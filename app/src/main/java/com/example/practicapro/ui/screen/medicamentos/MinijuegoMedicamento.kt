@@ -1,24 +1,22 @@
 package com.example.practicapro.ui.screen.medicamentos
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
-import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlin.math.roundToInt
 
@@ -32,12 +30,11 @@ fun MinijuegoMedicamentosScreen(navController: NavController) {
         "5. Monitorea al paciente después de la administración."
     )
 
-    // Estados para pasos arrastrados y placeholders
     var draggableSteps by remember { mutableStateOf(steps.shuffled()) }
     val placeholders = remember { mutableStateListOf<String?>(null, null, null, null, null) }
     var draggingItem by remember { mutableStateOf<String?>(null) }
     var feedbackVisible by remember { mutableStateOf(false) }
-    var correctSteps by remember { mutableStateOf(0) }
+    var correctSteps by remember { mutableIntStateOf(0) }
     var modalVisible by remember { mutableStateOf(true) }
 
     Column(
@@ -51,7 +48,6 @@ fun MinijuegoMedicamentosScreen(navController: NavController) {
         if (modalVisible) {
             CaseModal(onDismiss = { modalVisible = false })
         } else {
-            // Título
             Text(
                 text = "Caso Clínico: Administración de Medicamentos",
                 fontSize = 24.sp,
@@ -71,22 +67,23 @@ fun MinijuegoMedicamentosScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Placeholders para los pasos
             placeholders.forEachIndexed { index, placeholder ->
                 Placeholder(
                     text = placeholder,
                     isHighlighted = draggingItem != null,
+                    draggingItem = draggingItem, // Pasar draggingItem
                     onDrop = { droppedStep ->
-                        placeholders[index] = droppedStep
-                        draggableSteps = draggableSteps.filter { it != droppedStep }
-                        draggingItem = null
+                        if (placeholders[index] == null) { // Aceptar solo si el espacio está vacío
+                            placeholders[index] = droppedStep
+                            draggableSteps = draggableSteps.filter { it != droppedStep }
+                            draggingItem = null
+                        }
                     }
                 )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Pasos disponibles para arrastrar
             Text(
                 text = "Pasos disponibles:",
                 fontSize = 18.sp,
@@ -106,19 +103,17 @@ fun MinijuegoMedicamentosScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Botón para verificar el orden
             Button(
                 onClick = {
                     correctSteps = placeholders.zip(steps).count { it.first == it.second }
                     feedbackVisible = true
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7DBB00)),
-                enabled = placeholders.none { it == null } // Solo activo si todos los placeholders están llenos
+                enabled = placeholders.none { it == null }
             ) {
                 Text("Verificar Orden", color = Color.White, fontWeight = FontWeight.Bold)
             }
 
-            // Feedback al verificar el orden
             if (feedbackVisible) {
                 FeedbackDialog(correctSteps, steps.size) {
                     feedbackVisible = false
@@ -135,6 +130,7 @@ fun MinijuegoMedicamentosScreen(navController: NavController) {
 fun Placeholder(
     text: String?,
     isHighlighted: Boolean,
+    draggingItem: String?, // Agregado como parámetro
     onDrop: (String) -> Unit
 ) {
     Box(
@@ -145,7 +141,19 @@ fun Placeholder(
                 color = if (isHighlighted && text == null) Color(0xFFD3E2FF) else Color(0xFFF5F5F5),
                 shape = RoundedCornerShape(8.dp)
             )
-            .padding(8.dp),
+            .padding(8.dp)
+            .pointerInput(Unit) {
+                detectDragGestures(
+                    onDrag = { change, _ ->
+                        change.consume()
+                    },
+                    onDragEnd = {
+                        if (text == null && draggingItem != null) {
+                            onDrop(draggingItem)
+                        }
+                    }
+                )
+            },
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -164,8 +172,8 @@ fun DraggableStep(
     onDragStart: () -> Unit,
     onDragEnd: () -> Unit
 ) {
-    var offsetX by remember { mutableStateOf(0f) }
-    var offsetY by remember { mutableStateOf(0f) }
+    var offsetX by remember { mutableFloatStateOf(0f) }
+    var offsetY by remember { mutableFloatStateOf(0f) }
     var isDragging by remember { mutableStateOf(false) }
 
     Box(
@@ -216,9 +224,7 @@ fun DraggableStep(
 fun FeedbackDialog(correctSteps: Int, totalSteps: Int, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = {
-            Text("Resultados del Intento")
-        },
+        title = { Text("Resultados del Intento") },
         text = {
             Text(
                 text = "Pasos correctos: $correctSteps de $totalSteps.\n" +
