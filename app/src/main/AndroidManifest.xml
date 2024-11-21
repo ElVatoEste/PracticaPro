@@ -12,6 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Practicapro"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="developer_name"
+            android:value="Manuel Alejandro Lopez Velasquez " />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -23,6 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

@@ -11,7 +11,8 @@ import com.example.practicapro.ui.screen.asepsia.AsepsiaScreen
 import com.example.practicapro.ui.screen.asepsia.QuizScreen
 import com.example.practicapro.ui.screen.procedimientos.ProcedimientosScreen
 import com.example.practicapro.ui.screen.medicamentos.MedicamentosScreen
-import com.example.practicapro.ui.screen.modules.UrgenciasScreen
+import com.example.practicapro.ui.screen.medicamentos.MinijuegoMedicamentosScreen
+import com.example.practicapro.ui.screen.urgencias.UrgenciasScreen
 import com.example.practicapro.ui.screen.procedimientos.ProcedimientosQuizScreen
 
 // Definición de rutas como constantes
@@ -25,6 +26,7 @@ object Routes {
     const val QUIZ_PROCEDIMIENTOS = "quiz_procedimientos"
     const val ADMINISTRACION = "administracion"
     const val URGENCIAS = "urgencias"
+    const val MINIJUEGO_MEDICAMENTOS = "minijuego_medicamentos"
 }
 @Composable
 fun AppNavigation() {
@@ -68,12 +70,17 @@ fun AppNavigation() {
 
         // Pantalla de Administración de Medicamentos
         composable(Routes.ADMINISTRACION) {
-            MedicamentosScreen()
+            MedicamentosScreen(navController)
         }
+
+        composable(Routes.MINIJUEGO_MEDICAMENTOS) {
+            MinijuegoMedicamentosScreen(navController)
+        }
+
 
         // Pantalla de Urgencias Médicas
         composable(Routes.URGENCIAS) {
-            UrgenciasScreen()
+            UrgenciasScreen(navController)
         }
     }
 }

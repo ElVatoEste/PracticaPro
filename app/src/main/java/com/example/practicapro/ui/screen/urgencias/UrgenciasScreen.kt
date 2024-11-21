@@ -1,4 +1,4 @@
-package com.example.practicapro.ui.screen.medicamentos
+package com.example.practicapro.ui.screen.urgencias
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -19,10 +19,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.practicapro.R
-import com.example.practicapro.ui.navigation.Routes
 
 @Composable
-fun MedicamentosScreen(navController: NavController) {
+fun UrgenciasScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -33,7 +32,7 @@ fun MedicamentosScreen(navController: NavController) {
     ) {
         // Título principal
         Text(
-            text = "Administración de Medicamentos",
+            text = "Urgencias Médicas",
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
@@ -42,7 +41,7 @@ fun MedicamentosScreen(navController: NavController) {
 
         // Subtítulo
         Text(
-            text = "Conoce las prácticas esenciales para la administración segura y efectiva de medicamentos.",
+            text = "Prepárate para actuar rápidamente en emergencias médicas, protegiendo vidas con procedimientos clave.",
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
             color = Color.Gray
@@ -50,8 +49,8 @@ fun MedicamentosScreen(navController: NavController) {
 
         // Imagen representativa
         Image(
-            painter = painterResource(id = R.drawable.ic_medicines),
-            contentDescription = "Administración de Medicamentos",
+            painter = painterResource(id = R.drawable.ic_emergency),
+            contentDescription = "Urgencias Médicas",
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
@@ -66,19 +65,17 @@ fun MedicamentosScreen(navController: NavController) {
         // Sección de conceptos clave
         SectionTitle("Conceptos Clave")
         SectionContent(
-            "La administración de medicamentos implica garantizar que los pacientes reciban el tratamiento adecuado, en la dosis correcta y por la vía apropiada."
+            "Las urgencias médicas son situaciones en las que un paciente necesita atención inmediata para evitar daños mayores o la muerte. Los protocolos están diseñados para estabilizar al paciente mientras se prepara para intervenciones avanzadas."
         )
         SectionContent(
-            "Los principios básicos incluyen:\n" +
-                    "- Paciente correcto\n" +
-                    "- Medicamento correcto\n" +
-                    "- Dosis correcta\n" +
-                    "- Vía correcta\n" +
-                    "- Hora correcta"
+            "Conceptos importantes:\n" +
+                    "- Evaluación inicial (ABC: Vía aérea, respiración, circulación).\n" +
+                    "- Identificación de emergencias como paro cardíaco, shock y hemorragias graves.\n" +
+                    "- Aplicación de protocolos básicos como RCP y el uso del DEA."
         )
 
-        // Técnicas específicas
-        SectionTitle("Técnicas Básicas")
+        // Sección de técnicas específicas
+        SectionTitle("Técnicas Clave en Urgencias")
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -86,26 +83,42 @@ fun MedicamentosScreen(navController: NavController) {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             TechniqueCard(
-                title = "Preparación de Medicamentos",
-                description = "Cómo garantizar que la dosis y el tipo de medicamento sean los correctos.",
-                imageRes = R.drawable.ic_medicines
+                title = "Reanimación Cardiopulmonar (RCP)",
+                description = "Pasos para realizar RCP efectiva en adultos y niños.",
+                imageRes = R.drawable.ic_emergency
             )
             TechniqueCard(
-                title = "Administración Intramuscular",
-                description = "Pasos para inyecciones seguras y efectivas.",
-                imageRes = R.drawable.ic_medicines
+                title = "Uso del DEA",
+                description = "Guía para operar un Desfibrilador Externo Automático (DEA).",
+                imageRes = R.drawable.ic_emergency
             )
             TechniqueCard(
-                title = "Vías Intravenosas",
-                description = "Procedimientos para colocar una vía intravenosa correctamente.",
-                imageRes = R.drawable.ic_medicines
+                title = "Manejo de Shock",
+                description = "Técnicas para estabilizar pacientes en shock.",
+                imageRes = R.drawable.ic_emergency
+            )
+            TechniqueCard(
+                title = "Control de Hemorragias",
+                description = "Métodos básicos para detener hemorragias masivas.",
+                imageRes = R.drawable.ic_emergency
             )
         }
 
-        // Botón para minijuegos
+        // Sección de recomendaciones generales
+        SectionTitle("Recomendaciones")
+        SectionContent(
+            "1. Mantén la calma y sigue los protocolos establecidos.\n" +
+                    "2. Prioriza las intervenciones que estabilicen al paciente.\n" +
+                    "3. Comunica información clara y precisa al equipo médico."
+        )
+        SectionContent(
+            "Recuerda: la seguridad del rescatador es esencial. Utiliza equipo de protección personal adecuado siempre que sea posible."
+        )
+
+        // Botón para evaluación
         ActionButton(
-            text = "Iniciar Actividad Interactiva",
-            onClick = { navController.navigate(Routes.MINIJUEGO_MEDICAMENTOS) } // Navega al minijuego usando la constante
+            text = "Realizar Evaluación",
+            onClick = { navController.navigate("quiz_urgencias") } // Navega al quiz
         )
 
         // Espacio adicional al final para mejor desplazamiento
@@ -194,6 +207,6 @@ fun SectionContent(content: String) {
 
 @Composable
 fun VideoPlayerScreen() {
-    // Implementación similar a la de los otros módulos para reproducir el video educativo
+    // Implementación similar al módulo de Asepsia
     Text("Aquí va el reproductor de video (pendiente de implementar)") // Placeholder
 }
