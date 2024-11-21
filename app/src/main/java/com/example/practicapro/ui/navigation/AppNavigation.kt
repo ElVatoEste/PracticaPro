@@ -84,3 +84,30 @@ fun AppNavigation() {
         }
     }
 }
+
+//@Composable
+//fun BottomNavigationBar(navController: NavController) {
+//    BottomAppBar(
+//        containerColor = MaterialTheme.colorScheme.primary,
+//        contentColor = MaterialTheme.colorScheme.onPrimary
+//    ) {
+//
+//        IconButton(
+//            onClick = { if (navController.previousBackStackEntry != null) navController.popBackStack() },
+//            enabled = navController.previousBackStackEntry != null
+//        ) {
+//            Icon(Icons.Default.ArrowBack, contentDescription = "Regresar")
+//        }
+//
+//        Spacer(modifier = Modifier.weight(1f))
+//
+//        IconButton(onClick = {
+//            if (navController.currentDestination?.route != Routes.MAIN) {
+//                navController.navigate(Routes.MAIN) { launchSingleTop = true }
+//            }
+//        }) {
+//            Icon(Icons.Default.Home, contentDescription = "Inicio")
+//        }
+//
+//    }
+//}
