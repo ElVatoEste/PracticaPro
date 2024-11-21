@@ -22,9 +22,9 @@ fun AppNavigation() {
         composable("main") { MainScreen(navController) }
         // Pantallas de los Módulos
         composable("calculadora") { CalculadoraScreen() }
-        composable("tecnicas_de_asepsia_y_antisepsia") { AsepsiaScreen() }
-        composable("procedimientos_basicos") { ProcedimientosScreen() }
-        composable("administracion_de_medicamentos") { MedicamentosScreen() }
-        composable("urgencias_medicas") { UrgenciasScreen() }
+        composable("tecnicas") { AsepsiaScreen() }
+        composable("procedimientos") { ProcedimientosScreen() }
+        composable("administracion") { MedicamentosScreen() }
+        composable("urgencias") { UrgenciasScreen() }
     }
 }
