@@ -1,4 +1,4 @@
-package com.example.practicapro.ui.procedimientos
+package com.example.practicapro.ui.screen.procedimientos
 
 import android.net.Uri
 import androidx.compose.foundation.Image
@@ -27,6 +27,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
 import com.example.practicapro.R
+import com.example.practicapro.ui.navigation.Routes
 
 @Composable
 fun ProcedimientosScreen(navController: NavController) {
@@ -104,11 +105,12 @@ fun ProcedimientosScreen(navController: NavController) {
             )
         }
 
-        // Botón para evaluación
+// Botón para evaluación
         ActionButton(
             text = "Realizar Evaluación",
-            onClick = { navController.navigate("quiz_procedimientos") } // Navega al quiz
+            onClick = { navController.navigate(Routes.QUIZ_PROCEDIMIENTOS) } // Navega al quiz
         )
+
 
         // Espacio adicional al final para desplazamiento cómodo
         Spacer(modifier = Modifier.height(32.dp))

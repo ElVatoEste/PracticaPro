@@ -1,4 +1,4 @@
-package com.example.practicapro.ui.asepsia
+package com.example.practicapro.ui.screen.asepsia
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*

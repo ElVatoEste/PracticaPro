@@ -7,24 +7,25 @@ import androidx.navigation.compose.composable
 import com.example.practicapro.ui.screen.splash.SplashScreen
 import com.example.practicapro.ui.screen.main.MainScreen
 import com.example.practicapro.ui.screen.calculadora.CalculadoraScreen
-import com.example.practicapro.ui.asepsia.AsepsiaScreen
-import com.example.practicapro.ui.asepsia.QuizScreen
-import com.example.practicapro.ui.procedimientos.ProcedimientosScreen
-import com.example.practicapro.ui.screen.modules.MedicamentosScreen
+import com.example.practicapro.ui.screen.asepsia.AsepsiaScreen
+import com.example.practicapro.ui.screen.asepsia.QuizScreen
+import com.example.practicapro.ui.screen.procedimientos.ProcedimientosScreen
+import com.example.practicapro.ui.screen.medicamentos.MedicamentosScreen
 import com.example.practicapro.ui.screen.modules.UrgenciasScreen
+import com.example.practicapro.ui.screen.procedimientos.ProcedimientosQuizScreen
 
 // Definición de rutas como constantes
 object Routes {
-    const val SPLASH = "splash"                  // Ruta para la pantalla de bienvenida
-    const val MAIN = "main"                      // Ruta para la pantalla principal
-    const val CALCULADORA = "calculadora"        // Ruta para la calculadora
-    const val TECNICAS = "tecnicas"              // Ruta para el módulo de técnicas de asepsia
-    const val QUIZ_SCREEN = "quiz_screen"        // Ruta para el quiz de técnicas de asepsia
-    const val PROCEDIMIENTOS = "procedimientos"  // Ruta para el módulo de procedimientos básicos
-    const val ADMINISTRACION = "administracion"  // Ruta para el módulo de administración de medicamentos
-    const val URGENCIAS = "urgencias"            // Ruta para el módulo de urgencias médicas
+    const val SPLASH = "splash"
+    const val MAIN = "main"
+    const val CALCULADORA = "calculadora"
+    const val TECNICAS = "tecnicas"
+    const val QUIZ_SCREEN = "quiz_screen"
+    const val PROCEDIMIENTOS = "procedimientos"
+    const val QUIZ_PROCEDIMIENTOS = "quiz_procedimientos"
+    const val ADMINISTRACION = "administracion"
+    const val URGENCIAS = "urgencias"
 }
-
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
@@ -58,6 +59,11 @@ fun AppNavigation() {
         // Pantalla de Procedimientos Básicos
         composable(Routes.PROCEDIMIENTOS) {
             ProcedimientosScreen(navController)
+        }
+
+        // Pantalla del Quiz de Procedimientos Básicos
+        composable(Routes.QUIZ_PROCEDIMIENTOS) {
+            ProcedimientosQuizScreen(onDismiss = { navController.popBackStack() })
         }
 
         // Pantalla de Administración de Medicamentos
