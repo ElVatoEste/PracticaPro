@@ -29,6 +29,11 @@ import androidx.navigation.NavController
 import com.example.practicapro.R
 import android.net.Uri
 import androidx.media3.common.MediaItem
+import com.example.practicapro.components.ActionButton
+import com.example.practicapro.components.SectionContent
+import com.example.practicapro.components.SectionTitle
+import com.example.practicapro.components.TechniqueCard
+import com.example.practicapro.components.VideoPlayerScreen
 
 
 @Composable
@@ -115,120 +120,4 @@ fun AsepsiaScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(32.dp))
     }
 }
-
-// Composable para botones interactivos
-@Composable
-fun ActionButton(text: String, onClick: () -> Unit) {
-    Button(
-        onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7DBB00))
-    ) {
-        Text(text = text, color = Color.White, fontWeight = FontWeight.Bold)
-    }
-}
-
-// Composable para tarjetas de técnicas
-@Composable
-fun TechniqueCard(title: String, description: String, imageRes: Int) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(120.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
-        elevation = CardDefaults.cardElevation(8.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(id = imageRes),
-                contentDescription = title,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .height(120.dp)
-                    .width(120.dp)
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(12.dp))
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Column(
-                modifier = Modifier.fillMaxHeight(),
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = title,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-                Text(
-                    text = description,
-                    fontSize = 14.sp,
-                    color = Color.Gray
-                )
-            }
-        }
-    }
-}
-
-// Composables para título y contenido
-@Composable
-fun SectionTitle(title: String) {
-    Text(
-        text = title,
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Bold,
-        textAlign = TextAlign.Start,
-        modifier = Modifier.fillMaxWidth()
-    )
-}
-
-@Composable
-fun SectionContent(content: String) {
-    Text(
-        text = content,
-        fontSize = 16.sp,
-        textAlign = TextAlign.Justify,
-        modifier = Modifier.fillMaxWidth()
-    )
-}
-
-@Composable
-fun VideoPlayerScreen() {
-    val context = LocalContext.current
-
-    // Configuración de ExoPlayer
-    val exoPlayer = remember {
-        ExoPlayer.Builder(context).build().apply {
-            val mediaItem = MediaItem.Builder()
-                .setUri(Uri.parse("android.resource://${context.packageName}/raw/tutorial_video"))
-                .build()
-            setMediaItem(mediaItem)
-            prepare() // Prepara el video
-            pause()   // Inicia en pausa
-        }
-    }
-
-    // Mostrar el PlayerView de ExoPlayer
-    DisposableEffect(
-        AndroidView(
-            factory = {
-                PlayerView(context).apply {
-                    player = exoPlayer
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth() // Ocupa todo el ancho de la pantalla
-                .aspectRatio(16f / 9f) // Mantiene la proporción de aspecto 16:9
-        )
-    ) {
-        onDispose {
-            exoPlayer.release() // Libera el reproductor al salir de la pantalla
-        }
-    }
-}
-
-
 

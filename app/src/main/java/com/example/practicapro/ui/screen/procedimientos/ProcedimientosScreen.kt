@@ -27,6 +27,10 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
 import com.example.practicapro.R
+import com.example.practicapro.components.ActionButton
+import com.example.practicapro.components.SectionContent
+import com.example.practicapro.components.SectionTitle
+import com.example.practicapro.components.TechniqueCard
 import com.example.practicapro.ui.navigation.Routes
 
 @Composable
@@ -117,116 +121,3 @@ fun ProcedimientosScreen(navController: NavController) {
     }
 }
 
-//// Reproductor de Video
-//@Composable
-//fun VideoPlayerScreen(videoUri: String) {
-//    val context = LocalContext.current
-//
-//    val exoPlayer = remember {
-//        ExoPlayer.Builder(context).build().apply {
-//            val mediaItem = MediaItem.Builder()
-//                .setUri(Uri.parse(videoUri))
-//                .build()
-//            setMediaItem(mediaItem)
-//            prepare()
-//            pause()
-//        }
-//    }
-//
-//    DisposableEffect(
-//        AndroidView(
-//            factory = {
-//                PlayerView(context).apply {
-//                    player = exoPlayer
-//                }
-//            },
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .aspectRatio(16f / 9f) // Mantener proporción 16:9
-//        )
-//    ) {
-//        onDispose {
-//            exoPlayer.release()
-//        }
-//    }
-//}
-
-// Composable para título de sección
-@Composable
-fun SectionTitle(title: String) {
-    Text(
-        text = title,
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Bold,
-        textAlign = TextAlign.Start,
-        modifier = Modifier.fillMaxWidth()
-    )
-}
-
-// Composable para contenido de sección
-@Composable
-fun SectionContent(content: String) {
-    Text(
-        text = content,
-        fontSize = 16.sp,
-        textAlign = TextAlign.Justify,
-        modifier = Modifier.fillMaxWidth()
-    )
-}
-
-// Composable para botones interactivos
-@Composable
-fun ActionButton(text: String, onClick: () -> Unit) {
-    Button(
-        onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7DBB00))
-    ) {
-        Text(text = text, color = Color.White, fontWeight = FontWeight.Bold)
-    }
-}
-
-// Composable para tarjetas de técnicas
-@Composable
-fun TechniqueCard(title: String, description: String, imageRes: Int) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(120.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
-        elevation = CardDefaults.cardElevation(8.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(id = imageRes),
-                contentDescription = title,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .height(120.dp)
-                    .width(120.dp)
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(12.dp))
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Column(
-                modifier = Modifier.fillMaxHeight(),
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = title,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-                Text(
-                    text = description,
-                    fontSize = 14.sp,
-                    color = Color.Gray
-                )
-            }
-        }
-    }
-}

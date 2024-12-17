@@ -27,6 +27,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.graphicsLayer
+import com.example.practicapro.module.Module
+import com.example.practicapro.module.ModuleCard
 import kotlinx.coroutines.delay
 
 // Función principal que incluye la animación
@@ -168,79 +170,6 @@ fun MainScreen(navController: NavController) {
             }
             // Relleno flexible inferior
             Spacer(modifier = Modifier.weight(2f))
-        }
-    }
-}
-
-// Modelo de datos para un módulo
-data class Module(val name: String, val description: String, val imageRes: Int)
-
-// Composable para las tarjetas de módulos
-@Composable
-fun ModuleCard(module: Module, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    Card(
-        onClick = onClick, // Habilita la funcionalidad clicable
-        modifier = modifier
-            .height(240.dp), // Altura ajustada
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF5F5F5) // Fondo claro
-        ),
-        elevation = CardDefaults.cardElevation(8.dp), // Efecto de elevación
-        shape = RoundedCornerShape(12.dp) // Esquinas redondeadas
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // Imagen que ocupa la parte superior
-            Image(
-                painter = painterResource(id = module.imageRes),
-                contentDescription = module.name,
-                contentScale = ContentScale.Crop, // La imagen llena el espacio
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(140.dp) // Imagen cuadrada
-            )
-
-            // Contenedor para título y descripción
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f) // La sección inferior ocupa el espacio restante
-                    .padding(horizontal = 8.dp),
-                verticalArrangement = Arrangement.SpaceEvenly // Espaciado uniforme entre título y descripción
-            ) {
-                // Título ocupa la mitad del espacio
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = module.name,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black,
-                        textAlign = TextAlign.Center
-                    )
-                }
-                // Descripción ocupa la otra mitad
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = module.description,
-                        fontSize = 12.sp,
-                        color = Color.Gray,
-                        textAlign = TextAlign.Center
-                    )
-                }
-            }
         }
     }
 }
