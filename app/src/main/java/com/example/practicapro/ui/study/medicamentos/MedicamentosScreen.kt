@@ -1,10 +1,5 @@
-package com.example.practicapro.ui.screen.asepsia
+package com.example.practicapro.ui.study.medicamentos
 
-
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -17,38 +12,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
 import com.example.practicapro.R
-import android.net.Uri
-import androidx.media3.common.MediaItem
 import com.example.practicapro.components.ActionButton
 import com.example.practicapro.components.SectionContent
 import com.example.practicapro.components.SectionTitle
 import com.example.practicapro.components.TechniqueCard
 import com.example.practicapro.components.VideoPlayerScreen
-
+import com.example.practicapro.ui.navigation.Routes
 
 @Composable
-fun AsepsiaScreen(navController: NavController) {
+fun MedicamentosScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState()) // Habilita el desplazamiento vertical
+            .verticalScroll(rememberScrollState())
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Título principal
         Text(
-            text = "Técnicas de Asepsia y Antisepsia",
+            text = "Administración de Medicamentos",
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
@@ -57,7 +47,7 @@ fun AsepsiaScreen(navController: NavController) {
 
         // Subtítulo
         Text(
-            text = "Explora conceptos clave y técnicas fundamentales para prevenir infecciones.",
+            text = "Conoce las prácticas esenciales para la administración segura y efectiva de medicamentos.",
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
             color = Color.Gray
@@ -65,27 +55,34 @@ fun AsepsiaScreen(navController: NavController) {
 
         // Imagen representativa
         Image(
-            painter = painterResource(id = R.drawable.ic_asepsia),
-            contentDescription = "Imagen de Asepsia",
+            painter = painterResource(id = R.drawable.ic_medicines),
+            contentDescription = "Administración de Medicamentos",
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)
-                .padding(8.dp)
                 .clip(RoundedCornerShape(16.dp))
         )
 
         // Reproductor de video
-        SectionTitle("Video Introductorio")
+        SectionTitle("Video Educativo")
         VideoPlayerScreen()
 
         // Sección de conceptos clave
-        SectionTitle("Conceptos Básicos")
+        SectionTitle("Conceptos Clave")
         SectionContent(
-            "La asepsia incluye prácticas para prevenir la introducción de microorganismos en áreas críticas. Esto es fundamental en el entorno médico para proteger a los pacientes y al personal de salud."
+            "La administración de medicamentos implica garantizar que los pacientes reciban el tratamiento adecuado, en la dosis correcta y por la vía apropiada."
+        )
+        SectionContent(
+            "Los principios básicos incluyen:\n" +
+                    "- Paciente correcto\n" +
+                    "- Medicamento correcto\n" +
+                    "- Dosis correcta\n" +
+                    "- Vía correcta\n" +
+                    "- Hora correcta"
         )
 
-        // Sección de técnicas
+        // Técnicas específicas
         SectionTitle("Técnicas Básicas")
         Column(
             modifier = Modifier
@@ -94,30 +91,29 @@ fun AsepsiaScreen(navController: NavController) {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             TechniqueCard(
-                title = "Lavado de Manos",
-                description = "Realiza un correcto lavado de manos en 5 pasos.",
-                imageRes = R.drawable.ic_asepsia
+                title = "Preparación de Medicamentos",
+                description = "Cómo garantizar que la dosis y el tipo de medicamento sean los correctos.",
+                imageRes = R.drawable.ic_medicines
             )
             TechniqueCard(
-                title = "Uso de Guantes",
-                description = "Conoce el uso correcto del equipo de protección personal.",
-                imageRes = R.drawable.ic_asepsia
+                title = "Administración Intramuscular",
+                description = "Pasos para inyecciones seguras y efectivas.",
+                imageRes = R.drawable.ic_medicines
             )
             TechniqueCard(
-                title = "Limpieza de Superficies",
-                description = "Minimiza riesgos limpiando áreas críticas.",
-                imageRes = R.drawable.ic_asepsia
+                title = "Vías Intravenosas",
+                description = "Procedimientos para colocar una vía intravenosa correctamente.",
+                imageRes = R.drawable.ic_medicines
             )
         }
 
-        // Botón para evaluación
+        // Botón para minijuegos
         ActionButton(
-            text = "Realizar Evaluación",
-            onClick = { navController.navigate("quiz_screen") } // Navega al quiz
+            text = "Iniciar Actividad Interactiva",
+            onClick = { navController.navigate(Routes.MINIJUEGO_MEDICAMENTOS) } // Navega al minijuego usando la constante
         )
 
         // Espacio adicional al final para mejor desplazamiento
         Spacer(modifier = Modifier.height(32.dp))
     }
 }
-

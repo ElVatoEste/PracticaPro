@@ -1,10 +1,9 @@
-package com.example.practicapro.ui.screen.procedimientos
+package com.example.practicapro.ui.study.procedimientos
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
@@ -17,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.practicapro.ui.screen.asepsia.ProgressBar
+import com.example.practicapro.ui.study.asepsia.ProgressBar
 import kotlinx.coroutines.delay
 
 @Composable

@@ -4,16 +4,16 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.practicapro.ui.screen.splash.SplashScreen
-import com.example.practicapro.ui.screen.main.MainScreen
-import com.example.practicapro.ui.screen.calculadora.CalculadoraScreen
-import com.example.practicapro.ui.screen.asepsia.AsepsiaScreen
-import com.example.practicapro.ui.screen.asepsia.QuizScreen
-import com.example.practicapro.ui.screen.procedimientos.ProcedimientosScreen
-import com.example.practicapro.ui.screen.medicamentos.MedicamentosScreen
-import com.example.practicapro.ui.screen.medicamentos.MinijuegoMedicamentosScreen
-import com.example.practicapro.ui.screen.urgencias.UrgenciasScreen
-import com.example.practicapro.ui.screen.procedimientos.ProcedimientosQuizScreen
+import com.example.practicapro.ui.splash.SplashScreen
+import com.example.practicapro.ui.main.MainScreen
+import com.example.practicapro.ui.calculadora.CalculadoraScreen
+import com.example.practicapro.ui.study.asepsia.AsepsiaScreen
+import com.example.practicapro.ui.study.asepsia.QuizScreen
+import com.example.practicapro.ui.study.procedimientos.ProcedimientosScreen
+import com.example.practicapro.ui.study.medicamentos.MedicamentosScreen
+import com.example.practicapro.ui.study.medicamentos.MinijuegoMedicamentosScreen
+import com.example.practicapro.ui.study.urgencias.UrgenciasScreen
+import com.example.practicapro.ui.study.procedimientos.ProcedimientosQuizScreen
 
 // Definición de rutas como constantes
 object Routes {

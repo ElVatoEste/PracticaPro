@@ -1,5 +1,7 @@
-package com.example.practicapro.ui.screen.medicamentos
+package com.example.practicapro.ui.study.asepsia
 
+
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -24,21 +26,21 @@ import com.example.practicapro.components.SectionContent
 import com.example.practicapro.components.SectionTitle
 import com.example.practicapro.components.TechniqueCard
 import com.example.practicapro.components.VideoPlayerScreen
-import com.example.practicapro.ui.navigation.Routes
+
 
 @Composable
-fun MedicamentosScreen(navController: NavController) {
+fun AsepsiaScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()) // Habilita el desplazamiento vertical
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Título principal
         Text(
-            text = "Administración de Medicamentos",
+            text = "Técnicas de Asepsia y Antisepsia",
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
@@ -47,7 +49,7 @@ fun MedicamentosScreen(navController: NavController) {
 
         // Subtítulo
         Text(
-            text = "Conoce las prácticas esenciales para la administración segura y efectiva de medicamentos.",
+            text = "Explora conceptos clave y técnicas fundamentales para prevenir infecciones.",
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
             color = Color.Gray
@@ -55,34 +57,27 @@ fun MedicamentosScreen(navController: NavController) {
 
         // Imagen representativa
         Image(
-            painter = painterResource(id = R.drawable.ic_medicines),
-            contentDescription = "Administración de Medicamentos",
+            painter = painterResource(id = R.drawable.ic_asepsia),
+            contentDescription = "Imagen de Asepsia",
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)
+                .padding(8.dp)
                 .clip(RoundedCornerShape(16.dp))
         )
 
         // Reproductor de video
-        SectionTitle("Video Educativo")
+        SectionTitle("Video Introductorio")
         VideoPlayerScreen()
 
         // Sección de conceptos clave
-        SectionTitle("Conceptos Clave")
+        SectionTitle("Conceptos Básicos")
         SectionContent(
-            "La administración de medicamentos implica garantizar que los pacientes reciban el tratamiento adecuado, en la dosis correcta y por la vía apropiada."
-        )
-        SectionContent(
-            "Los principios básicos incluyen:\n" +
-                    "- Paciente correcto\n" +
-                    "- Medicamento correcto\n" +
-                    "- Dosis correcta\n" +
-                    "- Vía correcta\n" +
-                    "- Hora correcta"
+            "La asepsia incluye prácticas para prevenir la introducción de microorganismos en áreas críticas. Esto es fundamental en el entorno médico para proteger a los pacientes y al personal de salud."
         )
 
-        // Técnicas específicas
+        // Sección de técnicas
         SectionTitle("Técnicas Básicas")
         Column(
             modifier = Modifier
@@ -91,29 +86,30 @@ fun MedicamentosScreen(navController: NavController) {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             TechniqueCard(
-                title = "Preparación de Medicamentos",
-                description = "Cómo garantizar que la dosis y el tipo de medicamento sean los correctos.",
-                imageRes = R.drawable.ic_medicines
+                title = "Lavado de Manos",
+                description = "Realiza un correcto lavado de manos en 5 pasos.",
+                imageRes = R.drawable.ic_asepsia
             )
             TechniqueCard(
-                title = "Administración Intramuscular",
-                description = "Pasos para inyecciones seguras y efectivas.",
-                imageRes = R.drawable.ic_medicines
+                title = "Uso de Guantes",
+                description = "Conoce el uso correcto del equipo de protección personal.",
+                imageRes = R.drawable.ic_asepsia
             )
             TechniqueCard(
-                title = "Vías Intravenosas",
-                description = "Procedimientos para colocar una vía intravenosa correctamente.",
-                imageRes = R.drawable.ic_medicines
+                title = "Limpieza de Superficies",
+                description = "Minimiza riesgos limpiando áreas críticas.",
+                imageRes = R.drawable.ic_asepsia
             )
         }
 
-        // Botón para minijuegos
+        // Botón para evaluación
         ActionButton(
-            text = "Iniciar Actividad Interactiva",
-            onClick = { navController.navigate(Routes.MINIJUEGO_MEDICAMENTOS) } // Navega al minijuego usando la constante
+            text = "Realizar Evaluación",
+            onClick = { navController.navigate("quiz_screen") } // Navega al quiz
         )
 
         // Espacio adicional al final para mejor desplazamiento
         Spacer(modifier = Modifier.height(32.dp))
     }
 }
+

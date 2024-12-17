@@ -1,4 +1,4 @@
-package com.example.practicapro.ui.screen.main
+package com.example.practicapro.ui.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*

@@ -1,4 +1,4 @@
-package com.example.practicapro.ui.screen.calculadora
+package com.example.practicapro.ui.calculadora
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

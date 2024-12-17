@@ -1,4 +1,4 @@
-package com.example.practicapro.ui.screen.medicamentos
+package com.example.practicapro.ui.study.medicamentos
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures

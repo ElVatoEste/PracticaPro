@@ -1,4 +1,4 @@
-package com.example.practicapro.ui.screen.urgencias
+package com.example.practicapro.ui.study.urgencias
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
