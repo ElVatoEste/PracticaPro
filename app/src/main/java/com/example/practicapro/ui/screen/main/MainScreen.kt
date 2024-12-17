@@ -22,6 +22,50 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.practicapro.R
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.graphicsLayer
+import kotlinx.coroutines.delay
+
+// Función principal que incluye la animación
+@Composable
+fun AnimatedModuleCard(
+    module: Module,
+    modifier: Modifier = Modifier,
+    delayMillis: Int,
+    onClick: () -> Unit
+) {
+    val alpha = remember { Animatable(0f) }
+    val offsetY = remember { Animatable(50f) }
+
+    // Lanzamos las animaciones en paralelo
+    LaunchedEffect(Unit) {
+        delay(delayMillis.toLong())
+        alpha.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(durationMillis = 250)
+        )
+        offsetY.animateTo(
+            targetValue = 0f,
+            animationSpec = tween(durationMillis = 250)
+        )
+    }
+
+    // Aplicar las animaciones al Composable de la tarjeta
+    ModuleCard(
+        module = module,
+        modifier = modifier
+            .graphicsLayer(
+                translationY = offsetY.value, // Aplicar desplazamiento vertical animado
+                alpha = alpha.value // Aplicar opacidad animada
+            ),
+        onClick = onClick
+    )
+}
+
+// Reemplazar las tarjetas por la versión animada en MainScreen
 @Composable
 fun MainScreen(navController: NavController) {
     val scrollState = rememberScrollState() // Estado de desplazamiento
@@ -55,13 +99,14 @@ fun MainScreen(navController: NavController) {
             Spacer(modifier = Modifier.weight(2f))
 
             // Módulo de calculadora ocupa ambas columnas
-            ModuleCard(
+            AnimatedModuleCard(
                 module = Module(
                     name = "Calculadora",
                     description = "Herramienta para realizar cálculos médicos.",
                     imageRes = R.drawable.ic_calculator
                 ),
-                modifier = Modifier.fillMaxWidth(), // Ocupa el ancho completo
+                modifier = Modifier.fillMaxWidth(),
+                delayMillis = 100, // Retardo inicial para la animación
                 onClick = { navController.navigate("calculadora") } // Redirecciona a Calculadora
             )
 
@@ -95,15 +140,16 @@ fun MainScreen(navController: NavController) {
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                modules.chunked(2).forEach { rowModules ->
+                modules.chunked(2).forEachIndexed { rowIndex, rowModules ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        rowModules.forEach { module ->
-                            ModuleCard(
+                        rowModules.forEachIndexed { moduleIndex, module ->
+                            AnimatedModuleCard(
                                 module = module,
                                 modifier = Modifier.weight(1f), // Distribución uniforme
+                                delayMillis = 200 * (rowIndex * 2 + moduleIndex), // Incrementa el retardo para cada módulo
                                 onClick = { // Redirección a las rutas correspondientes
                                     when (module.name) {
                                         "Técnicas de Asepsia y Antisepsia" -> navController.navigate("tecnicas")
@@ -199,9 +245,4 @@ fun ModuleCard(module: Module, modifier: Modifier = Modifier, onClick: () -> Uni
     }
 }
 
-// Preview de la pantalla principal
-@Composable
-fun MainScreenPreview() {
-    val navController = rememberNavController() // Simulación de NavController
-    MainScreen(navController = navController)
-}
+

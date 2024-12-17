@@ -7,7 +7,7 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/practicaprowt"
-        android:label="@string/app_name"
+        android:label="PracticaPro"
         android:roundIcon="@drawable/practicaprowt"
         android:supportsRtl="true"
         android:theme="@style/Theme.Practicapro"

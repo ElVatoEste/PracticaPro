@@ -10,12 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.practicapro.ui.navigation.AppNavigation
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
             Scaffold(
                 modifier = Modifier.fillMaxSize()
             ) { innerPadding ->
@@ -25,7 +23,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 @Composable
 fun AppContent(modifier: Modifier = Modifier) {
     AppNavigation()

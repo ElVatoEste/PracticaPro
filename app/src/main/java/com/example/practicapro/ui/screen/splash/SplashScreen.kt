@@ -1,12 +1,18 @@
 package com.example.practicapro.ui.screen.splash
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,9 +27,21 @@ fun SplashScreen(
     navController: NavController,
     margin: Int = 8 // Margen configurable en dp
 ) {
-    // Retardo antes de navegar
+    // Animaciones para opacidad y escala
+    val scale = remember { Animatable(0f) }
+    val alpha = remember { Animatable(0f) }
+
+    // Lanzamos las animaciones en paralelo
     LaunchedEffect(Unit) {
-        delay(3000) // 3 segundos
+        scale.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+        )
+        alpha.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(durationMillis = 1500)
+        )
+        delay(1500)
         navController.navigate("main") {
             popUpTo("splash") { inclusive = true }
         }
@@ -33,24 +51,19 @@ fun SplashScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFFFFFF)),
+            .background(Color.White),
         contentAlignment = Alignment.Center
     ) {
         Image(
             painter = painterResource(id = R.drawable.logo_fm),
             contentDescription = "Logo UAM Facultad Medicina",
             modifier = Modifier
-                .fillMaxWidth(1f)
+                .fillMaxWidth(0.8f)
                 .padding(horizontal = margin.dp)
                 .aspectRatio(2f, matchHeightConstraintsFirst = false)
+                .scale(scale.value) // Aplicamos escala animada
+                .alpha(alpha.value) // Aplicamos opacidad animada
         )
     }
 }
 
-// Preview para mostrar cómo se verá la pantalla Splash
-@Preview(showBackground = true)
-@Composable
-fun SplashScreenPreview() {
-    val mockNavController = rememberNavController()
-    SplashScreen(navController = mockNavController, margin = 8) // Margen configurado en el preview
-}
