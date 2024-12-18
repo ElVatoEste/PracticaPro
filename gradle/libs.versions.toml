@@ -12,8 +12,15 @@ navigationRuntimeKtx = "2.8.4"
 navigationCompose = "2.8.4"
 media3Exoplayer = "1.4.1"
 media3Ui = "1.4.1"
+roomCommon = "2.6.1"
+roomKtx = "2.6.1"
+room = "2.6.1"
 
 [libraries]
+androidx-room-common = { module = "androidx.room:room-common", version.ref = "room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

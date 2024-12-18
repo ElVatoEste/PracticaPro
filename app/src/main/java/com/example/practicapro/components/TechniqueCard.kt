@@ -1,16 +1,7 @@
 package com.example.practicapro.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -26,34 +17,41 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// Composable para tarjetas de técnicas
 @Composable
-fun TechniqueCard(title: String, description: String, imageRes: Int) {
+fun TechniqueCard(
+    title: String,
+    description: String,
+    imageRes: Int,
+    onClick: () -> Unit = {}
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(120.dp),
+            .padding(8.dp), // Elimina la altura fija
         colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
-        elevation = CardDefaults.cardElevation(8.dp)
+        elevation = CardDefaults.cardElevation(8.dp),
+        onClick = onClick
     ) {
         Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalAlignment = Alignment.Top // Alinea al inicio para descripciones largas
         ) {
             Image(
                 painter = painterResource(id = imageRes),
                 contentDescription = title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .height(120.dp)
-                    .width(120.dp)
-                    .padding(8.dp)
+                    .size(100.dp) // Imagen con tamaño fijo y cuadrado
                     .clip(RoundedCornerShape(12.dp))
             )
             Spacer(modifier = Modifier.width(8.dp))
             Column(
-                modifier = Modifier.fillMaxHeight(),
-                verticalArrangement = Arrangement.Center
+                modifier = Modifier
+                    .weight(1f) // Permite que el texto ocupe todo el espacio restante
+                    .wrapContentHeight(), // Adapta la altura según el contenido
+                verticalArrangement = Arrangement.spacedBy(4.dp) // Espacio entre título y descripción
             ) {
                 Text(
                     text = title,
@@ -64,7 +62,8 @@ fun TechniqueCard(title: String, description: String, imageRes: Int) {
                 Text(
                     text = description,
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    color = Color.Gray,
+                    maxLines = 5, // Limita el número de líneas si es necesario
                 )
             }
         }

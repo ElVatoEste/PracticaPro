@@ -1,12 +1,20 @@
-package com.example.practicapro.ui.navigation
+package com.example.practicapro.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.practicapro.rooms.appDatabase.DatabaseProvider
 import com.example.practicapro.ui.splash.SplashScreen
 import com.example.practicapro.ui.main.MainScreen
 import com.example.practicapro.ui.calculadora.CalculadoraScreen
+import com.example.practicapro.ui.login.LoginScreen
 import com.example.practicapro.ui.study.asepsia.AsepsiaScreen
 import com.example.practicapro.ui.study.asepsia.QuizScreen
 import com.example.practicapro.ui.study.procedimientos.ProcedimientosScreen
@@ -27,15 +35,30 @@ object Routes {
     const val ADMINISTRACION = "administracion"
     const val URGENCIAS = "urgencias"
     const val MINIJUEGO_MEDICAMENTOS = "minijuego_medicamentos"
+    const val LOGIN = "login"
 }
+
 @Composable
 fun AppNavigation() {
+    val context = LocalContext.current
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Routes.SPLASH) {
-        // Pantalla Splash
+    NavHost(
+        navController = navController,
+        startDestination = Routes.SPLASH
+    ) {
+        // Pantalla de Splash
         composable(Routes.SPLASH) {
             SplashScreen(navController)
+        }
+
+        // Pantalla de Login
+        composable(Routes.LOGIN) {
+            LoginScreen(onLoginSuccess = {
+                navController.navigate(Routes.MAIN) {
+                    popUpTo(Routes.LOGIN) { inclusive = true }
+                }
+            }, context = context)
         }
 
         // Pantalla Principal
@@ -73,10 +96,10 @@ fun AppNavigation() {
             MedicamentosScreen(navController)
         }
 
+        // Minijuego de Medicamentos
         composable(Routes.MINIJUEGO_MEDICAMENTOS) {
             MinijuegoMedicamentosScreen(navController)
         }
-
 
         // Pantalla de Urgencias Médicas
         composable(Routes.URGENCIAS) {
@@ -84,6 +107,8 @@ fun AppNavigation() {
         }
     }
 }
+
+
 
 //@Composable
 //fun BottomNavigationBar(navController: NavController) {

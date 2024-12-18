@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.practicapro.R
+import com.example.practicapro.rooms.appDatabase.DatabaseProvider
 import kotlinx.coroutines.delay
 
 @Composable
@@ -31,17 +32,27 @@ fun SplashScreen(
 
     // Lanzamos las animaciones en paralelo
     LaunchedEffect(Unit) {
+        // Animación de escala
         scale.animateTo(
             targetValue = 1f,
             animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
         )
+        // Animación de opacidad
         alpha.animateTo(
             targetValue = 1f,
             animationSpec = tween(durationMillis = 1500)
         )
+        // Pausa para completar la animación
         delay(1500)
-        navController.navigate("main") {
-            popUpTo("splash") { inclusive = true }
+
+        // Verificación del estado del usuario
+        val userDao = DatabaseProvider.getDatabase(navController.context).userDao()
+        val user = userDao.getUser()
+        val isLoggedIn = user != null && user.expirationDate > System.currentTimeMillis()
+
+        // Redirección condicional
+        navController.navigate(if (isLoggedIn) "main" else "login") {
+            popUpTo("splash") { inclusive = true } // Remueve la pantalla de splash del backstack
         }
     }
 
@@ -49,7 +60,7 @@ fun SplashScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(Color.White), // Fondo blanco
         contentAlignment = Alignment.Center
     ) {
         Image(
@@ -64,4 +75,5 @@ fun SplashScreen(
         )
     }
 }
+
 

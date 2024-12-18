@@ -19,12 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.practicapro.R
-import com.example.practicapro.components.ActionButton
-import com.example.practicapro.components.SectionContent
-import com.example.practicapro.components.SectionTitle
-import com.example.practicapro.components.TechniqueCard
-import com.example.practicapro.components.VideoPlayerScreen
-import com.example.practicapro.ui.navigation.Routes
+import com.example.practicapro.components.*
+import com.example.practicapro.navigation.Routes
 
 @Composable
 fun MedicamentosScreen(navController: NavController) {
