@@ -60,6 +60,11 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.ui)
 
+    //Retrofit
+    implementation(libs.retrofit) // Biblioteca principal de Retrofit
+    implementation(libs.converter.gson) // Para convertir JSON usando Gson
+    implementation(libs.logging.interceptor)
+
     // Room dependencies
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
