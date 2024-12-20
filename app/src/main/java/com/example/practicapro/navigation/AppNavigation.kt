@@ -40,7 +40,6 @@ object Routes {
 
 @Composable
 fun AppNavigation() {
-    val context = LocalContext.current
     val navController = rememberNavController()
 
     NavHost(
@@ -58,7 +57,7 @@ fun AppNavigation() {
                 navController.navigate(Routes.MAIN) {
                     popUpTo(Routes.LOGIN) { inclusive = true }
                 }
-            }, context = context)
+            }, context = LocalContext.current)
         }
 
         // Pantalla Principal
@@ -107,7 +106,6 @@ fun AppNavigation() {
         }
     }
 }
-
 
 
 //@Composable

@@ -61,8 +61,8 @@ dependencies {
     implementation(libs.androidx.media3.ui)
 
     //Retrofit
-    implementation(libs.retrofit) // Biblioteca principal de Retrofit
-    implementation(libs.converter.gson) // Para convertir JSON usando Gson
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
 
     // Room dependencies

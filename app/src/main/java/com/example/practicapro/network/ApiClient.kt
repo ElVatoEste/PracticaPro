@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
-    private const val BASE_URL = "http://localhost:3000/" // Cambiar por la URL de tu API
+    private const val BASE_URL = "https://practica-pro-back.vercel.app/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY // Nivel de logs: Body muestra detalles completos

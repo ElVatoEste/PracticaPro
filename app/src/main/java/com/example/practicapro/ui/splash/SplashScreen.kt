@@ -22,41 +22,35 @@ import com.example.practicapro.rooms.appDatabase.DatabaseProvider
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(
-    navController: NavController,
-    margin: Int = 8 // Margen configurable en dp
-) {
+fun SplashScreen(navController: NavController, margin: Int = 8) {
     // Animaciones para opacidad y escala
     val scale = remember { Animatable(0f) }
     val alpha = remember { Animatable(0f) }
 
-    // Lanzamos las animaciones en paralelo
     LaunchedEffect(Unit) {
-        // Animación de escala
+        // Animaciones de SplashScreen
         scale.animateTo(
             targetValue = 1f,
             animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
         )
-        // Animación de opacidad
         alpha.animateTo(
             targetValue = 1f,
             animationSpec = tween(durationMillis = 1500)
         )
-        // Pausa para completar la animación
         delay(1500)
 
-        // Verificación del estado del usuario
+        // Verificar el estado del usuario
         val userDao = DatabaseProvider.getDatabase(navController.context).userDao()
         val user = userDao.getUser()
         val isLoggedIn = user != null && user.expirationDate > System.currentTimeMillis()
 
-        // Redirección condicional
+        // Redirigir según el estado del usuario
         navController.navigate(if (isLoggedIn) "main" else "login") {
-            popUpTo("splash") { inclusive = true } // Remueve la pantalla de splash del backstack
+            popUpTo("splash") { inclusive = true }
         }
     }
 
-    // Contenido visual de la Splash Screen
+    // Contenido visual del Splash
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -70,10 +64,8 @@ fun SplashScreen(
                 .fillMaxWidth(0.8f)
                 .padding(horizontal = margin.dp)
                 .aspectRatio(2f, matchHeightConstraintsFirst = false)
-                .scale(scale.value) // Aplicamos escala animada
-                .alpha(alpha.value) // Aplicamos opacidad animada
+                .scale(scale.value)
+                .alpha(alpha.value)
         )
     }
 }
-
-
