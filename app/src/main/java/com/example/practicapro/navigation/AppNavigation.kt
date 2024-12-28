@@ -15,6 +15,7 @@ import com.example.practicapro.ui.splash.SplashScreen
 import com.example.practicapro.ui.main.MainScreen
 import com.example.practicapro.ui.calculadora.CalculadoraScreen
 import com.example.practicapro.ui.login.LoginScreen
+import com.example.practicapro.ui.register.RegisterScreen
 import com.example.practicapro.ui.study.asepsia.AsepsiaScreen
 import com.example.practicapro.ui.study.asepsia.QuizScreen
 import com.example.practicapro.ui.study.procedimientos.ProcedimientosScreen
@@ -36,6 +37,7 @@ object Routes {
     const val URGENCIAS = "urgencias"
     const val MINIJUEGO_MEDICAMENTOS = "minijuego_medicamentos"
     const val LOGIN = "login"
+    const val REGISTER = "register"
 }
 
 @Composable
@@ -53,11 +55,29 @@ fun AppNavigation() {
 
         // Pantalla de Login
         composable(Routes.LOGIN) {
-            LoginScreen(onLoginSuccess = {
-                navController.navigate(Routes.MAIN) {
-                    popUpTo(Routes.LOGIN) { inclusive = true }
+            LoginScreen(
+                onLoginSuccess = {
+                    navController.navigate(Routes.MAIN) {
+                        popUpTo(Routes.LOGIN) { inclusive = true }
+                    }
+                },
+                context = LocalContext.current,
+                onNavigateToRegister = {
+                    navController.navigate(Routes.REGISTER)
                 }
-            }, context = LocalContext.current)
+            )
+        }
+
+        // Pantalla de Registro
+        composable(Routes.REGISTER) {
+            RegisterScreen(
+                onRegisterSuccess = {
+                    navController.navigate(Routes.LOGIN) {
+                        popUpTo(Routes.REGISTER) { inclusive = true }
+                    }
+                },
+                context = LocalContext.current
+            )
         }
 
         // Pantalla Principal

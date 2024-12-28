@@ -1,4 +1,4 @@
-package com.example.practicapro.ui.login
+package com.example.practicapro.ui.register
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -22,10 +22,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(onLoginSuccess: () -> Unit, onNavigateToRegister: () -> Unit, context: android.content.Context) {
+fun RegisterScreen(onRegisterSuccess: () -> Unit, context: android.content.Context) {
     // Estados del formulario
+    var nombre by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
     var error by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(false) }
 
@@ -37,17 +39,14 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onNavigateToRegister: () -> Unit, co
     // Inicialización de animaciones
     LaunchedEffect(Unit) {
         delay(500)
-        // Primero, movemos el logo hacia arriba
         logoOffsetY.animateTo(
             targetValue = -100f,
             animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
         )
-        // Escalamos el logo a 1f (si deseas otro efecto, puedes cambiarlo)
         logoScale.animateTo(
             targetValue = 1f,
             animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
         )
-        // Ahora mostramos los inputs
         inputsAlpha.animateTo(
             targetValue = 1f,
             animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
@@ -69,10 +68,10 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onNavigateToRegister: () -> Unit, co
                 .padding(innerPadding),
             contentAlignment = Alignment.Center
         ) {
-            // Logo animado en el centro
+            // Logo animado
             Image(
                 painter = painterResource(id = R.drawable.logo_fm),
-                contentDescription = "Logo UAM Facultad Medicina",
+                contentDescription = "Logo Registro",
                 modifier = Modifier
                     .offset(y = logoOffsetY.value.dp)
                     .scale(logoScale.value)
@@ -80,16 +79,25 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onNavigateToRegister: () -> Unit, co
                     .aspectRatio(2f, matchHeightConstraintsFirst = false)
             )
 
-            // Inputs debajo del logo, apareciendo después
+            // Inputs debajo del logo
             Column(
                 modifier = Modifier
                     .alpha(inputsAlpha.value)
-                    // Agregamos un padding top para que aparezcan debajo del logo
                     .padding(top = 150.dp)
                     .fillMaxWidth(0.8f),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Iniciar Sesión", style = MaterialTheme.typography.titleLarge)
+                Text(text = "Registro", style = MaterialTheme.typography.titleLarge)
+
+                // Campo de nombre
+                OutlinedTextField(
+                    value = nombre,
+                    onValueChange = { nombre = it },
+                    label = { Text("Nombre Completo") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
 
                 // Campo de correo
                 OutlinedTextField(
@@ -110,13 +118,32 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onNavigateToRegister: () -> Unit, co
                     modifier = Modifier.fillMaxWidth()
                 )
 
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Confirmar contraseña
+                OutlinedTextField(
+                    value = confirmPassword,
+                    onValueChange = { confirmPassword = it },
+                    label = { Text("Confirmar Contraseña") },
+                    visualTransformation = PasswordVisualTransformation(),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Botón de inicio de sesión
+                // Botón de registro
                 Button(
                     onClick = {
-                        if (!isLoading) { // Validación de múltiples clics
+                        if (!isLoading) {
                             scope.launch {
+                                if (password != confirmPassword) {
+                                    snackbarHostState.showSnackbar(
+                                        "Las contraseñas no coinciden",
+                                        duration = SnackbarDuration.Short
+                                    )
+                                    return@launch
+                                }
+
                                 if (!isNetworkAvailable) {
                                     snackbarHostState.showSnackbar(
                                         "Sin conexión a Internet. Verifica tu conexión.",
@@ -124,11 +151,15 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onNavigateToRegister: () -> Unit, co
                                     )
                                 } else {
                                     isLoading = true
-                                    val result = AuthRepository.login(context, email, password)
+                                    val result = AuthRepository.register(context, nombre, email, password)
                                     isLoading = false
                                     result.fold(
                                         onSuccess = {
-                                            onLoginSuccess() // Login exitoso
+                                            snackbarHostState.showSnackbar(
+                                                "Registro exitoso",
+                                                duration = SnackbarDuration.Short
+                                            )
+                                            onRegisterSuccess() // Registro exitoso
                                         },
                                         onFailure = {
                                             error = "Error: ${it.localizedMessage}"
@@ -157,24 +188,8 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onNavigateToRegister: () -> Unit, co
                             color = Color(0xFF7DBB00)
                         )
                     } else {
-                        Text("Iniciar Sesión")
+                        Text("Registrarse")
                     }
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Texto para crear una cuenta
-                TextButton(
-                    onClick = {
-                        // Lógica para redirigir a la pantalla de registro
-                        onNavigateToRegister()
-                    }
-                ) {
-                    Text(
-                        text = "¿No tienes cuenta? Crea una aquí",
-                        color = Color(0xFF7DBB00),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
                 }
 
                 // Mostrar errores si existen
@@ -185,7 +200,4 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onNavigateToRegister: () -> Unit, co
             }
         }
     }
-
 }
-
-

@@ -76,20 +76,16 @@ fun MainScreen(navController: NavController) {
             )
         }
 
-        // Contenido desplazable
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 80.dp) // Asegura que el contenido no se superponga con el logo
-                .padding(horizontal = 8.dp) // Padding lateral pequeño
+                .padding(top = 80.dp)
+                .padding(horizontal = 8.dp)
                 .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Relleno flexible superior
             Spacer(modifier = Modifier.weight(2f))
-
-            // Módulo de calculadora ocupa ambas columnas
             AnimatedModuleCard(
                 module = Module(
                     name = "Calculadora",
@@ -97,8 +93,8 @@ fun MainScreen(navController: NavController) {
                     imageRes = R.drawable.ic_calculator
                 ),
                 modifier = Modifier.fillMaxWidth(),
-                delayMillis = 100, // Retardo inicial para la animación
-                onClick = { navController.navigate("calculadora") } // Redirecciona a Calculadora
+                delayMillis = 100,
+                onClick = { navController.navigate("calculadora") }
             )
 
             Spacer(modifier = Modifier.height(8.dp))
