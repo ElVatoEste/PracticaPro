@@ -11,23 +11,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.practicapro.R
-import com.example.practicapro.network.NetworkObserver
-import com.example.practicapro.repository.AuthRepository
+import com.example.practicapro.components.NormalTextField
+import com.example.practicapro.components.PasswordTextField
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(onLoginSuccess: () -> Unit, onNavigateToRegister: () -> Unit, context: android.content.Context) {
-    // Estados del formulario
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var error by remember { mutableStateOf<String?>(null) }
-    var isLoading by remember { mutableStateOf(false) }
+fun LoginScreen(
+    onLoginSuccess: () -> Unit,
+    onNavigateToRegister: () -> Unit,
+    context: android.content.Context,
+    viewModel: LoginViewModel = viewModel()
+) {
+    val email by viewModel.email
+    val password by viewModel.password
+    val error by viewModel.error
+    val isLoading by viewModel.isLoading
+    val showEmailNotConfirmedDialog by viewModel.showEmailNotConfirmedDialog
+    val focusManager = LocalFocusManager.current
 
     // Animaciones
     val logoOffsetY = remember { Animatable(0f) }
@@ -37,25 +45,21 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onNavigateToRegister: () -> Unit, co
     // Inicialización de animaciones
     LaunchedEffect(Unit) {
         delay(500)
-        // Primero, movemos el logo hacia arriba
         logoOffsetY.animateTo(
-            targetValue = -100f,
+            targetValue = -160f,
             animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
         )
-        // Escalamos el logo a 1f (si deseas otro efecto, puedes cambiarlo)
         logoScale.animateTo(
             targetValue = 1f,
             animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
         )
-        // Ahora mostramos los inputs
         inputsAlpha.animateTo(
             targetValue = 1f,
             animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
         )
     }
 
-    // Observadores y helpers
-    val isNetworkAvailable by NetworkObserver.isNetworkAvailable.collectAsState()
+    // Helpers
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -84,7 +88,6 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onNavigateToRegister: () -> Unit, co
             Column(
                 modifier = Modifier
                     .alpha(inputsAlpha.value)
-                    // Agregamos un padding top para que aparezcan debajo del logo
                     .padding(top = 150.dp)
                     .fillMaxWidth(0.8f),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -92,21 +95,21 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onNavigateToRegister: () -> Unit, co
                 Text(text = "Iniciar Sesión", style = MaterialTheme.typography.titleLarge)
 
                 // Campo de correo
-                OutlinedTextField(
+                NormalTextField(
                     value = email,
-                    onValueChange = { email = it },
+                    onValueChange = { viewModel.onEmailChange(it) },
                     label = { Text("Correo Electrónico") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 // Campo de contraseña
-                OutlinedTextField(
+                PasswordTextField(
                     value = password,
-                    onValueChange = { password = it },
+                    onValueChange = { viewModel.onPasswordChange(it) },
                     label = { Text("Contraseña") },
-                    visualTransformation = PasswordVisualTransformation(),
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -115,31 +118,19 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onNavigateToRegister: () -> Unit, co
                 // Botón de inicio de sesión
                 Button(
                     onClick = {
-                        if (!isLoading) { // Validación de múltiples clics
-                            scope.launch {
-                                if (!isNetworkAvailable) {
-                                    snackbarHostState.showSnackbar(
-                                        "Sin conexión a Internet. Verifica tu conexión.",
-                                        duration = SnackbarDuration.Short
-                                    )
-                                } else {
-                                    isLoading = true
-                                    val result = AuthRepository.login(context, email, password)
-                                    isLoading = false
-                                    result.fold(
-                                        onSuccess = {
-                                            onLoginSuccess() // Login exitoso
-                                        },
-                                        onFailure = {
-                                            error = "Error: ${it.localizedMessage}"
-                                            snackbarHostState.showSnackbar(
-                                                error ?: "Ocurrió un error",
-                                                duration = SnackbarDuration.Short
-                                            )
-                                        }
-                                    )
+                        if (!isLoading) {
+                            viewModel.doLogin(
+                                context = context,
+                                onLoginSuccess = onLoginSuccess,
+                                onErrorSnackBar = { message ->
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(
+                                            message,
+                                            duration = SnackbarDuration.Short
+                                        )
+                                    }
                                 }
-                            }
+                            )
                         }
                     },
                     modifier = Modifier
@@ -164,12 +155,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onNavigateToRegister: () -> Unit, co
                 Spacer(modifier = Modifier.height(8.dp))
 
                 // Texto para crear una cuenta
-                TextButton(
-                    onClick = {
-                        // Lógica para redirigir a la pantalla de registro
-                        onNavigateToRegister()
-                    }
-                ) {
+                TextButton(onClick = onNavigateToRegister) {
                     Text(
                         text = "¿No tienes cuenta? Crea una aquí",
                         color = Color(0xFF7DBB00),
@@ -186,6 +172,17 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onNavigateToRegister: () -> Unit, co
         }
     }
 
+    // Dialogo de correo no confirmado
+    if (showEmailNotConfirmedDialog) {
+        AlertDialog(
+            onDismissRequest = { viewModel.dismissEmailNotConfirmedDialog() },
+            title = { Text("Correo no confirmado") },
+            text = { Text(error ?: "Debes confirmar tu correo antes de iniciar sesión.") },
+            confirmButton = {
+                Button(onClick = { viewModel.dismissEmailNotConfirmedDialog() }) {
+                    Text("Aceptar")
+                }
+            }
+        )
+    }
 }
-
-

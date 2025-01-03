@@ -11,11 +11,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.example.practicapro.R
+import com.example.practicapro.components.NormalTextField
+import com.example.practicapro.components.PasswordTextField
 import com.example.practicapro.network.NetworkObserver
 import com.example.practicapro.repository.AuthRepository
 import kotlinx.coroutines.delay
@@ -30,6 +34,7 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit, context: android.content.Conte
     var confirmPassword by remember { mutableStateOf("") }
     var error by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
 
     // Animaciones
     val logoOffsetY = remember { Animatable(0f) }
@@ -40,7 +45,7 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit, context: android.content.Conte
     LaunchedEffect(Unit) {
         delay(500)
         logoOffsetY.animateTo(
-            targetValue = -100f,
+            targetValue = -160f,
             animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
         )
         logoScale.animateTo(
@@ -90,42 +95,43 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit, context: android.content.Conte
                 Text(text = "Registro", style = MaterialTheme.typography.titleLarge)
 
                 // Campo de nombre
-                OutlinedTextField(
+                NormalTextField(
                     value = nombre,
                     onValueChange = { nombre = it },
                     label = { Text("Nombre Completo") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 // Campo de correo
-                OutlinedTextField(
+                NormalTextField(
                     value = email,
                     onValueChange = { email = it },
                     label = { Text("Correo Electrónico") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 // Campo de contraseña
-                OutlinedTextField(
+                PasswordTextField(
                     value = password,
                     onValueChange = { password = it },
                     label = { Text("Contraseña") },
-                    visualTransformation = PasswordVisualTransformation(),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 // Confirmar contraseña
-                OutlinedTextField(
+                PasswordTextField(
                     value = confirmPassword,
                     onValueChange = { confirmPassword = it },
                     label = { Text("Confirmar Contraseña") },
-                    visualTransformation = PasswordVisualTransformation(),
                     modifier = Modifier.fillMaxWidth()
                 )
 
