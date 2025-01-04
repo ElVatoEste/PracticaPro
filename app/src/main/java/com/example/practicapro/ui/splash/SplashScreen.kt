@@ -37,7 +37,7 @@ fun SplashScreen(navController: NavController, margin: Int = 8) {
             targetValue = 1f,
             animationSpec = tween(durationMillis = 1500)
         )
-        delay(1500)
+        delay(1000)
 
         // Verificar el estado del usuario
         val userDao = DatabaseProvider.getDatabase(navController.context).userDao()

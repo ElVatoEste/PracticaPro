@@ -20,6 +20,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.practicapro.R
 import com.example.practicapro.components.NormalTextField
 import com.example.practicapro.components.PasswordTextField
+import com.example.practicapro.components.VerificationCodeModal
+import com.example.practicapro.viewmodel.VerificationViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -28,7 +30,8 @@ fun LoginScreen(
     onLoginSuccess: () -> Unit,
     onNavigateToRegister: () -> Unit,
     context: android.content.Context,
-    viewModel: LoginViewModel = viewModel()
+    viewModel: LoginViewModel = viewModel(),
+    verificationViewModel: VerificationViewModel = viewModel()
 ) {
     val email by viewModel.email
     val password by viewModel.password
@@ -172,15 +175,20 @@ fun LoginScreen(
         }
     }
 
-    // Dialogo de correo no confirmado
     if (showEmailNotConfirmedDialog) {
-        AlertDialog(
-            onDismissRequest = { viewModel.dismissEmailNotConfirmedDialog() },
-            title = { Text("Correo no confirmado") },
-            text = { Text(error ?: "Debes confirmar tu correo antes de iniciar sesión.") },
-            confirmButton = {
-                Button(onClick = { viewModel.dismissEmailNotConfirmedDialog() }) {
-                    Text("Aceptar")
+        VerificationCodeModal(
+            isVisible = showEmailNotConfirmedDialog,
+            onDismiss = { viewModel.dismissEmailNotConfirmedDialog() },
+            viewModel = verificationViewModel,
+            email = email,
+            context = context,
+            onConfirmSuccess = {
+                scope.launch {
+                    viewModel.dismissEmailNotConfirmedDialog()
+                    snackbarHostState.showSnackbar(
+                        "Correo confirmado exitosamente",
+                        duration = SnackbarDuration.Short
+                    )
                 }
             }
         )

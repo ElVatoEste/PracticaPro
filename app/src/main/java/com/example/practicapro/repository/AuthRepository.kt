@@ -2,6 +2,7 @@ package com.example.practicapro.repository
 
 import android.content.Context
 import com.example.practicapro.exceptions.EmailNotConfirmedException
+import com.example.practicapro.model.ConfirmationRequest
 import com.example.practicapro.model.LoginRequest
 import com.example.practicapro.model.RegisterRequest
 import com.example.practicapro.model.LoginErrorResponse
@@ -37,19 +38,35 @@ object AuthRepository {
         }
     }
 
-    suspend fun register(context: Context, nombre: String, email: String, password: String): Result<User> {
+    suspend fun register(context: Context, nombre: String, email: String, password: String): Result<String> {
         return runCatching {
             val isNetworkAvailable = NetworkObserver.isNetworkAvailable.first()
             if (!isNetworkAvailable) throw Exception("No hay conexión a internet.")
 
             val response = authService.register(RegisterRequest(nombre, email, password))
 
-            // Crear usuario con la respuesta exitosa
-            val user = buildUser(response.user.nombre, response.user.email, response.accessToken)
-            saveUserToDatabase(context, user)
-            user
+            // Devuelve el mensaje del servidor en caso de éxito
+            response.message
         }.recoverCatching { throwable ->
-            handleHttpErrors(throwable)
+            handleHttpErrors(throwable).toString()
+        }
+    }
+
+    // Método de confirmación de email
+    suspend fun confirmEmail(context: Context, email: String, code: String): Result<String> {
+        return runCatching {
+            val isNetworkAvailable = NetworkObserver.isNetworkAvailable.first()
+            if (!isNetworkAvailable) throw Exception("No hay conexión a internet.")
+
+            val response = authService.confirmEmail(ConfirmationRequest(email, code))
+
+            if (response.success) {
+                response.message
+            } else {
+                throw Exception("Error: ${response.message}")
+            }
+        }.recoverCatching { throwable ->
+            handleHttpErrors(throwable).toString()
         }
     }
 

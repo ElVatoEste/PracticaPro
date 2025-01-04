@@ -10,5 +10,5 @@ data class ConfirmationResponse(
     val statusCode: Int?,
 
     @SerializedName("success")
-    val sucess: Boolean
+    val success: Boolean
 )

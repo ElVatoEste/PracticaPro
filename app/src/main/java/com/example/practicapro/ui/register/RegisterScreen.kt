@@ -15,25 +15,32 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.practicapro.R
 import com.example.practicapro.components.NormalTextField
 import com.example.practicapro.components.PasswordTextField
+import com.example.practicapro.components.VerificationCodeModal
 import com.example.practicapro.network.NetworkObserver
-import com.example.practicapro.repository.AuthRepository
+import com.example.practicapro.viewmodel.RegisterViewModel
+import com.example.practicapro.viewmodel.VerificationViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun RegisterScreen(onRegisterSuccess: () -> Unit, context: android.content.Context) {
-    // Estados del formulario
-    var nombre by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-    var error by remember { mutableStateOf<String?>(null) }
-    var isLoading by remember { mutableStateOf(false) }
+fun RegisterScreen(
+    onRegisterSuccess: () -> Unit,
+    context: android.content.Context,
+    registerViewModel: RegisterViewModel = viewModel(),
+    verificationViewModel: VerificationViewModel = viewModel()
+) {
+    val nombre by registerViewModel.nombre
+    val email by registerViewModel.email
+    val password by registerViewModel.password
+    val confirmPassword by registerViewModel.confirmPassword
+    val error by registerViewModel.error
+    val isLoading by registerViewModel.isLoading
+
     val focusManager = LocalFocusManager.current
 
     // Animaciones
@@ -41,7 +48,9 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit, context: android.content.Conte
     val logoScale = remember { Animatable(1f) }
     val inputsAlpha = remember { Animatable(0f) }
 
-    // Inicialización de animaciones
+    // Mostrar el modal de verificación de código
+    val showVerificationModal = remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
         delay(500)
         logoOffsetY.animateTo(
@@ -50,11 +59,11 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit, context: android.content.Conte
         )
         logoScale.animateTo(
             targetValue = 1f,
-            animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+            animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
         )
         inputsAlpha.animateTo(
             targetValue = 1f,
-            animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+            animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
         )
     }
 
@@ -84,7 +93,7 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit, context: android.content.Conte
                     .aspectRatio(2f, matchHeightConstraintsFirst = false)
             )
 
-            // Inputs debajo del logo
+            // Inputs
             Column(
                 modifier = Modifier
                     .alpha(inputsAlpha.value)
@@ -94,10 +103,9 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit, context: android.content.Conte
             ) {
                 Text(text = "Registro", style = MaterialTheme.typography.titleLarge)
 
-                // Campo de nombre
                 NormalTextField(
                     value = nombre,
-                    onValueChange = { nombre = it },
+                    onValueChange = { registerViewModel.onNombreChange(it) },
                     label = { Text("Nombre Completo") },
                     modifier = Modifier.fillMaxWidth(),
                     onNext = { focusManager.moveFocus(FocusDirection.Down) }
@@ -105,10 +113,9 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit, context: android.content.Conte
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Campo de correo
                 NormalTextField(
                     value = email,
-                    onValueChange = { email = it },
+                    onValueChange = { registerViewModel.onEmailChange(it) },
                     label = { Text("Correo Electrónico") },
                     modifier = Modifier.fillMaxWidth(),
                     onNext = { focusManager.moveFocus(FocusDirection.Down) }
@@ -116,10 +123,9 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit, context: android.content.Conte
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Campo de contraseña
                 PasswordTextField(
                     value = password,
-                    onValueChange = { password = it },
+                    onValueChange = { registerViewModel.onPasswordChange(it) },
                     label = { Text("Contraseña") },
                     modifier = Modifier.fillMaxWidth(),
                     onNext = { focusManager.moveFocus(FocusDirection.Down) }
@@ -127,52 +133,38 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit, context: android.content.Conte
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Confirmar contraseña
                 PasswordTextField(
                     value = confirmPassword,
-                    onValueChange = { confirmPassword = it },
+                    onValueChange = { registerViewModel.onConfirmPasswordChange(it) },
                     label = { Text("Confirmar Contraseña") },
                     modifier = Modifier.fillMaxWidth()
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Botón de registro
                 Button(
                     onClick = {
                         if (!isLoading) {
                             scope.launch {
-                                if (password != confirmPassword) {
-                                    snackbarHostState.showSnackbar(
-                                        "Las contraseñas no coinciden",
-                                        duration = SnackbarDuration.Short
-                                    )
-                                    return@launch
-                                }
-
                                 if (!isNetworkAvailable) {
                                     snackbarHostState.showSnackbar(
                                         "Sin conexión a Internet. Verifica tu conexión.",
                                         duration = SnackbarDuration.Short
                                     )
                                 } else {
-                                    isLoading = true
-                                    val result = AuthRepository.register(context, nombre, email, password)
-                                    isLoading = false
-                                    result.fold(
-                                        onSuccess = {
-                                            snackbarHostState.showSnackbar(
-                                                "Registro exitoso",
-                                                duration = SnackbarDuration.Short
-                                            )
-                                            onRegisterSuccess() // Registro exitoso
-                                        },
-                                        onFailure = {
-                                            error = "Error: ${it.localizedMessage}"
-                                            snackbarHostState.showSnackbar(
-                                                error ?: "Ocurrió un error",
-                                                duration = SnackbarDuration.Short
-                                            )
+                                    registerViewModel.doRegister(
+                                        context = context,
+                                        onRegisterSuccess = { message ->
+                                            scope.launch {
+                                                val snackbarResult = snackbarHostState.showSnackbar(
+                                                    message = message,
+                                                    duration = SnackbarDuration.Short
+                                                )
+                                                if (snackbarResult == SnackbarResult.Dismissed || snackbarResult == SnackbarResult.ActionPerformed) {
+                                                    // Muestra el modal de verificación
+                                                    showVerificationModal.value = true
+                                                }
+                                            }
                                         }
                                     )
                                 }
@@ -198,12 +190,25 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit, context: android.content.Conte
                     }
                 }
 
-                // Mostrar errores si existen
                 if (error != null) {
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(text = error!!, color = MaterialTheme.colorScheme.error)
                 }
             }
         }
+    }
+
+    if (showVerificationModal.value) {
+        VerificationCodeModal(
+            isVisible = showVerificationModal.value,
+            onDismiss = { showVerificationModal.value = false },
+            viewModel = verificationViewModel,
+            email = email,
+            context = context,
+            onConfirmSuccess = {
+                showVerificationModal.value = false
+                onRegisterSuccess()
+            }
+        )
     }
 }

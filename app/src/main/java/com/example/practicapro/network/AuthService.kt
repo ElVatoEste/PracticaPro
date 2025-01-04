@@ -9,7 +9,7 @@ interface AuthService {
     suspend fun login(@Body credentials: LoginRequest): AuthResponse
 
     @POST("auth/register")
-    suspend fun register(@Body credentials: RegisterRequest): AuthResponse
+    suspend fun register(@Body credentials: RegisterRequest): RegisterResponse
 
     @POST("auth/confirm-email")
     suspend fun confirmEmail(@Body confirmationRequest: ConfirmationRequest): ConfirmationResponse
