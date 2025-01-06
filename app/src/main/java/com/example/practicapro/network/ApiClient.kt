@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 object ApiClient {
     private const val BASE_URL = "https://practica-pro-back.vercel.app/"
     private const val LOCAL_URL = "http://192.168.0.3:3000/"
-    private const val IsLocal = true
+    private const val IS_LOCAL = true
     private const val TAG = "ApiClient"
 
     // Interceptor de logs
@@ -51,12 +51,12 @@ object ApiClient {
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor) // Logs de Retrofit
         .addInterceptor(bodyInterceptor) // Interceptor personalizado
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
+        .connectTimeout(3, TimeUnit.SECONDS)
+        .readTimeout(3, TimeUnit.SECONDS)
         .build()
 
     // Selección de URL base
-    private val baseUrl = if (IsLocal) LOCAL_URL else BASE_URL
+    private val baseUrl = if (IS_LOCAL) LOCAL_URL else BASE_URL
 
     // Cliente Retrofit
     val retrofit: Retrofit = Retrofit.Builder()
