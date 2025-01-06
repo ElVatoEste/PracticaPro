@@ -19,6 +19,9 @@ class VerificationViewModel : ViewModel() {
     private val _error = mutableStateOf<String?>(null)
     val error get() = _error
 
+    private val _successMessage = mutableStateOf("")
+    val successMessage get() = _successMessage
+
     private val _isLoading = mutableStateOf(false)
     val isLoading get() = _isLoading
 
@@ -36,8 +39,12 @@ class VerificationViewModel : ViewModel() {
         }
     }
 
-    // Confirmar el código
-    fun confirmEmail(context: Context) {
+    // Confirmar el código con callbacks personalizados
+    fun confirmEmail(
+        context: Context,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
         viewModelScope.launch {
             _isLoading.value = true
             val result = AuthRepository.confirmEmail(context, _email.value, _code.value)
@@ -47,11 +54,56 @@ class VerificationViewModel : ViewModel() {
                 onSuccess = {
                     _isSuccess.value = true
                     _error.value = null
+                    onSuccess()
                 },
                 onFailure = {
+                    _isSuccess.value = false
                     _error.value = it.localizedMessage
+                    onError(it.localizedMessage ?: "Error desconocido")
                 }
             )
         }
+    }
+
+    // Reenviar el código de verificación con callbacks personalizados
+    fun resendVerificationEmail(
+        context: Context,
+        onSuccess: (String) -> Unit,
+        onError: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            val result = AuthRepository.resendVerificationEmail(_email.value)
+            _isLoading.value = false
+
+            result.fold(
+                onSuccess = { message ->
+                    _successMessage.value = message
+                    _error.value = null
+                    onSuccess(message)
+                },
+                onFailure = {
+                    _successMessage.value = ""
+                    _error.value = it.localizedMessage
+                    onError(it.localizedMessage ?: "Error desconocido")
+                }
+            )
+        }
+    }
+
+    // Limpiar mensajes
+    fun clearMessages() {
+        _error.value = null
+        _successMessage.value = ""
+    }
+
+    // Actualizar el mensaje de error
+    fun onErrorChange(message: String?) {
+        _error.value = message
+    }
+
+    // Actualizar el mensaje de éxito
+    fun onSuccessMessageChange(message: String) {
+        _successMessage.value = message
     }
 }

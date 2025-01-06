@@ -1,16 +1,11 @@
 package com.example.practicapro.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.practicapro.rooms.appDatabase.DatabaseProvider
 import com.example.practicapro.ui.splash.SplashScreen
 import com.example.practicapro.ui.main.MainScreen
 import com.example.practicapro.ui.calculadora.CalculadoraScreen
@@ -41,19 +36,15 @@ object Routes {
 }
 
 @Composable
-fun AppNavigation() {
-    val navController = rememberNavController()
-
+fun AppNavigation(navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = Routes.SPLASH
     ) {
-        // Pantalla de Splash
         composable(Routes.SPLASH) {
             SplashScreen(navController)
         }
 
-        // Pantalla de Login
         composable(Routes.LOGIN) {
             LoginScreen(
                 onLoginSuccess = {
@@ -68,7 +59,6 @@ fun AppNavigation() {
             )
         }
 
-        // Pantalla de Registro
         composable(Routes.REGISTER) {
             RegisterScreen(
                 onRegisterSuccess = {
@@ -80,47 +70,38 @@ fun AppNavigation() {
             )
         }
 
-        // Pantalla Principal
         composable(Routes.MAIN) {
             MainScreen(navController)
         }
 
-        // Pantalla de la Calculadora
         composable(Routes.CALCULADORA) {
             CalculadoraScreen()
         }
 
-        // Pantalla de Técnicas de Asepsia
         composable(Routes.TECNICAS) {
             AsepsiaScreen(navController)
         }
 
-        // Pantalla del Quiz de Técnicas
         composable(Routes.QUIZ_SCREEN) {
             QuizScreen(onDismiss = { navController.popBackStack() })
         }
 
-        // Pantalla de Procedimientos Básicos
         composable(Routes.PROCEDIMIENTOS) {
             ProcedimientosScreen(navController)
         }
 
-        // Pantalla del Quiz de Procedimientos Básicos
         composable(Routes.QUIZ_PROCEDIMIENTOS) {
             ProcedimientosQuizScreen(onDismiss = { navController.popBackStack() })
         }
 
-        // Pantalla de Administración de Medicamentos
         composable(Routes.ADMINISTRACION) {
             MedicamentosScreen(navController)
         }
 
-        // Minijuego de Medicamentos
         composable(Routes.MINIJUEGO_MEDICAMENTOS) {
             MinijuegoMedicamentosScreen(navController)
         }
 
-        // Pantalla de Urgencias Médicas
         composable(Routes.URGENCIAS) {
             UrgenciasScreen(navController)
         }

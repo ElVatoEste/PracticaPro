@@ -3,6 +3,7 @@ package com.example.practicapro.repository
 import android.content.Context
 import com.example.practicapro.exceptions.EmailNotConfirmedException
 import com.example.practicapro.model.ConfirmationRequest
+import com.example.practicapro.model.EmailRequest
 import com.example.practicapro.model.LoginRequest
 import com.example.practicapro.model.RegisterRequest
 import com.example.practicapro.model.LoginErrorResponse
@@ -45,7 +46,6 @@ object AuthRepository {
 
             val response = authService.register(RegisterRequest(nombre, email, password))
 
-            // Devuelve el mensaje del servidor en caso de éxito
             response.message
         }.recoverCatching { throwable ->
             handleHttpErrors(throwable).toString()
@@ -65,6 +65,15 @@ object AuthRepository {
             } else {
                 throw Exception("Error: ${response.message}")
             }
+        }.recoverCatching { throwable ->
+            handleHttpErrors(throwable).toString()
+        }
+    }
+
+    suspend fun resendVerificationEmail(email: String): Result<String> {
+        return runCatching {
+            val response = authService.resentEmail(EmailRequest(email))
+            response.message
         }.recoverCatching { throwable ->
             handleHttpErrors(throwable).toString()
         }
@@ -94,14 +103,11 @@ object AuthRepository {
                 val errorResponse = errorBody?.let { Gson().fromJson(it, LoginErrorResponse::class.java) }
 
                 if (errorResponse != null) {
-                    // Si el servidor indica que el correo no está confirmado
                     if (errorResponse.isConfirmed == false) {
                         throw EmailNotConfirmedException(errorResponse.message ?: "Correo electrónico no confirmado.")
                     }
-                    // Aquí puedes manejar otros tipos de errores que vengan en el errorResponse
                     throw Exception(errorResponse.message ?: "Error desconocido.")
                 }
-
                 throw Exception("Error HTTP (${throwable.code()}): ${throwable.message()}")
             }
             else -> throw Exception("Error inesperado: ${throwable.message}")

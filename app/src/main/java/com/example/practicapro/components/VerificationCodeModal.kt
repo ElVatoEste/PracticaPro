@@ -1,15 +1,14 @@
 package com.example.practicapro.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.example.practicapro.viewmodel.VerificationViewModel
 
@@ -22,6 +21,8 @@ fun VerificationCodeModal(
     context: android.content.Context,
     onConfirmSuccess: () -> Unit
 ) {
+    val greenColor = Color(0xFF7DBB00)
+
     if (isVisible) {
 
         LaunchedEffect(Unit) {
@@ -29,7 +30,10 @@ fun VerificationCodeModal(
         }
 
         AlertDialog(
-            onDismissRequest = onDismiss,
+            onDismissRequest = {
+                viewModel.clearMessages()
+                onDismiss()
+            },
             title = { Text("Confirmación de Correo") },
             text = {
                 Column {
@@ -46,17 +50,49 @@ fun VerificationCodeModal(
                         ),
                         keyboardActions = KeyboardActions(
                             onDone = {
-                                viewModel.confirmEmail(context)
+                                viewModel.clearMessages()
+                                viewModel.confirmEmail(
+                                    context,
+                                    onSuccess = { onConfirmSuccess() },
+                                    onError = { message -> viewModel.onErrorChange(message) }
+                                )
                             }
                         ),
                         singleLine = true
                     )
 
+                    Spacer(modifier = Modifier.height(16.dp))
+
                     if (viewModel.error.value != null) {
                         Text(
                             text = viewModel.error.value!!,
-                            color = MaterialTheme.colorScheme.error,
+                            color = Color.Red,
                             modifier = Modifier.padding(top = 8.dp)
+                        )
+                    } else if (viewModel.successMessage.value.isNotEmpty()) {
+                        Text(
+                            text = viewModel.successMessage.value,
+                            color = greenColor,
+                            modifier = Modifier.padding(top = 8.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    TextButton(
+                        onClick = {
+                            viewModel.clearMessages()
+                            viewModel.resendVerificationEmail(
+                                context,
+                                onSuccess = { message -> viewModel.onSuccessMessageChange(message) },
+                                onError = { message -> viewModel.onErrorChange(message) }
+                            )
+                        }
+                    ) {
+                        Text(
+                            text = "¿No recibiste el correo? Reenviar código",
+                            color = greenColor,
+                            textDecoration = TextDecoration.Underline
                         )
                     }
                 }
@@ -64,17 +100,31 @@ fun VerificationCodeModal(
             confirmButton = {
                 Button(
                     onClick = {
-                        viewModel.confirmEmail(context)
-                        if (viewModel.isSuccess.value) {
-                            onConfirmSuccess()
-                        }
-                    }
+                        viewModel.clearMessages()
+                        viewModel.confirmEmail(
+                            context,
+                            onSuccess = { onConfirmSuccess() },
+                            onError = { message -> viewModel.onErrorChange(message) }
+                        )
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = greenColor,
+                        contentColor = Color.White
+                    )
                 ) {
                     Text("Confirmar")
                 }
             },
             dismissButton = {
-                TextButton(onClick = onDismiss) {
+                TextButton(
+                    onClick = {
+                        viewModel.clearMessages()
+                        onDismiss()
+                    },
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = greenColor
+                    )
+                ) {
                     Text("Cancelar")
                 }
             }

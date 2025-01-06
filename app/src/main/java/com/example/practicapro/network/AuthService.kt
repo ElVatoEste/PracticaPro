@@ -13,5 +13,8 @@ interface AuthService {
 
     @POST("auth/confirm-email")
     suspend fun confirmEmail(@Body confirmationRequest: ConfirmationRequest): ConfirmationResponse
+
+    @POST("auth/resend-verification")
+    suspend fun resentEmail(@Body emailRequest: EmailRequest): MessageResponse
 }
 
