@@ -19,11 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.practicapro.R
-import com.example.practicapro.components.ActionButton
-import com.example.practicapro.components.SectionContent
-import com.example.practicapro.components.SectionTitle
-import com.example.practicapro.components.TechniqueCard
-import com.example.practicapro.components.VideoPlayerScreen
+import com.example.practicapro.components.*
 
 @Composable
 fun UrgenciasScreen(navController: NavController) {

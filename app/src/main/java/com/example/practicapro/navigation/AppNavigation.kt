@@ -1,12 +1,16 @@
-package com.example.practicapro.ui.navigation
+package com.example.practicapro.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.compose.rememberNavController
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.practicapro.ui.splash.SplashScreen
 import com.example.practicapro.ui.main.MainScreen
 import com.example.practicapro.ui.calculadora.CalculadoraScreen
+import com.example.practicapro.ui.login.LoginScreen
+import com.example.practicapro.ui.register.RegisterScreen
 import com.example.practicapro.ui.study.asepsia.AsepsiaScreen
 import com.example.practicapro.ui.study.asepsia.QuizScreen
 import com.example.practicapro.ui.study.procedimientos.ProcedimientosScreen
@@ -27,48 +31,69 @@ object Routes {
     const val ADMINISTRACION = "administracion"
     const val URGENCIAS = "urgencias"
     const val MINIJUEGO_MEDICAMENTOS = "minijuego_medicamentos"
+    const val LOGIN = "login"
+    const val REGISTER = "register"
 }
-@Composable
-fun AppNavigation() {
-    val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Routes.SPLASH) {
-        // Pantalla Splash
+@Composable
+fun AppNavigation(navController: NavHostController) {
+    NavHost(
+        navController = navController,
+        startDestination = Routes.SPLASH
+    ) {
         composable(Routes.SPLASH) {
             SplashScreen(navController)
         }
 
-        // Pantalla Principal
+        composable(Routes.LOGIN) {
+            LoginScreen(
+                onLoginSuccess = {
+                    navController.navigate(Routes.MAIN) {
+                        popUpTo(Routes.LOGIN) { inclusive = true }
+                    }
+                },
+                context = LocalContext.current,
+                onNavigateToRegister = {
+                    navController.navigate(Routes.REGISTER)
+                }
+            )
+        }
+
+        composable(Routes.REGISTER) {
+            RegisterScreen(
+                onRegisterSuccess = {
+                    navController.navigate(Routes.LOGIN) {
+                        popUpTo(Routes.REGISTER) { inclusive = true }
+                    }
+                },
+                context = LocalContext.current
+            )
+        }
+
         composable(Routes.MAIN) {
             MainScreen(navController)
         }
 
-        // Pantalla de la Calculadora
         composable(Routes.CALCULADORA) {
             CalculadoraScreen()
         }
 
-        // Pantalla de Técnicas de Asepsia
         composable(Routes.TECNICAS) {
             AsepsiaScreen(navController)
         }
 
-        // Pantalla del Quiz de Técnicas
         composable(Routes.QUIZ_SCREEN) {
             QuizScreen(onDismiss = { navController.popBackStack() })
         }
 
-        // Pantalla de Procedimientos Básicos
         composable(Routes.PROCEDIMIENTOS) {
             ProcedimientosScreen(navController)
         }
 
-        // Pantalla del Quiz de Procedimientos Básicos
         composable(Routes.QUIZ_PROCEDIMIENTOS) {
             ProcedimientosQuizScreen(onDismiss = { navController.popBackStack() })
         }
 
-        // Pantalla de Administración de Medicamentos
         composable(Routes.ADMINISTRACION) {
             MedicamentosScreen(navController)
         }
@@ -77,37 +102,8 @@ fun AppNavigation() {
             MinijuegoMedicamentosScreen(navController)
         }
 
-
-        // Pantalla de Urgencias Médicas
         composable(Routes.URGENCIAS) {
             UrgenciasScreen(navController)
         }
     }
 }
-
-//@Composable
-//fun BottomNavigationBar(navController: NavController) {
-//    BottomAppBar(
-//        containerColor = MaterialTheme.colorScheme.primary,
-//        contentColor = MaterialTheme.colorScheme.onPrimary
-//    ) {
-//
-//        IconButton(
-//            onClick = { if (navController.previousBackStackEntry != null) navController.popBackStack() },
-//            enabled = navController.previousBackStackEntry != null
-//        ) {
-//            Icon(Icons.Default.ArrowBack, contentDescription = "Regresar")
-//        }
-//
-//        Spacer(modifier = Modifier.weight(1f))
-//
-//        IconButton(onClick = {
-//            if (navController.currentDestination?.route != Routes.MAIN) {
-//                navController.navigate(Routes.MAIN) { launchSingleTop = true }
-//            }
-//        }) {
-//            Icon(Icons.Default.Home, contentDescription = "Inicio")
-//        }
-//
-//    }
-//}
