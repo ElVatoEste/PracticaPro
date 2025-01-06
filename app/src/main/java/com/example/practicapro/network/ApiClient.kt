@@ -51,8 +51,8 @@ object ApiClient {
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor) // Logs de Retrofit
         .addInterceptor(bodyInterceptor) // Interceptor personalizado
-        .connectTimeout(3, TimeUnit.SECONDS)
-        .readTimeout(3, TimeUnit.SECONDS)
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
         .build()
 
     // Selección de URL base
