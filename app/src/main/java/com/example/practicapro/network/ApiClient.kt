@@ -49,8 +49,8 @@ object ApiClient {
 
     // Cliente HTTP
     private val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor) // Logs de Retrofit
-        .addInterceptor(bodyInterceptor) // Interceptor personalizado
+        .addInterceptor(loggingInterceptor)
+        .addInterceptor(bodyInterceptor)
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .build()

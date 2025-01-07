@@ -1,8 +1,13 @@
 package com.example.practicapro.navigation
 
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -45,7 +50,12 @@ fun AppNavigation(navController: NavHostController) {
             SplashScreen(navController)
         }
 
-        composable(Routes.LOGIN) {
+        // Login Screen
+        composable(
+            Routes.LOGIN,
+            enterTransition = { slideInVertically() + fadeIn() },
+            exitTransition = { slideOutVertically() + fadeOut() }
+        ) {
             LoginScreen(
                 onLoginSuccess = {
                     navController.navigate(Routes.MAIN) {
@@ -59,7 +69,12 @@ fun AppNavigation(navController: NavHostController) {
             )
         }
 
-        composable(Routes.REGISTER) {
+        // Register Screen
+        composable(
+            Routes.REGISTER,
+            enterTransition = { slideInHorizontally() + fadeIn() },
+            exitTransition = { slideOutHorizontally() + fadeOut() }
+        ) {
             RegisterScreen(
                 onRegisterSuccess = {
                     navController.navigate(Routes.LOGIN) {
@@ -70,7 +85,12 @@ fun AppNavigation(navController: NavHostController) {
             )
         }
 
-        composable(Routes.MAIN) {
+        // Main Screen
+        composable(
+            Routes.MAIN,
+            enterTransition = { fadeIn() },
+            exitTransition = { fadeOut() }
+        ) {
             MainScreen(navController)
         }
 

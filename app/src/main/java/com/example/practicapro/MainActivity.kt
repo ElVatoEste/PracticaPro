@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
                 snackbarHost = { SnackbarHost(snackbarHostState) },
                 bottomBar = {
                     val currentRoute = navController.currentBackStackEntryAsState()?.value?.destination?.route
-                    if (currentRoute != Routes.LOGIN && currentRoute != Routes.SPLASH) {
+                    if (currentRoute != Routes.LOGIN && currentRoute != Routes.SPLASH && currentRoute != Routes.REGISTER) {
                         BottomNavigationBar(navController)
                     }
                 }

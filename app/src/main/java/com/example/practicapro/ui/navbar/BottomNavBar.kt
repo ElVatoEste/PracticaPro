@@ -1,5 +1,6 @@
 package com.example.practicapro.ui.navbar
 
+import android.util.Log
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -11,10 +12,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.example.practicapro.navigation.Routes
 import com.example.practicapro.rooms.appDatabase.DatabaseProvider
 import kotlinx.coroutines.launch
@@ -25,7 +28,9 @@ fun BottomNavigationBar(navController: NavController) {
     val currentRoute = currentBackStackEntry?.destination?.route
     val scope = rememberCoroutineScope()
 
-    if (currentRoute != Routes.LOGIN && currentRoute != Routes.SPLASH) {
+    Log.d("BottomNavigationBar", "Current Route: $currentRoute")
+
+    if (currentRoute != Routes.LOGIN && currentRoute != Routes.SPLASH && currentRoute != Routes.REGISTER ) {
         Surface(
             modifier = Modifier.height(56.dp),
             shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -49,16 +54,27 @@ fun BottomNavigationBar(navController: NavController) {
                         Icon(
                             Icons.Default.Home,
                             contentDescription = "Inicio",
-                            tint = if (currentRoute == Routes.MAIN) Color.White else Color(0xFF000000)
+                            tint = if (currentRoute == Routes.MAIN) Color.White else Color(
+                                0xFFFFFFFF
+                            )
                         )
                     },
                     label = {
                         Text(
                             text = "Inicio",
                             fontSize = 13.sp,
-                            color = if (currentRoute == Routes.MAIN) Color.White else Color(0xFF000000)
+                            color = if (currentRoute == Routes.MAIN) Color.White else Color(
+                                0xFFFFFFFF
+                            )
                         )
-                    }
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Color.White,
+                        unselectedIconColor = Color.Gray,
+                        selectedTextColor = Color.White,
+                        unselectedTextColor = Color.Gray,
+                        indicatorColor = Color(0xFF4CAF50)
+                    )
                 )
 
                 // Botón Logout
@@ -67,7 +83,7 @@ fun BottomNavigationBar(navController: NavController) {
                     onClick = {
                         scope.launch {
                             val userDao = DatabaseProvider.getDatabase(navController.context).userDao()
-                            userDao.deleteUser() // Eliminar usuario de la base de datos
+                            userDao.deleteUser()
                             navController.navigate(Routes.LOGIN) {
                                 popUpTo(Routes.MAIN) { inclusive = true }
                             }
@@ -77,7 +93,7 @@ fun BottomNavigationBar(navController: NavController) {
                         Icon(
                             Icons.Default.Logout,
                             contentDescription = "Cerrar Sesión",
-                            tint = Color(0xFF7DBB00)
+                            tint = Color(0xFFFFFFFF)
                         )
                     },
                     label = {
@@ -91,4 +107,11 @@ fun BottomNavigationBar(navController: NavController) {
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewBottomNavigationBar() {
+    val navController = rememberNavController()
+    BottomNavigationBar(navController = navController)
 }
