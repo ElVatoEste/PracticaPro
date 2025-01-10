@@ -14,6 +14,32 @@ object ApiClient {
     private const val IS_LOCAL = true
     private const val TAG = "ApiClient"
 
+    private var token: String? = null
+
+    // 👉 Configurar el token
+    fun setToken(newToken: String) {
+        token = newToken
+    }
+
+    // 👉 Limpiar el token
+    fun clearToken() {
+        token = null
+    }
+
+    // Interceptor para agregar el token a las solicitudes
+    private val authInterceptor = Interceptor { chain ->
+        val originalRequest = chain.request()
+        val requestBuilder = originalRequest.newBuilder()
+
+        // Agregar el token si está disponible
+        token?.let {
+            requestBuilder.addHeader("Authorization", "Bearer $it")
+        }
+
+        val request = requestBuilder.build()
+        chain.proceed(request)
+    }
+
     // Interceptor de logs
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
@@ -49,6 +75,7 @@ object ApiClient {
 
     // Cliente HTTP
     private val okHttpClient = OkHttpClient.Builder()
+        .addInterceptor(authInterceptor)
         .addInterceptor(loggingInterceptor)
         .addInterceptor(bodyInterceptor)
         .connectTimeout(30, TimeUnit.SECONDS)

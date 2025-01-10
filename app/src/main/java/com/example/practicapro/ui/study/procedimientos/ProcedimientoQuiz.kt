@@ -1,32 +1,29 @@
 package com.example.practicapro.ui.study.procedimientos
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Animatable
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.practicapro.ui.study.asepsia.ProgressBar
+import com.example.practicapro.components.quizes.AnimatedTimeBar
+import com.example.practicapro.components.quizes.Feedback
+import com.example.practicapro.components.quizes.FinalSummary
+import com.example.practicapro.components.quizes.ProgressBar
 import kotlinx.coroutines.delay
 
 @Composable
 fun ProcedimientosQuizScreen(onDismiss: () -> Unit) {
-    var currentQuestion by remember { mutableStateOf(0) }
-    var score by remember { mutableStateOf(0) }
+    var currentQuestion by remember { mutableIntStateOf(0) }
+    var score by remember { mutableIntStateOf(0) }
     var selectedAnswer by remember { mutableStateOf<String?>(null) }
     var showFeedback by remember { mutableStateOf(false) }
     var showFinalSummary by remember { mutableStateOf(false) }
-    var timeLeft by remember { mutableStateOf(10f) }
+    var timeLeft by remember { mutableFloatStateOf(10f) }
     val maxTime = 10f
 
     val questions = listOf(
@@ -109,7 +106,7 @@ fun ProcedimientosQuizScreen(onDismiss: () -> Unit) {
     )
 
     if (showFinalSummary) {
-        FinalSummary(score = score, totalQuestions = questions.size, onDismiss = onDismiss)
+        FinalSummary(score = score, onDismiss = onDismiss)
         return
     }
 
@@ -195,105 +192,4 @@ fun ProcedimientosQuizScreen(onDismiss: () -> Unit) {
             )
         }
     }
-}
-
-@Composable
-fun AnimatedTimeBar(timeLeft: Float, maxTime: Float) {
-    val animatedTime = remember { Animatable(timeLeft) }
-    LaunchedEffect(timeLeft) {
-        animatedTime.animateTo(timeLeft)
-    }
-    LinearProgressIndicator(
-        progress = animatedTime.value / maxTime,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(10.dp),
-        color = if (timeLeft > maxTime * 0.3f) Color(0xFF7DBB00) else Color(0xFFFF5252)
-    )
-}
-
-@Composable
-fun Feedback(isCorrect: Boolean?, explanation: String, timeBonus: Int, onNext: () -> Unit) {
-    if (isCorrect == null) return // No mostrar feedback si no se ha seleccionado una respuesta
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable { onNext() }, // Avanza solo cuando se hace clic
-        colors = CardDefaults.cardColors(
-            containerColor = if (isCorrect) Color(0xFF7DBB00) else Color(0xFFFF5252)
-        ),
-        elevation = CardDefaults.cardElevation(4.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(
-                imageVector = if (isCorrect) Icons.Default.CheckCircle else Icons.Default.Close,
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier.size(40.dp)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = if (isCorrect) {
-                    "¡Correcto! +$timeBonus puntos extra"
-                } else {
-                    "Incorrecto. Intenta de nuevo."
-                },
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = explanation,
-                fontSize = 14.sp,
-                color = Color.White,
-                textAlign = TextAlign.Center
-            )
-        }
-    }
-}
-
-
-@Composable
-fun FinalSummary(score: Int, totalQuestions: Int, onDismiss: () -> Unit) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
-            Text(text = "¡Quiz Finalizado!")
-        },
-        text = {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = "Puntaje Final: $score",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = if (score == totalQuestions * 2) {
-                        "¡Perfecto! Has dominado este tema al máximo."
-                    } else if (score > totalQuestions) {
-                        "¡Buen trabajo! Puedes intentar mejorar aún más."
-                    } else {
-                        "Sigue practicando para alcanzar tu mejor desempeño."
-                    },
-                    fontSize = 16.sp,
-                    textAlign = TextAlign.Center
-                )
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Aceptar")
-            }
-        }
-    )
 }

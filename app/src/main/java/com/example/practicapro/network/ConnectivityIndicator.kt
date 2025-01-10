@@ -1,9 +1,10 @@
+package com.example.practicapro.network
+
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
-import com.example.practicapro.network.NetworkObserver
 import kotlinx.coroutines.launch
 
 @Composable
@@ -22,7 +23,7 @@ fun ConnectivityIndicator(snackbarHostState: SnackbarHostState) {
             snackbarHostState.showSnackbar(
                 message = message,
                 withDismissAction = true,
-                duration = SnackbarDuration.Indefinite,
+                duration = SnackbarDuration.Short,
                 actionLabel = "Cerrar"
             )
         }

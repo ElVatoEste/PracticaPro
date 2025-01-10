@@ -17,7 +17,7 @@ import com.example.practicapro.ui.calculadora.CalculadoraScreen
 import com.example.practicapro.ui.login.LoginScreen
 import com.example.practicapro.ui.register.RegisterScreen
 import com.example.practicapro.ui.study.asepsia.AsepsiaScreen
-import com.example.practicapro.ui.study.asepsia.QuizScreen
+import com.example.practicapro.ui.study.asepsia.quiz.QuizScreen
 import com.example.practicapro.ui.study.procedimientos.ProcedimientosScreen
 import com.example.practicapro.ui.study.medicamentos.MedicamentosScreen
 import com.example.practicapro.ui.study.medicamentos.MinijuegoMedicamentosScreen

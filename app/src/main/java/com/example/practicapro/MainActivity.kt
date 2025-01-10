@@ -1,6 +1,5 @@
 package com.example.practicapro
 
-import ConnectivityIndicator
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.NavHostController
+import com.example.practicapro.network.ConnectivityIndicator
 import com.example.practicapro.navigation.AppNavigation
 import com.example.practicapro.navigation.Routes
 import com.example.practicapro.ui.navbar.BottomNavigationBar

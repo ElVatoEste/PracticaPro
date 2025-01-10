@@ -4,7 +4,7 @@ import android.content.Context
 import com.example.practicapro.exceptions.EmailNotConfirmedException
 import com.example.practicapro.model.*
 import com.example.practicapro.network.ApiClient
-import com.example.practicapro.network.AuthService
+import com.example.practicapro.service.AuthService
 import com.example.practicapro.network.NetworkObserver
 import com.example.practicapro.rooms.appDatabase.DatabaseProvider
 import com.example.practicapro.rooms.entitys.User
@@ -39,6 +39,7 @@ object AuthRepository {
             handleHttpErrors(throwable)
         }.onSuccess { user ->
             saveUserToDatabase(context, user)
+            ApiClient.setToken(user.token)
         }
     }
 
@@ -94,6 +95,15 @@ object AuthRepository {
             token = token,
             expirationDate = expirationDate
         )
+    }
+
+    // 📌 Cerrar sesión
+    suspend fun logout(context: Context) {
+        ApiClient.clearToken()
+        val userDao = DatabaseProvider.getDatabase(context).userDao()
+        withContext(Dispatchers.IO) {
+            userDao.deleteUser()
+        }
     }
 
     // 📌 Guardar usuario en la base de datos

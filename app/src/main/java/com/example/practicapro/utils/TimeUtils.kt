@@ -8,3 +8,5 @@ fun Int.hours(): Long = this * 60 * 60 * 1000L
 
 // Función de extensión para convertir minutos a milisegundos
 fun Int.minutes(): Long = this * 60 * 1000L
+
+fun Int.seconds(): Long = this * 100L
