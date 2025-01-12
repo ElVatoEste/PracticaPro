@@ -1,6 +1,8 @@
 package com.example.practicapro.network
 
 import android.util.Log
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -16,14 +18,15 @@ object ApiClient {
 
     private var token: String? = null
 
-    // 👉 Configurar el token
-    fun setToken(newToken: String) {
-        token = newToken
-    }
+    // 👉 Token Flow para observar cambios
+    private val _tokenFlow = MutableStateFlow<String?>(null)
+    val tokenFlow = _tokenFlow.asStateFlow()
 
-    // 👉 Limpiar el token
-    fun clearToken() {
-        token = null
+    // 👉 Configurar el token
+    fun setToken(newToken: String?) {
+        _tokenFlow.value = newToken
+        token = newToken
+        Log.d(TAG, "setToken() - Token configurado: $newToken")
     }
 
     // Interceptor para agregar el token a las solicitudes
@@ -31,9 +34,13 @@ object ApiClient {
         val originalRequest = chain.request()
         val requestBuilder = originalRequest.newBuilder()
 
+        // Log para verificar si el token está presente
+        Log.d(TAG, "authInterceptor - Token actual: $token")
+
         // Agregar el token si está disponible
         token?.let {
             requestBuilder.addHeader("Authorization", "Bearer $it")
+            Log.d(TAG, "authInterceptor - Token agregado al encabezado Authorization")
         }
 
         val request = requestBuilder.build()

@@ -19,11 +19,12 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.practicapro.navigation.Routes
-import com.example.practicapro.rooms.appDatabase.DatabaseProvider
+import com.example.practicapro.repository.AuthRepository
+import com.example.practicapro.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun BottomNavigationBar(navController: NavController) {
+fun BottomNavigationBar(navController: NavController, userViewModel: UserViewModel) {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
     val scope = rememberCoroutineScope()
@@ -82,8 +83,7 @@ fun BottomNavigationBar(navController: NavController) {
                     selected = false,
                     onClick = {
                         scope.launch {
-                            val userDao = DatabaseProvider.getDatabase(navController.context).userDao()
-                            userDao.deleteUser()
+                            AuthRepository.logout(navController.context, userViewModel)
                             navController.navigate(Routes.LOGIN) {
                                 popUpTo(Routes.MAIN) { inclusive = true }
                             }
@@ -113,5 +113,5 @@ fun BottomNavigationBar(navController: NavController) {
 @Composable
 fun PreviewBottomNavigationBar() {
     val navController = rememberNavController()
-    BottomNavigationBar(navController = navController)
+    BottomNavigationBar(navController = navController, userViewModel = UserViewModel())
 }

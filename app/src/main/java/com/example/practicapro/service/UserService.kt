@@ -7,7 +7,5 @@ import retrofit2.http.Header
 interface UserService {
 
     @GET("usuario/profile")
-    suspend fun getProfile(
-        @Header("Authorization") token: String
-    ): UserProfileResponse
+    suspend fun getProfile(): UserProfileResponse
 }

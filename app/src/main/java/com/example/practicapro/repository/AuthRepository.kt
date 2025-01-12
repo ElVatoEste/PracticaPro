@@ -10,6 +10,7 @@ import com.example.practicapro.rooms.appDatabase.DatabaseProvider
 import com.example.practicapro.rooms.entitys.User
 import com.example.practicapro.utils.days
 import com.example.practicapro.utils.minutes
+import com.example.practicapro.viewmodel.UserViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -97,13 +98,13 @@ object AuthRepository {
         )
     }
 
-    // 📌 Cerrar sesión
-    suspend fun logout(context: Context) {
-        ApiClient.clearToken()
+    // 🔄 Método de logout
+    suspend fun logout(context: Context, userViewModel: UserViewModel) {
         val userDao = DatabaseProvider.getDatabase(context).userDao()
         withContext(Dispatchers.IO) {
             userDao.deleteUser()
         }
+        userViewModel.clearUserProfile()
     }
 
     // 📌 Guardar usuario en la base de datos
