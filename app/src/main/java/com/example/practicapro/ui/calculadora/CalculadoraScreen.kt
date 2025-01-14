@@ -1,60 +1,84 @@
 package com.example.practicapro.ui.calculadora
 
 import android.util.Log
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.practicapro.repository.UserRepository
-import com.example.practicapro.viewmodel.UserViewModel
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.practicapro.rooms.appDatabase.DatabaseProvider
+import com.example.practicapro.rooms.entitys.Note
+import com.example.practicapro.rooms.entitys.PendingRequest
 import kotlinx.coroutines.launch
 
 @Composable
-fun CalculadoraScreen(userViewModel: UserViewModel = viewModel()) {
+fun CalculadoraScreen() {
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    // Estados para mostrar las notas y peticiones pendientes
+    var notesList by remember { mutableStateOf<List<Note>>(emptyList()) }
+    var pendingRequestsList by remember { mutableStateOf<List<PendingRequest>>(emptyList()) }
 
     // Estado para mostrar el resultado
     var result by remember { mutableStateOf("Calculadora") }
-
-    // Verificar si hay un token presente
-    val token = userViewModel.token.value
-    val tokenStatus = if (token.isNullOrEmpty()) "Token no encontrado" else "Token presente"
-
-    // Log del token obtenido
-    Log.d("CalculadoraScreen", "Token obtenido desde el ViewModel: $token")
 
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = tokenStatus)
+            Text(text = result)
 
+            // Botón para cargar todas las notas
             Button(
                 onClick = {
                     scope.launch {
-                        // Realizar la llamada a la API
-                        val response = UserRepository.getUserProfile()
-                        response.fold(
-                            onSuccess = { profile ->
-                                result = "Perfil: ${profile.nombre}"
-                            },
-                            onFailure = { throwable ->
-                                result = "Error: ${throwable.message}"
-                            }
-                        )
+                        val database = DatabaseProvider.getDatabase(context)
+                        notesList = database.noteDao().getAllNotes()
+                        result = "Notas cargadas: ${notesList.size}"
+                        Log.d("CalculadoraScreen", "Notas: $notesList")
                     }
                 }
             ) {
-                Text(text = "Probar API")
+                Text(text = "Cargar Notas")
             }
 
-            Text(text = result)
+            // Mostrar notas cargadas
+            notesList.forEach { note ->
+                Text(text = "Nota: ${note.subjectName}, Puntaje: ${note.score}, Intento: ${note.attempt}")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Botón para cargar peticiones pendientes
+            Button(
+                onClick = {
+                    scope.launch {
+                        val database = DatabaseProvider.getDatabase(context)
+                        pendingRequestsList = database.pendingRequestDao().getAllRequests()
+                        result = "Peticiones pendientes: ${pendingRequestsList.size}"
+                        Log.d("CalculadoraScreen", "Peticiones Pendientes: $pendingRequestsList")
+                    }
+                }
+            ) {
+                Text(text = "Cargar Peticiones Pendientes")
+            }
+
+            // Mostrar peticiones pendientes
+            pendingRequestsList.forEach { request ->
+                Text(text = "Petición: ${request.endpoint}, Payload: ${request.payload}")
+            }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CalculadoraScreenPreview() {
+    CalculadoraScreen()
 }

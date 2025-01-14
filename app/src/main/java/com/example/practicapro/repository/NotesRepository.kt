@@ -1,0 +1,119 @@
+package com.example.practicapro.repository
+
+import android.content.Context
+import android.util.Log
+import com.example.practicapro.entitys.ApiNote
+import com.example.practicapro.model.CreateNoteRequest
+import com.example.practicapro.network.ApiClient
+import com.example.practicapro.network.NetworkObserver
+import com.example.practicapro.rooms.appDatabase.DatabaseProvider
+import com.example.practicapro.rooms.entitys.Note
+import com.example.practicapro.rooms.entitys.PendingRequest
+import com.example.practicapro.service.NotesService
+import com.example.practicapro.utils.toRoomEntity
+import kotlinx.coroutines.flow.first
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+
+object NotesRepository {
+
+    private val notesService: NotesService by lazy {
+        ApiClient.retrofit.create(NotesService::class.java)
+    }
+
+    // ✅ Obtener notas y guardarlas en Room
+    suspend fun getNotes(context: Context, quizName: String): Result<List<Note>> {
+        return runCatching {
+            val isNetworkAvailable = NetworkObserver.isNetworkAvailable.first()
+            if (isNetworkAvailable) {
+                val notesFromApi = notesService.getNotes()
+                val notesForRoom = notesFromApi.map { it.toRoomEntity(context) }
+                saveNotesLocally(context, notesForRoom)
+                notesForRoom
+            } else {
+                // Obtener las notas almacenadas localmente en Room
+                val database = DatabaseProvider.getDatabase(context)
+                val noteDao = database.noteDao()
+                noteDao.getNotes(quizName)
+            }
+        }.recoverCatching { throwable ->
+            throw Exception("Error al obtener las notas: ${throwable.message}")
+        }
+    }
+
+    // Crear una nueva nota
+    suspend fun createNote(context: Context, request: CreateNoteRequest): Result<ApiNote> {
+        return runCatching {
+            val isNetworkAvailable = NetworkObserver.isNetworkAvailable.first()
+            if (isNetworkAvailable) {
+                val note = notesService.createNote(request)
+                val localNote = note.toRoomEntity(context)
+
+                // Guardar la nota en Room
+                saveNoteLocally(context, localNote)
+
+                // Validación: Comprobar si la nota se guardó en Room
+                val database = DatabaseProvider.getDatabase(context)
+                val savedNote = database.noteDao().getNoteById(localNote.id)
+                if (savedNote != null) {
+                    Log.e("NotesRepository", "Nota guardada en Room: $savedNote")
+                } else {
+                    Log.e("NotesRepository", "Error: Nota no encontrada en Room después de la inserción.")
+                }
+
+                note
+            } else {
+                savePendingRequest(context, "notas", request)
+                throw Exception("Nota guardada localmente. Se enviará cuando haya conexión.")
+            }
+        }.recoverCatching { throwable ->
+            throw Exception("Error al crear la nota: ${throwable.message}")
+        }
+    }
+
+    // ✅ Guardar una lista de notas en Room
+    private suspend fun saveNotesLocally(context: Context, notes: List<Note>) {
+        val database = DatabaseProvider.getDatabase(context)
+        val noteDao = database.noteDao()
+        noteDao.insertNotes(notes)
+    }
+
+    private suspend fun saveNoteLocally(context: Context, note: Note) {
+        val database = DatabaseProvider.getDatabase(context)
+        val noteDao = database.noteDao()
+
+        noteDao.insertNote(note)
+    }
+
+
+    // ✅ Guardar una petición pendiente en el pool
+    private suspend fun savePendingRequest(context: Context, endpoint: String, request: CreateNoteRequest) {
+        val database = DatabaseProvider.getDatabase(context)
+        val pendingRequestDao = database.pendingRequestDao()
+
+        val requestJson = Json.encodeToString(request)
+        val pendingRequest = PendingRequest(
+            endpoint = endpoint,
+            payload = requestJson,
+            method = "POST"
+        )
+        pendingRequestDao.insertRequest(pendingRequest)
+    }
+
+    // ✅ Procesar las peticiones pendientes
+    suspend fun processPendingRequests(context: Context) {
+        val database = DatabaseProvider.getDatabase(context)
+        val pendingRequestDao = database.pendingRequestDao()
+        val pendingRequests = pendingRequestDao.getAllRequests()
+
+        for (request in pendingRequests) {
+            try {
+                val payload = Json.decodeFromString<CreateNoteRequest>(request.payload)
+                notesService.createNote(payload)
+                pendingRequestDao.deleteRequestById(request.id)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+}

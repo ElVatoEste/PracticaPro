@@ -2,7 +2,9 @@
         alias(libs.plugins.android.application)
         alias(libs.plugins.kotlin.android)
         alias(libs.plugins.kotlin.compose)
+        alias(libs.plugins.kotlinx.serialization)
         id("org.jetbrains.kotlin.kapt")
+
     }
 
     android {
@@ -72,8 +74,10 @@
         // Room dependencies
         implementation(libs.androidx.room.common)
         implementation(libs.androidx.room.ktx)
-        implementation(libs.androidx.espresso.core)
         kapt(libs.androidx.room.compiler)
+
+        // Kotlinx Serialization
+        implementation(libs.kotlinx.serialization.json)
 
         testImplementation(libs.junit)
         androidTestImplementation(libs.androidx.junit)

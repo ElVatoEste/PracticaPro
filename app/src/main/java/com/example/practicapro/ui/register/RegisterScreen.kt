@@ -1,5 +1,6 @@
 package com.example.practicapro.ui.register
 
+import android.content.Context
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -15,6 +16,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.practicapro.R
@@ -30,7 +32,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun RegisterScreen(
     onRegisterSuccess: () -> Unit,
-    context: android.content.Context,
+    onNavigateToLogin: () -> Unit,
+    context: Context,
     registerViewModel: RegisterViewModel = viewModel(),
     verificationViewModel: VerificationViewModel = viewModel()
 ) {
@@ -52,9 +55,9 @@ fun RegisterScreen(
     val showVerificationModal = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        delay(500)
+        delay(200)
         logoOffsetY.animateTo(
-            targetValue = -160f,
+            targetValue = -180f,
             animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
         )
         logoScale.animateTo(
@@ -188,6 +191,15 @@ fun RegisterScreen(
                     } else {
                         Text("Registrarse")
                     }
+                }
+
+                // Texto para crear una cuenta
+                TextButton(onClick = onNavigateToLogin) {
+                    Text(
+                        text = "¿Ya tienes cuenta? Logeate aquí",
+                        color = Color(0xFF7DBB00),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
 
                 if (error != null) {

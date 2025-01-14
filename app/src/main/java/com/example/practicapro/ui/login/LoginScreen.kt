@@ -47,18 +47,18 @@ fun LoginScreen(
 
     // Inicialización de animaciones
     LaunchedEffect(Unit) {
-        delay(500)
+        delay(200)
         logoOffsetY.animateTo(
-            targetValue = -160f,
+            targetValue = -180f,
             animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
         )
         logoScale.animateTo(
             targetValue = 1f,
-            animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+            animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
         )
         inputsAlpha.animateTo(
             targetValue = 1f,
-            animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+            animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
         )
     }
 

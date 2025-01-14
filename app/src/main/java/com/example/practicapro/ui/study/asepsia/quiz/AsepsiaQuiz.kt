@@ -5,20 +5,28 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.practicapro.components.quizes.*
+import com.example.practicapro.viewmodel.NotesViewModel
 import com.example.practicapro.viewmodel.QuizViewModel
 import kotlinx.coroutines.delay
+
 
 @Composable
 fun QuizScreen(
     onDismiss: () -> Unit,
-    quizViewModel: QuizViewModel = viewModel()
+    quizViewModel: QuizViewModel = viewModel(),
+    notesViewModel: NotesViewModel = viewModel()
 ) {
+    // Obtener el contexto desde LocalContext
+    val context = LocalContext.current
+
     // Estados del ViewModel
     val currentQuestion by quizViewModel.currentQuestion
     val score by quizViewModel.score
@@ -29,8 +37,15 @@ fun QuizScreen(
     val timeLeft by quizViewModel.timeLeft
     val maxTime = quizViewModel.maxTime
 
-    // Mostrar resumen final
+    // Estado para controlar si se ha enviado la nota
+    var hasSentNote by remember { mutableStateOf(false) }
+
     if (showFinalSummary) {
+        if (!hasSentNote) {
+            notesViewModel.addNote(context ,idMateria = 1, puntaje = score)
+            hasSentNote = true
+        }
+
         FinalSummary(
             score = score,
             onDismiss = onDismiss
@@ -103,7 +118,7 @@ fun QuizScreen(
                 Button(
                     onClick = { quizViewModel.selectAnswer(answer) },
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = selectedAnswer.isEmpty(), // Deshabilitar botones después de seleccionar
+                    enabled = selectedAnswer.isEmpty(),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = when {
                             selectedAnswer == answer -> MaterialTheme.colorScheme.secondary
@@ -129,4 +144,10 @@ fun QuizScreen(
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun QuizScreenPreview() {
+    QuizScreen(onDismiss = {})
 }

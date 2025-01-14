@@ -7,11 +7,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -20,9 +27,40 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.practicapro.R
 import com.example.practicapro.components.*
+import com.example.practicapro.rooms.appDatabase.DatabaseProvider
+import com.example.practicapro.rooms.entitys.Note
+import kotlinx.coroutines.launch
 
 @Composable
 fun UrgenciasScreen(navController: NavController) {
+
+
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var result by remember { mutableStateOf("") }
+
+    // Ejecutar la inserción de datos en la base de datos cuando la pantalla se carga
+    LaunchedEffect(Unit) {
+        scope.launch {
+            val database = DatabaseProvider.getDatabase(context)
+            val noteDao = database.noteDao()
+
+            // Insertar una nota de prueba
+            noteDao.insertNote(
+                Note(
+                    score = 80,
+                    attempt = 1,
+                    date = "2025-01-14",
+                    subjectName = "Asepsia",
+                    id = 4,
+                    subjectId = 1
+                )
+            )
+
+            result = "Nota de prueba insertada"
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()

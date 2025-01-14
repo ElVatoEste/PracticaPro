@@ -21,6 +21,7 @@ import com.example.practicapro.network.NetworkObserver
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.practicapro.network.ApiClient
+import com.example.practicapro.rooms.appDatabase.DatabaseProvider
 import com.example.practicapro.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
@@ -32,6 +33,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         NetworkObserver.startObserving(this)
+
+        // Cargar materias solo una vez
+        DatabaseProvider.loadInitialMaterias(this)
 
         // 🔄 Cargar el token desde Room y actualizar el ApiClient
         lifecycleScope.launch {

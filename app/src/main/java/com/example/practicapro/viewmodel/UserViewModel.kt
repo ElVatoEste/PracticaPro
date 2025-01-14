@@ -11,26 +11,22 @@ import kotlinx.coroutines.withContext
 
 class UserViewModel : ViewModel() {
 
-    // Token del usuario
     val token = mutableStateOf<String?>(null)
 
-    // Perfil del usuario
-    val userProfile = mutableStateOf<UserProfileResponse?>(null)
+    private val userProfile = mutableStateOf<UserProfileResponse?>(null)
 
-    // Actualizar el token
     fun updateToken(newToken: String) {
         token.value = newToken
-        ApiClient.setToken(newToken)  // Actualiza el ApiClient
+        ApiClient.setToken(newToken)
     }
 
-    // Limpiar datos del perfil (por ejemplo, al cerrar sesión)
+
     fun clearUserProfile() {
         token.value = null
         userProfile.value = null
-        ApiClient.setToken(null)  // Limpia el token en el ApiClient
+        ApiClient.setToken(null)
     }
 
-    // 🔄 Cargar el token desde Room
     suspend fun loadTokenFromRoom(context: Context) {
         val userDao = DatabaseProvider.getDatabase(context).userDao()
         val user = withContext(Dispatchers.IO) {

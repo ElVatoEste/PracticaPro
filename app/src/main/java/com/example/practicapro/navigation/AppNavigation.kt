@@ -24,7 +24,6 @@ import com.example.practicapro.ui.study.medicamentos.MinijuegoMedicamentosScreen
 import com.example.practicapro.ui.study.urgencias.UrgenciasScreen
 import com.example.practicapro.ui.study.procedimientos.ProcedimientosQuizScreen
 
-// Definición de rutas como constantes
 object Routes {
     const val SPLASH = "splash"
     const val MAIN = "main"
@@ -72,8 +71,8 @@ fun AppNavigation(navController: NavHostController) {
         // Register Screen
         composable(
             Routes.REGISTER,
-            enterTransition = { slideInHorizontally() + fadeIn() },
-            exitTransition = { slideOutHorizontally() + fadeOut() }
+            enterTransition = { slideInVertically() + fadeIn() },
+            exitTransition = { slideOutVertically() + fadeOut() }
         ) {
             RegisterScreen(
                 onRegisterSuccess = {
@@ -81,15 +80,18 @@ fun AppNavigation(navController: NavHostController) {
                         popUpTo(Routes.REGISTER) { inclusive = true }
                     }
                 },
-                context = LocalContext.current
+                context = LocalContext.current,
+                onNavigateToLogin = {
+                    navController.navigate(Routes.LOGIN)
+                }
             )
         }
 
         // Main Screen
         composable(
             Routes.MAIN,
-            enterTransition = { fadeIn() },
-            exitTransition = { fadeOut() }
+            enterTransition = { slideInHorizontally() + fadeIn() },
+            exitTransition = { slideOutHorizontally() + fadeOut() }
         ) {
             MainScreen(navController)
         }

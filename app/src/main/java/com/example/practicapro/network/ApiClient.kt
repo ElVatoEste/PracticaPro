@@ -79,8 +79,7 @@ object ApiClient {
                 .build()
         } ?: response
     }
-
-    // Cliente HTTP
+    
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(authInterceptor)
         .addInterceptor(loggingInterceptor)
@@ -89,10 +88,8 @@ object ApiClient {
         .readTimeout(30, TimeUnit.SECONDS)
         .build()
 
-    // Selección de URL base
     private val baseUrl = if (IS_LOCAL) LOCAL_URL else BASE_URL
 
-    // Cliente Retrofit
     val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .client(okHttpClient)

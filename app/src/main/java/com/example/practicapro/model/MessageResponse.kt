@@ -1,5 +1,7 @@
 package com.example.practicapro.model
 
 data class MessageResponse(
-    val message: String
+    val statusCode: Int?,
+    val message: String,
+    val error: String?,
 )

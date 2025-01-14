@@ -1,17 +1,12 @@
 package com.example.practicapro.viewmodel
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.practicapro.repository.ScoreRepository
-import com.example.practicapro.rooms.entitys.Score
 import com.example.practicapro.viewmodel.helper.Question
-import kotlinx.coroutines.launch
 
 class QuizViewModel : ViewModel() {
 
@@ -109,35 +104,6 @@ class QuizViewModel : ViewModel() {
     fun resetTime() {
         _timeLeft.floatValue = maxTime
     }
-
-    fun resetQuiz() {
-        _currentQuestion.intValue = 0
-        _score.intValue = 0
-        _selectedAnswer.value = ""
-        _showFeedback.value = false
-        _showFinalSummary.value = false
-        resetTime()
-    }
-
-//    fun saveScore(context: Context, userId: Int, quizName: String) {
-//        viewModelScope.launch {
-//            val repository = ScoreRepository(context)
-//            val attemptCount = repository.getAttemptCount(userId, quizName)
-//            if (attemptCount < 2) {
-//                repository.saveScore(
-//                    Score(
-//                        userId = userId,
-//                        quizName = quizName,
-//                        score = _score.intValue,
-//                        attempt = attemptCount + 1,
-//                        date = System.currentTimeMillis()
-//                    )
-//                )
-//            } else {
-//                Log.d("QuizViewModel", "Ya se realizaron los 2 intentos permitidos.")
-//            }
-//        }
-//    }
 
     private fun hideInstructions() {
         _showInstructions.value = false
