@@ -14,8 +14,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.NavHostController
 import com.example.practicapro.network.ConnectivityIndicator
-import com.example.practicapro.components.navigation.AppNavigation
-import com.example.practicapro.components.navigation.Routes
+import com.example.practicapro.navigation.AppNavigation
+import com.example.practicapro.navigation.Routes
 import com.example.practicapro.ui.navbar.BottomNavigationBar
 import com.example.practicapro.network.NetworkObserver
 import androidx.activity.viewModels
@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
-import com.example.practicapro.network.ApiClient
 import com.example.practicapro.rooms.appDatabase.DatabaseProvider
 import com.example.practicapro.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
@@ -49,16 +48,6 @@ class MainActivity : ComponentActivity() {
         // 🔄 Cargar el token desde Room y actualizar el ApiClient
         lifecycleScope.launch {
             userViewModel.loadTokenFromRoom(applicationContext)
-
-            // 🔧 Log para saber si se obtuvo el token
-            val token = userViewModel.token.value
-            if (token != null) {
-                Log.d("Observe", "Token obtenido: $token")
-                ApiClient.setToken(token)
-                Log.d("Observe", "Token configurado en ApiClient")
-            } else {
-                Log.d("Observe", "No se encontró token en Room")
-            }
         }
 
         setContent {

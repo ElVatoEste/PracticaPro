@@ -40,7 +40,9 @@ object DatabaseProvider {
                     Materia(1, "TECNICAS"),
                     Materia(2, "PROCEDIMIENTOS"),
                     Materia(3, "ADMINISTRACION"),
-                    Materia(4, "URGENCIAS")
+                    Materia(4, "URGENCIAS"),
+                    Materia(5, "PROCEDIMIENTOS2"),
+
                 )
 
                 database.materiaDao().insertAll(materias)

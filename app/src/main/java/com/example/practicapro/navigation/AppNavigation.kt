@@ -1,4 +1,4 @@
-package com.example.practicapro.components.navigation
+package com.example.practicapro.navigation
 
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -14,15 +14,18 @@ import androidx.navigation.compose.composable
 import com.example.practicapro.ui.splash.SplashScreen
 import com.example.practicapro.ui.main.MainScreen
 import com.example.practicapro.ui.calculadora.CalculadoraScreen
+import com.example.practicapro.ui.calculadora.ImcScreen
+import com.example.practicapro.ui.calculadora.PamScreen
 import com.example.practicapro.ui.login.LoginScreen
 import com.example.practicapro.ui.register.RegisterScreen
 import com.example.practicapro.ui.study.asepsia.AsepsiaScreen
 import com.example.practicapro.ui.study.asepsia.quiz.QuizScreen
-import com.example.practicapro.ui.study.procedimientos.ProcedimientosScreen
+import com.example.practicapro.ui.study.procedimientos.ProcedScreen
 import com.example.practicapro.ui.study.medicamentos.MedicamentosScreen
 import com.example.practicapro.ui.study.medicamentos.MinijuegoMedicamentosScreen
+import com.example.practicapro.ui.study.procedimientos.quiz.ProcQuiz
+import com.example.practicapro.ui.study.procedimientos.quiz.TrueFalseQuizScreen
 import com.example.practicapro.ui.study.urgencias.UrgenciasScreen
-import com.example.practicapro.ui.study.procedimientos.ProcedimientosQuizScreen
 
 object Routes {
     const val SPLASH = "splash"
@@ -32,11 +35,14 @@ object Routes {
     const val QUIZ_SCREEN = "quiz_screen"
     const val PROCEDIMIENTOS = "procedimientos"
     const val QUIZ_PROCEDIMIENTOS = "quiz_procedimientos"
+    const val QUIZ_PROC_TF = "quiz_proc_tf"
     const val ADMINISTRACION = "administracion"
     const val URGENCIAS = "urgencias"
     const val MINIJUEGO_MEDICAMENTOS = "minijuego_medicamentos"
     const val LOGIN = "login"
     const val REGISTER = "register"
+    const val IMC = "imc"
+    const val PAM = "pam"
 }
 
 @Composable
@@ -97,7 +103,15 @@ fun AppNavigation(navController: NavHostController) {
         }
 
         composable(Routes.CALCULADORA) {
-            CalculadoraScreen()
+            CalculadoraScreen(navController)
+        }
+
+        composable(Routes.IMC) {
+            ImcScreen(navController)
+        }
+
+        composable(Routes.PAM) {
+            PamScreen(navController)
         }
 
         composable(Routes.TECNICAS) {
@@ -109,11 +123,15 @@ fun AppNavigation(navController: NavHostController) {
         }
 
         composable(Routes.PROCEDIMIENTOS) {
-            ProcedimientosScreen(navController)
+            ProcedScreen(navController)
         }
 
         composable(Routes.QUIZ_PROCEDIMIENTOS) {
-            ProcedimientosQuizScreen(onDismiss = { navController.popBackStack() })
+            ProcQuiz(onDismiss = { navController.popBackStack() })
+        }
+
+        composable(Routes.QUIZ_PROC_TF) {
+            TrueFalseQuizScreen(onDismiss = { navController.popBackStack() })
         }
 
         composable(Routes.ADMINISTRACION) {

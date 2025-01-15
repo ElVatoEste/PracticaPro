@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.practicapro.components.navigation.Routes
+import com.example.practicapro.navigation.Routes
 import com.example.practicapro.repository.AuthRepository
 import com.example.practicapro.viewmodel.UserViewModel
 import kotlinx.coroutines.launch

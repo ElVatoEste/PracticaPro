@@ -1,4 +1,4 @@
-package com.example.practicapro.ui.study.asepsia.quiz
+package com.example.practicapro.ui.study.procedimientos.quiz
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -8,44 +8,42 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.practicapro.components.quizes.*
+import com.example.practicapro.components.quizes.AnimatedTimeBar
+import com.example.practicapro.components.quizes.Feedback
+import com.example.practicapro.components.quizes.FinalSummary
+import com.example.practicapro.components.quizes.InstructionsDialog
+import com.example.practicapro.components.quizes.ProgressBar
 import com.example.practicapro.viewmodel.NotesViewModel
-import com.example.practicapro.viewmodel.QuizViewModel
+import com.example.practicapro.viewmodel.TrueFalseQuizViewModel
 import kotlinx.coroutines.delay
 
-
 @Composable
-fun QuizScreen(
-    onDismiss: () -> Unit,
-    quizViewModel: QuizViewModel = viewModel(),
-    notesViewModel: NotesViewModel = viewModel()
+fun TrueFalseQuizScreen(
+    onDismiss: () -> Unit
 ) {
-    // Obtener el contexto desde LocalContext
     val context = LocalContext.current
+    val tfQuizViewModel: TrueFalseQuizViewModel = viewModel()
+    val notesViewModel: NotesViewModel = viewModel()
 
-    // Estados del ViewModel
-    val currentQuestion by quizViewModel.currentQuestion
-    val score by quizViewModel.score
-    val selectedAnswer by quizViewModel.selectedAnswer
-    val showFeedback by quizViewModel.showFeedback
-    val showFinalSummary by quizViewModel.showFinalSummary
-    val showInstructions by quizViewModel.showInstructions
-    val timeLeft by quizViewModel.timeLeft
-    val maxTime = quizViewModel.maxTime
+    val currentQuestion by tfQuizViewModel.currentQuestion
+    val score by tfQuizViewModel.score
+    val selectedAnswer by tfQuizViewModel.selectedAnswer
+    val showFeedback by tfQuizViewModel.showFeedback
+    val showFinalSummary by tfQuizViewModel.showFinalSummary
+    val showInstructions by tfQuizViewModel.showInstructions
+    val timeLeft by tfQuizViewModel.timeLeft
+    val maxTime = tfQuizViewModel.maxTime
 
-    // Estado para controlar si se ha enviado la nota
     var hasSentNote by remember { mutableStateOf(false) }
 
     if (showFinalSummary) {
         if (!hasSentNote) {
-            notesViewModel.addNote(context ,idMateria = 1, puntaje = score)
+            notesViewModel.addNote(context, idMateria = 5, puntaje = score)
             hasSentNote = true
         }
-
         FinalSummary(
             score = score,
             onDismiss = onDismiss
@@ -53,26 +51,23 @@ fun QuizScreen(
         return
     }
 
-    // Mostrar instrucciones antes de iniciar
     if (showInstructions) {
         InstructionsDialog(
-            onStartClick = { quizViewModel.startQuiz(1) },
+            onStartClick = { tfQuizViewModel.startQuiz() },
             onDismiss = onDismiss
         )
         return
     }
 
-    // Manejo de tiempo
     LaunchedEffect(currentQuestion, showFeedback) {
-        quizViewModel.resetTime()
+        tfQuizViewModel.resetTime()
         while (timeLeft > 0 && !showFeedback) {
-            quizViewModel.reduceTime(0.1f)
+            tfQuizViewModel.reduceTime(0.1f)
             delay(100L)
         }
     }
 
-    // Contenido del Quiz
-    val currentQ = quizViewModel.questions[currentQuestion]
+    val currentQ = tfQuizViewModel.questions[currentQuestion]
 
     Column(
         modifier = Modifier
@@ -81,16 +76,13 @@ fun QuizScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Barra de progreso
         ProgressBar(
             currentStep = currentQuestion + 1,
-            totalSteps = quizViewModel.questions.size
+            totalSteps = tfQuizViewModel.questions.size
         )
 
-        // Barra de tiempo
         AnimatedTimeBar(timeLeft = timeLeft, maxTime = maxTime)
 
-        // Título
         Text(
             text = "Evaluación Rápida",
             fontSize = 24.sp,
@@ -99,12 +91,12 @@ fun QuizScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // Pregunta actual
         Text(
-            text = "Pregunta ${currentQuestion + 1} de ${quizViewModel.questions.size}",
+            text = "Pregunta ${currentQuestion + 1} de ${tfQuizViewModel.questions.size}",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         )
+
         Text(
             text = currentQ.text,
             fontSize = 16.sp,
@@ -112,11 +104,10 @@ fun QuizScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // Opciones de respuesta
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             currentQ.options.forEach { answer ->
                 Button(
-                    onClick = { quizViewModel.selectAnswer(answer) },
+                    onClick = { tfQuizViewModel.selectAnswer(answer) },
                     modifier = Modifier.fillMaxWidth(),
                     enabled = selectedAnswer.isEmpty(),
                     colors = ButtonDefaults.buttonColors(
@@ -132,22 +123,14 @@ fun QuizScreen(
             }
         }
 
-        // Feedback
         if (showFeedback) {
             val correctAnswer = currentQ.options[currentQ.correctIndex]
-
             Feedback(
                 isCorrect = selectedAnswer == correctAnswer,
-                explanation = quizViewModel.explanations[currentQuestion],
-                timeBonus = quizViewModel.pointsAwarded,
-                onNext = { quizViewModel.onDismissFeedback() }
+                explanation = tfQuizViewModel.explanations[currentQuestion],
+                timeBonus = tfQuizViewModel.pointsAwarded,
+                onNext = { tfQuizViewModel.onDismissFeedback() }
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun QuizScreenPreview() {
-    QuizScreen(onDismiss = {})
 }

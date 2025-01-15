@@ -37,7 +37,7 @@ fun TechniqueCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.CenterVertically // Centrar verticalmente
         ) {
             Image(
                 painter = painterResource(id = imageRes),
@@ -52,21 +52,21 @@ fun TechniqueCard(
                 modifier = Modifier
                     .weight(1f)
                     .wrapContentHeight(),
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-                horizontalAlignment = Alignment.CenterHorizontally // Centrar horizontalmente
+                verticalArrangement = Arrangement.Center // Centrar verticalmente los textos
             ) {
                 Text(
                     text = title,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
-                    textAlign = TextAlign.Center // Título centrado
+                    textAlign = TextAlign.Start, // Alinear a la izquierda
+                    modifier = Modifier.fillMaxWidth()
                 )
                 Text(
                     text = description,
                     fontSize = 14.sp,
                     color = Color.Gray,
-                    textAlign = TextAlign.Justify, // Justificar texto
+                    textAlign = TextAlign.Justify, // Justificar el texto
                     modifier = Modifier.fillMaxWidth()
                 )
             }

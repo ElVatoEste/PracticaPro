@@ -1,4 +1,4 @@
-package com.example.practicapro.ui.study.asepsia.quiz
+package com.example.practicapro.ui.study.procedimientos.quiz
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -8,18 +8,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.practicapro.components.quizes.*
+import com.example.practicapro.components.quizes.AnimatedTimeBar
+import com.example.practicapro.components.quizes.Feedback
+import com.example.practicapro.components.quizes.FinalSummary
+import com.example.practicapro.components.quizes.InstructionsDialog
+import com.example.practicapro.components.quizes.ProgressBar
 import com.example.practicapro.viewmodel.NotesViewModel
 import com.example.practicapro.viewmodel.QuizViewModel
 import kotlinx.coroutines.delay
 
-
 @Composable
-fun QuizScreen(
+fun ProcQuiz(
     onDismiss: () -> Unit,
     quizViewModel: QuizViewModel = viewModel(),
     notesViewModel: NotesViewModel = viewModel()
@@ -42,7 +44,7 @@ fun QuizScreen(
 
     if (showFinalSummary) {
         if (!hasSentNote) {
-            notesViewModel.addNote(context ,idMateria = 1, puntaje = score)
+            notesViewModel.addNote(context ,idMateria = 2, puntaje = score)
             hasSentNote = true
         }
 
@@ -56,7 +58,7 @@ fun QuizScreen(
     // Mostrar instrucciones antes de iniciar
     if (showInstructions) {
         InstructionsDialog(
-            onStartClick = { quizViewModel.startQuiz(1) },
+            onStartClick = { quizViewModel.startQuiz(2) },
             onDismiss = onDismiss
         )
         return
@@ -144,10 +146,4 @@ fun QuizScreen(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun QuizScreenPreview() {
-    QuizScreen(onDismiss = {})
 }

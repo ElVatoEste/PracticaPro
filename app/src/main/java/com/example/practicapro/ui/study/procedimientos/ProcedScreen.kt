@@ -25,16 +25,16 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.practicapro.R
 import com.example.practicapro.components.*
-import com.example.practicapro.components.navigation.Routes
+import com.example.practicapro.navigation.Routes
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun ProcedimientosScreenPreview() {
-    ProcedimientosScreen(navController = null)
+fun ProcedScreenPreview() {
+    ProcedScreen(navController = null)
 }
 
 @Composable
-fun ProcedimientosScreen(navController: NavController?) {
+fun ProcedScreen(navController: NavController?) {
 
     var showDialog by remember { mutableStateOf(false) }
     var selectedSteps by remember { mutableStateOf(emptyList<String>()) }
@@ -82,10 +82,6 @@ fun ProcedimientosScreen(navController: NavController?) {
         SectionContent(
             "Los procedimientos básicos son esenciales para garantizar la seguridad y el bienestar del paciente, así como para reducir riesgos durante la atención médica."
         )
-
-        // Video Educativo
-        SectionTitle("Video Educativo")
-         VideoPlayerScreen()
 
         // Listado de procedimientos básicos
         SectionTitle("Toma de signos vitales")
@@ -157,8 +153,13 @@ fun ProcedimientosScreen(navController: NavController?) {
             onClick = { navController?.navigate(Routes.QUIZ_PROCEDIMIENTOS) } // Navega al quiz
         )
 
+        ActionButton(
+            text = "Realizar Evaluación 2",
+            onClick = { navController?.navigate(Routes.QUIZ_PROC_TF) } // Navega al quiz
+        )
+
         // Espacio adicional al final para desplazamiento cómodo
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.weight(1f))
     }
 
     if (showDialog) {
