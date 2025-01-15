@@ -14,7 +14,7 @@ fun ConnectivityIndicator(snackbarHostState: SnackbarHostState) {
 
     LaunchedEffect(isNetworkAvailable.value) {
         val message = if (isNetworkAvailable.value) {
-            "Conexión restaurada"
+            "Conexión establecida"
         } else {
             "Sin conexión a Internet"
         }
