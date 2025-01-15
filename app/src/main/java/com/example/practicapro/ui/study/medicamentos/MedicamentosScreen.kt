@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.practicapro.R
 import com.example.practicapro.components.*
-import com.example.practicapro.navigation.Routes
+import com.example.practicapro.components.navigation.Routes
 import com.example.practicapro.rooms.appDatabase.DatabaseProvider
 import com.example.practicapro.rooms.entitys.Note
 import kotlinx.coroutines.launch

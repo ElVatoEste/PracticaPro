@@ -14,6 +14,6 @@ interface PendingRequestDao {
     @Query("SELECT * FROM pending_requests")
     suspend fun getAllRequests(): List<PendingRequest>
 
-    @Query("DELETE FROM pending_requests WHERE id = :id")
-    suspend fun deleteRequestById(id: Int)
+    @Query("DELETE FROM pending_requests WHERE id = :requestId")
+    suspend fun deleteRequestById(requestId: Int)
 }

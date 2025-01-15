@@ -57,7 +57,7 @@ fun AsepsiaScreen(navController: NavController) {
             text = "Explora conceptos clave y técnicas fundamentales para prevenir infecciones.",
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
-            color = Color.Gray
+            color = Color.Black
         )
 
         // Imagen representativa
@@ -71,19 +71,22 @@ fun AsepsiaScreen(navController: NavController) {
                 .padding(8.dp)
                 .clip(RoundedCornerShape(16.dp))
         )
-
-        // Reproductor de video
-        SectionTitle("Video Introductorio")
-        VideoPlayerScreen(videoUri = "android.resource://${LocalContext.current.packageName}/${R.raw.lavado_clinico}")
-
         // Sección de conceptos clave
         SectionTitle("Conceptos Básicos")
         SectionContent(
             "La asepsia incluye prácticas para prevenir la introducción de microorganismos en áreas críticas. Esto es fundamental en el entorno médico para proteger a los pacientes y al personal de salud."
         )
 
+        // Reproductor de video
+        SectionTitle("Video Lavado de manos clínico")
+        VideoPlayerScreen(videoUri = "android.resource://${LocalContext.current.packageName}/${R.raw.lavado_clinico}")
+
+        // Reproductor de video
+        SectionTitle("Lavado de manos quirúrgicos")
+        VideoPlayerScreen(videoUri = "android.resource://${LocalContext.current.packageName}/${R.raw.lavado_quirurgico}")
+
         // Sección de técnicas
-        SectionTitle("Técnicas Básicas")
+        SectionTitle("Procedimientos Antisepticos")
         TechniqueCardList { title, steps ->
             dialogState = dialogState.copy(
                 showDialog = true,

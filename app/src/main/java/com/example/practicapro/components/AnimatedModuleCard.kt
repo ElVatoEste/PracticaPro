@@ -9,8 +9,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import com.example.practicapro.module.Module
-import com.example.practicapro.module.ModuleCard
+import com.example.practicapro.components.module.Module
+import com.example.practicapro.components.module.ModuleCard
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

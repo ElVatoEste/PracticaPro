@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.practicapro.R
 import com.example.practicapro.components.*
-import com.example.practicapro.navigation.Routes
+import com.example.practicapro.components.navigation.Routes
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

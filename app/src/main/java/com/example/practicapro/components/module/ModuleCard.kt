@@ -1,4 +1,4 @@
-package com.example.practicapro.module
+package com.example.practicapro.components.module
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

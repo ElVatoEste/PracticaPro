@@ -1,4 +1,4 @@
-package com.example.practicapro.navigation
+package com.example.practicapro.components.navigation
 
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut

@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.practicapro.exceptions.EmailNotConfirmedException
+import com.example.practicapro.repository.exceptions.EmailNotConfirmedException
 import com.example.practicapro.repository.AuthRepository
 import kotlinx.coroutines.launch
 

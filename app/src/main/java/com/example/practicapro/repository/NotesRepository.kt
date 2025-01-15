@@ -51,16 +51,7 @@ object NotesRepository {
 
                 // Guardar la nota en Room
                 saveNoteLocally(context, localNote)
-
-                // Validación: Comprobar si la nota se guardó en Room
-                val database = DatabaseProvider.getDatabase(context)
-                val savedNote = database.noteDao().getNoteById(localNote.id)
-                if (savedNote != null) {
-                    Log.e("NotesRepository", "Nota guardada en Room: $savedNote")
-                } else {
-                    Log.e("NotesRepository", "Error: Nota no encontrada en Room después de la inserción.")
-                }
-
+                Log.d("NotesRepository", "Nota creada y guardada en Room: $localNote")
                 note
             } else {
                 savePendingRequest(context, "notas", request)
@@ -85,20 +76,28 @@ object NotesRepository {
         noteDao.insertNote(note)
     }
 
-
-    // ✅ Guardar una petición pendiente en el pool
     private suspend fun savePendingRequest(context: Context, endpoint: String, request: CreateNoteRequest) {
-        val database = DatabaseProvider.getDatabase(context)
-        val pendingRequestDao = database.pendingRequestDao()
+        try {
+            val database = DatabaseProvider.getDatabase(context)
+            val pendingRequestDao = database.pendingRequestDao()
 
-        val requestJson = Json.encodeToString(request)
-        val pendingRequest = PendingRequest(
-            endpoint = endpoint,
-            payload = requestJson,
-            method = "POST"
-        )
-        pendingRequestDao.insertRequest(pendingRequest)
+            // ✅ Usa Json con configuración personalizada
+            val json = Json { ignoreUnknownKeys = true }
+            val requestJson = json.encodeToString(request)
+
+            val pendingRequest = PendingRequest(
+                endpoint = endpoint,
+                payload = requestJson,
+                method = "POST"
+            )
+
+            pendingRequestDao.insertRequest(pendingRequest)
+            Log.d("NotesRepository", "Petición pendiente guardada: $pendingRequest")
+        } catch (e: Exception) {
+            Log.e("NotesRepository", "Error al guardar la petición pendiente: ${e.message}", e)
+        }
     }
+
 
     // ✅ Procesar las peticiones pendientes
     suspend fun processPendingRequests(context: Context) {

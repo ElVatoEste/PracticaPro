@@ -1,7 +1,7 @@
 package com.example.practicapro.repository
 
 import android.content.Context
-import com.example.practicapro.exceptions.EmailNotConfirmedException
+import com.example.practicapro.repository.exceptions.EmailNotConfirmedException
 import com.example.practicapro.model.*
 import com.example.practicapro.network.ApiClient
 import com.example.practicapro.service.AuthService

@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -27,7 +28,7 @@ fun TechniqueCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp), // Elimina la altura fija
+            .padding(8.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
         elevation = CardDefaults.cardElevation(8.dp),
         onClick = onClick
@@ -36,34 +37,37 @@ fun TechniqueCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
-            verticalAlignment = Alignment.Top // Alinea al inicio para descripciones largas
+            verticalAlignment = Alignment.Top
         ) {
             Image(
                 painter = painterResource(id = imageRes),
                 contentDescription = title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(100.dp) // Imagen con tamaño fijo y cuadrado
+                    .size(100.dp)
                     .clip(RoundedCornerShape(12.dp))
             )
             Spacer(modifier = Modifier.width(8.dp))
             Column(
                 modifier = Modifier
-                    .weight(1f) // Permite que el texto ocupe todo el espacio restante
-                    .wrapContentHeight(), // Adapta la altura según el contenido
-                verticalArrangement = Arrangement.spacedBy(4.dp) // Espacio entre título y descripción
+                    .weight(1f)
+                    .wrapContentHeight(),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalAlignment = Alignment.CenterHorizontally // Centrar horizontalmente
             ) {
                 Text(
                     text = title,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                    color = Color.Black,
+                    textAlign = TextAlign.Center // Título centrado
                 )
                 Text(
                     text = description,
                     fontSize = 14.sp,
                     color = Color.Gray,
-                    maxLines = 5, // Limita el número de líneas si es necesario
+                    textAlign = TextAlign.Justify, // Justificar texto
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }

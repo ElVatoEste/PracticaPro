@@ -15,7 +15,7 @@
         android:roundIcon="@drawable/practicaprowt"
         android:supportsRtl="true"
         android:theme="@style/Theme.Practicapro"
-        tools:targetApi="34">
+        tools:targetApi="35">
 
         <meta-data
             android:name="developer_name"

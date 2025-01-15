@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.practicapro.R
 import com.example.practicapro.components.AnimatedModuleCard
-import com.example.practicapro.module.Module
+import com.example.practicapro.components.module.Module
 import kotlinx.coroutines.delay
 
 @Composable

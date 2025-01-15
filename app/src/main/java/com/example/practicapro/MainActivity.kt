@@ -14,11 +14,16 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.NavHostController
 import com.example.practicapro.network.ConnectivityIndicator
-import com.example.practicapro.navigation.AppNavigation
-import com.example.practicapro.navigation.Routes
+import com.example.practicapro.components.navigation.AppNavigation
+import com.example.practicapro.components.navigation.Routes
 import com.example.practicapro.ui.navbar.BottomNavigationBar
 import com.example.practicapro.network.NetworkObserver
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.practicapro.network.ApiClient
 import com.example.practicapro.rooms.appDatabase.DatabaseProvider
@@ -32,6 +37,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // ✅ Permitir que la app ocupe toda la pantalla, incluyendo recortes (notch)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         NetworkObserver.startObserving(this)
 
         // Cargar materias solo una vez
@@ -57,7 +66,9 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             Scaffold(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .windowInsetsPadding(WindowInsets.systemBars),
                 snackbarHost = { SnackbarHost(snackbarHostState) },
                 bottomBar = {
                     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
@@ -73,15 +84,19 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+
     }
 }
 
 @Composable
 fun AppContent(modifier: Modifier = Modifier, navController: NavHostController) {
     Surface(
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxSize()
+            .systemBarsPadding(),
         color = MaterialTheme.colorScheme.background
     ) {
         AppNavigation(navController)
     }
 }
+
