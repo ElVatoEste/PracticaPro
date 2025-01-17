@@ -8,11 +8,11 @@
     }
 
     android {
-        namespace = "com.example.practicapro"
+        namespace = "com.vatodev.practicapro"
         compileSdk = 35
 
         defaultConfig {
-            applicationId = "com.example.practicapro"
+            applicationId = "com.vatodev.practicapro"
             minSdk = 30
             targetSdk = 35
             versionCode = 1
