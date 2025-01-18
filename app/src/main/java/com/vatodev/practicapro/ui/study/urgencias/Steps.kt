@@ -47,7 +47,7 @@ val stepsFoleyMas = listOf(
             "PRECAUCIÓN: La fijación de la sonda Foley es un paso importante. El pene debe estar apuntando hacia el ombligo y el catéter cubierto con cinta inmediatamente por debajo del manubrio. "
 )
 
-val stepsFoleyFem = listOf("" +
+val stepsFoleyFem = listOf(
     "1. Obtenga una sonda Foley adecuada para el procedimiento o fin asegurándose de que se encuentra estéril (el envoltorio debe encontrarse intacto).",
     "2. Consiga el sistema de cateterización o los suministros adecuados. ",
     "3. Siga técnicas asépticas y las precauciones estándar de lavado de manos y póngase unos guantes estériles. ",

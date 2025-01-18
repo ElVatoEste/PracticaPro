@@ -31,7 +31,6 @@ fun MedicamentosScreen() {
     var selectedSteps by remember { mutableStateOf(emptyList<String>()) }
     var dialogTitle by remember { mutableStateOf("") }
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()

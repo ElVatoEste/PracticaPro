@@ -1,11 +1,14 @@
 package com.vatodev.practicapro.ui.register
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,8 +17,14 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vatodev.practicapro.R
@@ -27,6 +36,16 @@ import com.vatodev.practicapro.viewmodel.RegisterViewModel
 import com.vatodev.practicapro.viewmodel.VerificationViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
+@Preview
+@Composable
+fun PreviewRegisterScreen() {
+    RegisterScreen(
+        onRegisterSuccess = {},
+        onNavigateToLogin = {},
+        context = LocalContext.current
+    )
+}
 
 @Composable
 fun RegisterScreen(
@@ -53,6 +72,10 @@ fun RegisterScreen(
     // Mostrar el modal de verificación de código
     val showVerificationModal = remember { mutableStateOf(false) }
 
+    // Variable que controla si el usuario acepta la política de privacidad
+    var isPrivacyPolicyAccepted by remember { mutableStateOf(false) }
+
+    // Lanzamos animaciones
     LaunchedEffect(Unit) {
         delay(200)
         logoOffsetY.animateTo(
@@ -73,6 +96,13 @@ fun RegisterScreen(
     val isNetworkAvailable by NetworkObserver.isNetworkAvailable.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val localContext = LocalContext.current
+
+    // Función para abrir el enlace en el navegador
+    fun openPrivacyPolicy(context: Context) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://vatodev.xyz/privacy"))
+        context.startActivity(intent)
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -144,6 +174,41 @@ fun RegisterScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                // Sección con Checkbox y enlace a la Política de Privacidad
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Checkbox(
+                        checked = isPrivacyPolicyAccepted,
+                        onCheckedChange = { isPrivacyPolicyAccepted = it },
+                        colors = CheckboxDefaults.colors(
+                            checkedColor = Color(0xFF7DBB00),
+                            uncheckedColor = Color.Gray
+                        )
+                    )
+
+                    // Texto que incluye el link "Política de Privacidad"
+                    val annotatedLinkString = buildAnnotatedString {
+                        append("Al crear una cuenta, aceptas la ")
+                        withStyle(style = SpanStyle(color = Color(0xFF7DBB00))) {
+                            append("Política de Privacidad")
+                        }
+                    }
+
+                    // ClickableText para abrir el enlace
+                    ClickableText(
+                        text = annotatedLinkString,
+                        onClick = {
+                            // Cuando el usuario hace click en "Política de Privacidad"
+                            openPrivacyPolicy(localContext)
+                        },
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
                 Button(
                     onClick = {
                         if (!isLoading) {
@@ -161,8 +226,8 @@ fun RegisterScreen(
                                                     message = message,
                                                     duration = SnackbarDuration.Short
                                                 )
-                                                if (snackbarResult == SnackbarResult.Dismissed || snackbarResult == SnackbarResult.ActionPerformed) {
-                                                    // Muestra el modal de verificación
+                                                if (snackbarResult == SnackbarResult.Dismissed ||
+                                                    snackbarResult == SnackbarResult.ActionPerformed) {
                                                     showVerificationModal.value = true
                                                 }
                                             }
@@ -175,7 +240,7 @@ fun RegisterScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    enabled = !isLoading,
+                    enabled = !isLoading && isPrivacyPolicyAccepted,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF7DBB00),
                         contentColor = Color.White
@@ -190,8 +255,6 @@ fun RegisterScreen(
                         Text("Registrarse")
                     }
                 }
-
-                // Texto para crear una cuenta
                 TextButton(onClick = onNavigateToLogin) {
                     Text(
                         text = "¿Ya tienes cuenta? Logeate aquí",
