@@ -16,9 +16,9 @@ class NotesViewModel : ViewModel() {
     private val successMessage = mutableStateOf<String?>(null)
     private val errorMessage = mutableStateOf<String?>(null)
 
-    fun loadNotes(context: Context, quizName: String) {
+    fun loadNotes(context: Context) {
         viewModelScope.launch {
-            NotesRepository.getNotes(context, quizName).fold(
+            NotesRepository.getNotes(context).fold(
                 onSuccess = { notesList ->
                     note.value = notesList
                 },

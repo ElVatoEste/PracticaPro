@@ -11,6 +11,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.vatodev.practicapro.components.quizes.AnimatedTimeBar
 import com.vatodev.practicapro.components.quizes.Feedback
 import com.vatodev.practicapro.components.quizes.FinalSummary
@@ -22,6 +23,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun ProcQuiz(
+    navController: NavController,
     onDismiss: () -> Unit,
     quizViewModel: QuizViewModel = viewModel(),
     notesViewModel: NotesViewModel = viewModel()
@@ -50,7 +52,7 @@ fun ProcQuiz(
 
         FinalSummary(
             score = score,
-            onDismiss = onDismiss
+            navController = navController
         )
         return
     }

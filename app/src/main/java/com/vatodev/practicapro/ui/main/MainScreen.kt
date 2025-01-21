@@ -1,5 +1,7 @@
 package com.vatodev.practicapro.ui.main
 
+import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,15 +17,33 @@ import androidx.navigation.NavController
 import com.vatodev.practicapro.R
 import com.vatodev.practicapro.components.AnimatedModuleCard
 import com.vatodev.practicapro.components.module.Module
+import com.vatodev.practicapro.viewmodel.NotesViewModel
 import kotlinx.coroutines.delay
 
 @Composable
 fun MainScreen(navController: NavController) {
     var isLoaded by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
+    val notesViewModel = NotesViewModel()
+    val context = navController.context
 
     LaunchedEffect(Unit) {
-        delay(650)
+
+        val sharedPreferences = context.getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
+        val areNotesLoaded = sharedPreferences.getBoolean("notes_loaded", false)
+
+        if (!areNotesLoaded) {
+            // Solo carga las notas si no se han cargado en esta sesión
+            notesViewModel.loadNotes(context)
+
+            // Marca las notas como cargadas
+            sharedPreferences.edit().putBoolean("notes_loaded", true).apply()
+            Log.d("MainScreen", "Notas cargadas y marcadas como cargadas.")
+        } else {
+            Log.d("MainScreen", "Las notas ya se cargaron previamente en esta sesión.")
+        }
+
+        delay(650) // Simula una carga inicial
         isLoaded = true
     }
 

@@ -22,24 +22,52 @@ object NotesRepository {
     }
 
     // ✅ Obtener notas y guardarlas en Room
-    suspend fun getNotes(context: Context, quizName: String): Result<List<Note>> {
+    suspend fun getNotes(context: Context): Result<List<Note>> {
+        return fetchAndSaveNotes(context) // Sincroniza con el servidor
+            .mapCatching {
+                val localNotes = getLocalNotes(context).getOrThrow()
+                Log.d("GetNotes", "Notas después de sincronización: $localNotes")
+                localNotes
+            }.recoverCatching {
+                val localNotes = getLocalNotes(context).getOrThrow()
+                Log.d("GetNotes", "Notas obtenidas solo de Room tras error: $localNotes")
+                localNotes
+            }
+    }
+
+    private suspend fun fetchAndSaveNotes(context: Context): Result<Int> {
         return runCatching {
             val isNetworkAvailable = NetworkObserver.isNetworkAvailable.first()
             if (isNetworkAvailable) {
                 val notesFromApi = notesService.getNotes()
+                Log.d("FetchNotes", "Notas obtenidas del servicio: $notesFromApi")
+
                 val notesForRoom = notesFromApi.map { it.toRoomEntity(context) }
                 saveNotesLocally(context, notesForRoom)
-                notesForRoom
+
+                Log.d("SaveNotes", "Notas guardadas en Room: $notesForRoom")
             } else {
-                // Obtener las notas almacenadas localmente en Room
-                val database = DatabaseProvider.getDatabase(context)
-                val noteDao = database.noteDao()
-                noteDao.getNotes(quizName)
+                throw Exception("No hay conexión a Internet para obtener las notas del servicio.")
             }
         }.recoverCatching { throwable ->
-            throw Exception("Error al obtener las notas: ${throwable.message}")
+            throw Exception("Error al obtener y guardar las notas: ${throwable.message}")
         }
     }
+
+
+    private suspend fun getLocalNotes(context: Context): Result<List<Note>> {
+        return runCatching {
+            val database = DatabaseProvider.getDatabase(context)
+            val noteDao = database.noteDao()
+            val localNotes = noteDao.getAllNotes()
+
+            Log.d("GetLocalNotes", "Notas obtenidas de Room: $localNotes")
+            localNotes
+        }.recoverCatching { throwable ->
+            throw Exception("Error al leer las notas locales: ${throwable.message}")
+        }
+    }
+
 
     // Crear una nueva nota
     suspend fun createNote(context: Context, request: CreateNoteRequest): Result<ApiNote> {

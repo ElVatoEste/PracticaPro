@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.vatodev.practicapro.components.quizes.*
 import com.vatodev.practicapro.viewmodel.NotesViewModel
 import com.vatodev.practicapro.viewmodel.QuizViewModel
@@ -20,6 +21,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun QuizScreen(
+    navController: NavController,
     onDismiss: () -> Unit,
     quizViewModel: QuizViewModel = viewModel(),
     notesViewModel: NotesViewModel = viewModel()
@@ -48,7 +50,7 @@ fun QuizScreen(
 
         FinalSummary(
             score = score,
-            onDismiss = onDismiss
+            navController = navController
         )
         return
     }
@@ -144,10 +146,4 @@ fun QuizScreen(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun QuizScreenPreview() {
-    QuizScreen(onDismiss = {})
 }

@@ -8,15 +8,36 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 
-// Composable para botones interactivos
 @Composable
-fun ActionButton(text: String, onClick: () -> Unit) {
+fun ActionButton(
+    text: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
     Button(
         onClick = onClick,
+        enabled = enabled,
         modifier = Modifier.fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7DBB00))
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (enabled) Color(0xFF7DBB00) else Color.Gray, // Cambia el color si está deshabilitado
+            contentColor = Color.White
+        )
     ) {
-        Text(text = text, color = Color.White, fontWeight = FontWeight.Bold)
+        Text(
+            text = text,
+            color = if (enabled) Color.White else Color.Black,
+            fontWeight = FontWeight.Bold
+        )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ActionButtonPreview() {
+    ActionButton(text = "Realizar Evaluación",
+        onClick = { /* Acción al hacer clic */ },
+        enabled = false
+    )
 }

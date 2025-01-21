@@ -37,7 +37,6 @@ object Routes {
     const val QUIZ_PROC_TF = "quiz_proc_tf"
     const val ADMINISTRACION = "administracion"
     const val URGENCIAS = "urgencias"
-    const val MINIJUEGO_MEDICAMENTOS = "minijuego_medicamentos"
     const val LOGIN = "login"
     const val REGISTER = "register"
     const val IMC = "imc"
@@ -118,7 +117,7 @@ fun AppNavigation(navController: NavHostController) {
         }
 
         composable(Routes.QUIZ_SCREEN) {
-            QuizScreen(onDismiss = { navController.popBackStack() })
+            QuizScreen(navController, onDismiss = { navController.popBackStack() })
         }
 
         composable(Routes.PROCEDIMIENTOS) {
@@ -126,11 +125,11 @@ fun AppNavigation(navController: NavHostController) {
         }
 
         composable(Routes.QUIZ_PROCEDIMIENTOS) {
-            ProcQuiz(onDismiss = { navController.popBackStack() })
+            ProcQuiz(navController, onDismiss = { navController.popBackStack() })
         }
 
         composable(Routes.QUIZ_PROC_TF) {
-            TrueFalseQuizScreen(onDismiss = { navController.popBackStack() })
+            TrueFalseQuizScreen(navController, onDismiss = { navController.popBackStack() })
         }
 
         composable(Routes.ADMINISTRACION) {

@@ -2,6 +2,7 @@ package com.vatodev.practicapro.rooms.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.vatodev.practicapro.rooms.entitys.Note
 
@@ -17,10 +18,17 @@ interface NoteDao {
     @Query("SELECT * FROM note WHERE subjectName = :quizName")
     suspend fun getNotes(quizName: String): List<Note>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNote(note: Note)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNotes(notes: List<Note>)
+
+    @Query("""
+        SELECT COUNT(*) >= 2
+        FROM note
+        WHERE subjectId = :subjectId
+    """)
+    suspend fun hasReachedMaxAttempts(subjectId: Int): Boolean
 }
 

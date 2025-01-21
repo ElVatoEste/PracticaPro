@@ -58,7 +58,7 @@ fun MedicamentosScreen() {
 
         // Imagen representativa
         Image(
-            painter = painterResource(id = R.drawable.ic_medicines),
+            painter = painterResource(id = R.drawable.ic_medicines1),
             contentDescription = "Administración de Medicamentos",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -84,7 +84,7 @@ fun MedicamentosScreen() {
             TechniqueCard(
                 title = "Inyecciones Intradérmicas",
                 description = "Conoce los pasos para administrar inyecciones intradérmicas asegurando la dosis correcta y el medicamento adecuado.",
-                imageRes = R.drawable.ic_medicines,
+                imageRes = R.drawable.ic_medicines2,
                 onClick = {
                     dialogTitle = "Inyecciones Intradérmicas"
                     selectedSteps = stepsDermica
@@ -94,7 +94,7 @@ fun MedicamentosScreen() {
             TechniqueCard(
                 title = "Inyecciones Subcutáneas",
                 description = "Aprende cómo realizar inyecciones subcutáneas de forma segura y efectiva, minimizando riesgos.",
-                imageRes = R.drawable.ic_medicines,
+                imageRes = R.drawable.ic_medicines3,
                 onClick = {
                     dialogTitle = "Inyecciones Subcutáneas"
                     selectedSteps = stepsSubcutaneas
@@ -104,7 +104,7 @@ fun MedicamentosScreen() {
             TechniqueCard(
                 title = "Inyección Intramuscular",
                 description = "Domina la técnica de administración intramuscular, garantizando seguridad y precisión.",
-                imageRes = R.drawable.ic_medicines,
+                imageRes = R.drawable.ic_medicines4,
                 onClick = {
                     dialogTitle = "Inyección Intramuscular"
                     selectedSteps = stepsMuscular
@@ -114,7 +114,7 @@ fun MedicamentosScreen() {
             TechniqueCard(
                 title = "Vía Intravenosa",
                 description = "Paso a paso para colocar una vía intravenosa correctamente, asegurando una aplicación eficaz.",
-                imageRes = R.drawable.ic_medicines,
+                imageRes = R.drawable.ic_medicines5,
                 onClick = {
                     dialogTitle = "Vía Intravenosa"
                     selectedSteps = stepsVenosa

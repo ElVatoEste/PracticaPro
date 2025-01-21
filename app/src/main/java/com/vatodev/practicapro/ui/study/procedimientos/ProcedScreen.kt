@@ -1,5 +1,6 @@
 package com.vatodev.practicapro.ui.study.procedimientos
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -7,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -25,13 +28,32 @@ import androidx.navigation.NavController
 import com.vatodev.practicapro.R
 import com.vatodev.practicapro.components.*
 import com.vatodev.practicapro.navigation.Routes
+import com.vatodev.practicapro.rooms.appDatabase.DatabaseProvider
 
 @Composable
 fun ProcedScreen(navController: NavController?) {
 
+    val context = LocalContext.current
+
+    // Estados para los botones
+    var isButton1Enabled by remember { mutableStateOf(false) }
+    var isButton2Enabled by remember { mutableStateOf(false) }
+
     var showDialog by remember { mutableStateOf(false) }
     var selectedSteps by remember { mutableStateOf(emptyList<String>()) }
     var dialogTitle by remember { mutableStateOf("") }
+
+    // Validar estado de los botones cada vez que se entra a la pantalla
+    LaunchedEffect(Unit) {
+        val database = DatabaseProvider.getDatabase(context)
+        val noteDao = database.noteDao()
+
+        isButton1Enabled = !noteDao.hasReachedMaxAttempts(2) // Para subjectId 2
+        isButton2Enabled = !noteDao.hasReachedMaxAttempts(5) // Para subjectId 5
+
+        Log.d("ProcedScreen", "Estado de botón 1: $isButton1Enabled")
+        Log.d("ProcedScreen", "Estado de botón 2: $isButton2Enabled")
+    }
 
     Column(
         modifier = Modifier
@@ -60,7 +82,7 @@ fun ProcedScreen(navController: NavController?) {
 
         // Imagen representativa
         Image(
-            painter = painterResource(id = R.drawable.ic_procedures), // Cambiar por una imagen específica
+            painter = painterResource(id = R.drawable.ic_procedures1), // Cambiar por una imagen específica
             contentDescription = "Imagen de Procedimientos Básicos",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -87,7 +109,7 @@ fun ProcedScreen(navController: NavController?) {
             TechniqueCard(
                 title = "Talla",
                 description = "Procedimiento para medir la estatura del paciente.",
-                imageRes = R.drawable.ic_procedures, // Cambiar por una imagen representativa
+                imageRes = R.drawable.ic_procedures2, // Cambiar por una imagen representativa
                 onClick = {
                     dialogTitle = "Talla"
                     selectedSteps = stepsTalla
@@ -98,7 +120,7 @@ fun ProcedScreen(navController: NavController?) {
             TechniqueCard(
                 title = "Peso",
                 description = "Procedimiento para medir el peso corporal.",
-                imageRes = R.drawable.ic_procedures,
+                imageRes = R.drawable.ic_procedures3,
                 onClick = {
                     dialogTitle = "Peso"
                     selectedSteps = stepsPeso
@@ -109,7 +131,7 @@ fun ProcedScreen(navController: NavController?) {
             TechniqueCard(
                 title = "Frecuencia Cardíaca",
                 description = "Aprende cómo medir la frecuencia cardíaca correctamente.",
-                imageRes = R.drawable.ic_procedures,
+                imageRes = R.drawable.ic_procedures4,
                 onClick = {
                     dialogTitle = "Frecuencia Cardíaca"
                     selectedSteps = stepsFrecuenciaCardiaca
@@ -120,7 +142,7 @@ fun ProcedScreen(navController: NavController?) {
             TechniqueCard(
                 title = "Frecuencia Respiratoria",
                 description = "Aprende cómo medir la frecuencia respiratoria de manera adecuada.",
-                imageRes = R.drawable.ic_procedures,
+                imageRes = R.drawable.ic_procedures5,
                 onClick = {
                     dialogTitle = "Frecuencia Respiratoria"
                     selectedSteps = stepsFrecuenciaRespiratoria
@@ -131,7 +153,7 @@ fun ProcedScreen(navController: NavController?) {
             TechniqueCard(
                 title = "Presión Arterial",
                 description = "Aprende cómo medir la presión arterial de manera correcta.",
-                imageRes = R.drawable.ic_procedures,
+                imageRes = R.drawable.ic_procedures6,
                 onClick = {
                     dialogTitle = "Presión Arterial"
                     selectedSteps = stepsPresionArterial
@@ -143,12 +165,15 @@ fun ProcedScreen(navController: NavController?) {
 
         ActionButton(
             text = "Realizar Evaluación",
-            onClick = { navController?.navigate(Routes.QUIZ_PROCEDIMIENTOS) } // Navega al quiz
+            onClick = { navController?.navigate(Routes.QUIZ_PROCEDIMIENTOS) },
+            enabled = isButton1Enabled
         )
 
+        // Botón 2: Evaluación para `subjectId = 5`
         ActionButton(
             text = "Realizar Evaluación 2",
-            onClick = { navController?.navigate(Routes.QUIZ_PROC_TF) } // Navega al quiz
+            onClick = { navController?.navigate(Routes.QUIZ_PROC_TF) },
+            enabled = isButton2Enabled
         )
 
         // Espacio adicional al final para desplazamiento cómodo

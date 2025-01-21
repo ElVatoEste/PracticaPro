@@ -1,6 +1,8 @@
 package com.vatodev.practicapro
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,7 +25,12 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.vatodev.practicapro.network.AppLifecycleObserver
 import com.vatodev.practicapro.rooms.appDatabase.DatabaseProvider
 import com.vatodev.practicapro.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
@@ -35,6 +42,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Reinicia el estado al cerrar completamente la app
+        ProcessLifecycleOwner.get().lifecycle.addObserver(AppLifecycleObserver(this))
 
         // ✅ Permitir que la app ocupe toda la pantalla, incluyendo recortes (notch)
         WindowCompat.setDecorFitsSystemWindows(window, false)

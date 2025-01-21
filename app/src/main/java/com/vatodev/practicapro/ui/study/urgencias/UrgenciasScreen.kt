@@ -59,7 +59,7 @@ fun UrgenciasScreen() {
 
         // Imagen representativa
         Image(
-            painter = painterResource(id = R.drawable.ic_emergency),
+            painter = painterResource(id = R.drawable.ic_emergency1),
             contentDescription = "Urgencias Médicas",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -85,7 +85,7 @@ fun UrgenciasScreen() {
             TechniqueCard(
                 title = "Medición de Glucosa Capilar",
                 description = "Conoce los pasos esenciales para medir la glucosa capilar de manera segura y efectiva.",
-                imageRes = R.drawable.ic_emergency,
+                imageRes = R.drawable.ic_emergency2,
                 onClick = {
                     dialogTitle = "Medición de Glucosa Capilar"
                     selectedSteps = stepsGlucosa
@@ -95,7 +95,7 @@ fun UrgenciasScreen() {
             TechniqueCard(
                 title = "Colocación de Sonda Foley (Masculino)",
                 description = "Guía detallada para la colocación segura y efectiva de una sonda Foley en pacientes masculinos.",
-                imageRes = R.drawable.ic_emergency,
+                imageRes = R.drawable.ic_emergency3,
                 onClick = {
                     dialogTitle = "Colocación de Sonda Foley (Masculino)"
                     selectedSteps = stepsFoleyMas
@@ -105,7 +105,7 @@ fun UrgenciasScreen() {
             TechniqueCard(
                 title = "Colocación de Sonda Foley (Femenino)",
                 description = "Aprende la técnica adecuada para colocar una sonda Foley en pacientes femeninos.",
-                imageRes = R.drawable.ic_emergency,
+                imageRes = R.drawable.ic_emergency4,
                 onClick = {
                     dialogTitle = "Colocación de Sonda Foley (Femenino)"
                     selectedSteps = stepsFoleyFem
@@ -115,7 +115,7 @@ fun UrgenciasScreen() {
             TechniqueCard(
                 title = "Introducción de Sonda Nasogástrica",
                 description = "Pasos detallados para realizar la introducción de una sonda nasogástrica de forma segura.",
-                imageRes = R.drawable.ic_emergency,
+                imageRes = R.drawable.ic_emergency5,
                 onClick = {
                     dialogTitle = "Introducción de Sonda Nasogástrica"
                     selectedSteps = stepsSonda

@@ -1,5 +1,6 @@
 package com.vatodev.practicapro.ui.study.asepsia
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -21,10 +22,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.vatodev.practicapro.R
 import com.vatodev.practicapro.components.*
+import com.vatodev.practicapro.rooms.appDatabase.DatabaseProvider
 import com.vatodev.practicapro.viewmodel.helper.DialogState
 
 @Composable
 fun AsepsiaScreen(navController: NavController) {
+
+    val context = LocalContext.current
+    var isButtonEnabled by remember { mutableStateOf(false) }
+
     // Estado del diálogo agrupado en un solo objeto
     var dialogState by remember {
         mutableStateOf(
@@ -34,6 +40,13 @@ fun AsepsiaScreen(navController: NavController) {
                 steps = emptyList()
             )
         )
+    }
+
+    LaunchedEffect(key1 = navController.currentBackStackEntry) {
+        val database = DatabaseProvider.getDatabase(context)
+        val noteDao = database.noteDao()
+        isButtonEnabled = !noteDao.hasReachedMaxAttempts(1)
+        Log.d("AsepsiaScreen", "Estado del botón: $isButtonEnabled")
     }
 
     Column(
@@ -63,7 +76,7 @@ fun AsepsiaScreen(navController: NavController) {
 
         // Imagen representativa
         Image(
-            painter = painterResource(id = R.drawable.ic_asepsia),
+            painter = painterResource(id = R.drawable.ic_asepsia1),
             contentDescription = "Imagen de Asepsia",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -81,10 +94,25 @@ fun AsepsiaScreen(navController: NavController) {
         // Reproductor de video
         SectionTitle("Video Lavado de manos clínico")
         VideoPlayerScreen(videoUri = "android.resource://${LocalContext.current.packageName}/${R.raw.lavado_clinico}")
-
+        Text(
+            text = "Pontificia Universidad Javeriana Cali. (s.f.). Técnica Lavado de Manos Clínico [Video]. YouTube. https://www.youtube.com/watch?v=9W6BOGFjnxs",
+            fontSize = 14.sp,
+            textAlign = TextAlign.Start,
+            modifier = Modifier.fillMaxWidth(),
+            color = Color.Gray
+        )
         // Reproductor de video
         SectionTitle("Lavado de manos quirúrgicos")
         VideoPlayerScreen(videoUri = "android.resource://${LocalContext.current.packageName}/${R.raw.lavado_quirurgico}")
+        Text(
+            text = "Universidad Andrés Bello. (s.f.). Técnica de lavado de manos quirúrgico [Video]. YouTube. https://www.youtube.com/watch?v=68O40dKcPlM",
+            fontSize = 14.sp,
+            textAlign = TextAlign.Start,
+            modifier = Modifier.fillMaxWidth(),
+            color = Color.Gray
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
 
         // Sección de técnicas
         SectionTitle("Procedimientos Antisepticos")
@@ -98,7 +126,8 @@ fun AsepsiaScreen(navController: NavController) {
 
         ActionButton(
             text = "Realizar Evaluación",
-            onClick = { navController.navigate("quiz_screen") }
+            onClick = { navController.navigate("quiz_screen") },
+            enabled = isButtonEnabled
         )
 
         Spacer(modifier = Modifier.weight(1f))

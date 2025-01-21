@@ -22,7 +22,7 @@ fun TechniqueCardList(onCardClick: (String, List<String>) -> Unit) {
         TechniqueCard(
             title = "Lavado de Manos Clínico",
             description = "Pasos para un lavado de manos correcto.",
-            imageRes = R.drawable.ic_asepsia,
+            imageRes = R.drawable.ic_asepsia3,
             onClick = {
                 onCardClick("Lavado de Manos Clínico", stepsLavadoClinico)
             }
@@ -30,7 +30,7 @@ fun TechniqueCardList(onCardClick: (String, List<String>) -> Unit) {
         TechniqueCard(
             title = "Lavado de Manos Quirúrgico",
             description = "Elimina la flora transitoria y reduce al máximo la flora residente de las manos, previo a procedimientos invasivos.",
-            imageRes = R.drawable.ic_asepsia,
+            imageRes = R.drawable.ic_asepsia2,
             onClick = {
                 onCardClick("Lavado de Manos Quirúrgico", stepsLavadoQuirurgico)
             }
@@ -38,7 +38,7 @@ fun TechniqueCardList(onCardClick: (String, List<String>) -> Unit) {
         TechniqueCard(
             title = "Uso de Guantes",
             description = "Conoce el uso correcto del equipo de protección personal.",
-            imageRes = R.drawable.ic_asepsia,
+            imageRes = R.drawable.ic_asepsia4,
             onClick = {
                 onCardClick("Uso de Guantes", stepsUsoGuantes)
             }

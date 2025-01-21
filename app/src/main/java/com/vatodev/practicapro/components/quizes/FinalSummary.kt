@@ -15,9 +15,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.vatodev.practicapro.navigation.Routes
 
 @Composable
-fun FinalSummary(score: Int, onDismiss: () -> Unit) {
+fun FinalSummary(score: Int, navController: NavController) {
     val message = when {
         score == 100 -> "¡Excelente trabajo! Dominaste este tema."
         score >= 75 -> "Buen trabajo, pero puedes mejorar."
@@ -32,7 +34,6 @@ fun FinalSummary(score: Int, onDismiss: () -> Unit) {
         else -> Icons.Default.SentimentDissatisfied // 😞
     }
 
-
     val backgroundColor = when {
         score == 100 -> Color(0xFF4CAF50) // Verde éxito
         score >= 75 -> Color(0xFFFFC107) // Amarillo dorado
@@ -40,9 +41,8 @@ fun FinalSummary(score: Int, onDismiss: () -> Unit) {
         else -> Color(0xFFF44336) // Rojo error
     }
 
-
     AlertDialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = { /* Intencionalmente vacío, el diálogo no se cierra sin interacción */ },
         title = {
             Text(
                 text = "¡Quiz Finalizado!",
@@ -96,8 +96,12 @@ fun FinalSummary(score: Int, onDismiss: () -> Unit) {
             }
         },
         confirmButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Aceptar")
+            TextButton(onClick = {
+                navController.navigate(Routes.MAIN) {
+                    popUpTo(Routes.MAIN) { inclusive = true }
+                }
+            }) {
+                Text("Continuar")
             }
         }
     )
