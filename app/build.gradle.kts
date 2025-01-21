@@ -15,8 +15,8 @@
             applicationId = "com.vatodev.practicapro"
             minSdk = 30
             targetSdk = 35
-            versionCode = 3
-            versionName = "1.2"
+            versionCode = 5
+            versionName = "Production release 2.0"
             buildConfigField("String", "DEVELOPER_NAME", "\"Vato_dev\"")
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
@@ -28,6 +28,7 @@
                     getDefaultProguardFile("proguard-android-optimize.txt"),
                     "proguard-rules.pro"
                 )
+                signingConfig = signingConfigs.getByName("debug")
             }
         }
 
@@ -41,6 +42,7 @@
         }
 
         kotlinOptions {
+            freeCompilerArgs += listOf("-Xincremental")
             jvmTarget = "11"
         }
         buildFeatures {

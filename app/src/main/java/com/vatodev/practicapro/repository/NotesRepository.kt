@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.vatodev.practicapro.entitys.ApiNote
 import com.vatodev.practicapro.model.CreateNoteRequest
+import com.vatodev.practicapro.model.CreateOfflineNoteRequest
 import com.vatodev.practicapro.network.ApiClient
 import com.vatodev.practicapro.network.NetworkObserver
 import com.vatodev.practicapro.rooms.appDatabase.DatabaseProvider
@@ -108,15 +109,28 @@ object NotesRepository {
         try {
             val database = DatabaseProvider.getDatabase(context)
             val pendingRequestDao = database.pendingRequestDao()
+            val userDao = database.userDao()
 
-            // ✅ Usa Json con configuración personalizada
+            // Obtener el ID del usuario actual
+            val userId = userDao.getCurrentUserId()
+
+            // Crear el objeto CreateOfflineNoteRequest con idUsuario
+            val offlineRequest = CreateOfflineNoteRequest(
+                idUsuario = userId,
+                idMateria = request.idMateria,
+                puntaje = request.puntaje
+            )
+
+            // Serializar la solicitud pendiente
             val json = Json { ignoreUnknownKeys = true }
-            val requestJson = json.encodeToString(request)
+            val requestJson = json.encodeToString(offlineRequest)
 
+            // Crear y guardar la solicitud pendiente
             val pendingRequest = PendingRequest(
                 endpoint = endpoint,
                 payload = requestJson,
-                method = "POST"
+                method = "POST",
+                userId = userId
             )
 
             pendingRequestDao.insertRequest(pendingRequest)
@@ -126,20 +140,38 @@ object NotesRepository {
         }
     }
 
-
     // ✅ Procesar las peticiones pendientes
     suspend fun processPendingRequests(context: Context) {
         val database = DatabaseProvider.getDatabase(context)
         val pendingRequestDao = database.pendingRequestDao()
         val pendingRequests = pendingRequestDao.getAllRequests()
 
+        if (pendingRequests.isEmpty()) {
+            Log.d("NotesRepository", "No hay peticiones pendientes para procesar.")
+            return
+        }
+
         for (request in pendingRequests) {
             try {
-                val payload = Json.decodeFromString<CreateNoteRequest>(request.payload)
-                notesService.createNote(payload)
-                pendingRequestDao.deleteRequestById(request.id)
+                // Decodificar el payload para obtener la información de CreateOfflineNoteRequest
+                val payload = Json.decodeFromString<CreateOfflineNoteRequest>(request.payload)
+                Log.d("NotesRepository", "Petición procesada: ${request.id}")
+
+                // Llamar al endpoint con la solicitud decodificada
+                notesService.createOfflineNote(payload)
+
+                Log.d("NotesRepository", "Petición procesada exitosamente: ${request.id}")
             } catch (e: Exception) {
-                e.printStackTrace()
+                // Log del error, pero la petición se elimina de todos modos
+                Log.e("NotesRepository", "Error al procesar la petición ${request.id}: ${e.message}", e)
+            } finally {
+                // Eliminar la solicitud pendiente, independientemente del resultado
+                try {
+                    pendingRequestDao.deleteRequestById(request.id)
+                    Log.d("NotesRepository", "Petición eliminada de la tabla: ${request.id}")
+                } catch (deleteException: Exception) {
+                    Log.e("NotesRepository", "Error al eliminar la petición ${request.id}: ${deleteException.message}", deleteException)
+                }
             }
         }
     }

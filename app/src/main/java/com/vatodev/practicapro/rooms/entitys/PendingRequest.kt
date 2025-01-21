@@ -9,5 +9,6 @@ data class PendingRequest(
     val endpoint: String,
     val payload: String,
     val method: String,
+    val userId: Int,
     val timestamp: Long = System.currentTimeMillis()
 )

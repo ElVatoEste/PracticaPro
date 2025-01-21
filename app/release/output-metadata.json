@@ -4,15 +4,15 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.example.practicapro",
+  "applicationId": "com.vatodev.practicapro",
   "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 1,
-      "versionName": "1.0",
+      "versionCode": 4,
+      "versionName": "Production release",
       "outputFile": "app-release.apk"
     }
   ],

@@ -112,7 +112,7 @@ class QuizViewModel : ViewModel() {
         createQuestion(
             "¿Cuál es la acción inicial que debe realizarse antes de medir la frecuencia respiratoria de un paciente?",
             listOf(
-                "a Colocar al paciente en una posición adecuada. (correcta)",
+                "Colocar al paciente en una posición adecuada. (correcta)",
                 "Comprobar la identidad del paciente.",
                 "Medir la frecuencia respiratoria al mismo tiempo que el pulso.",
                 "Informar al paciente que se le va a medir la frecuencia respiratoria."
@@ -121,7 +121,7 @@ class QuizViewModel : ViewModel() {
         createQuestion(
             "¿Por qué no es conveniente informar al paciente que se le va a medir la frecuencia respiratoria?",
             listOf(
-                "a Porque el paciente podría alterar involuntariamente su ritmo respiratorio. (correcta)",
+                "Porque el paciente podría alterar involuntariamente su ritmo respiratorio. (correcta)",
                 "Porque la información podría generar ansiedad.",
                 "Porque la medición debe realizarse de forma automática, sin que el paciente sepa.",
                 "Porque podría afectar los resultados de otros signos vitales."
@@ -131,7 +131,7 @@ class QuizViewModel : ViewModel() {
             "¿Qué posición es recomendable para medir la frecuencia respiratoria?",
             listOf(
                 "Posición de pie.",
-                "a Posición de semi-Fowler o acostado. (correcta)",
+                "Posición de semi-Fowler o acostado. (correcta)",
                 "Posición lateral.",
                 "Posición de Trendelenburg."
             )
@@ -139,7 +139,7 @@ class QuizViewModel : ViewModel() {
         createQuestion(
             "¿Cuál de las siguientes opciones es correcta para medir la frecuencia respiratoria en un paciente?",
             listOf(
-                "a Contar las inspiraciones del paciente durante un minuto observando las elevaciones del tórax. (correcta)",
+                "Contar las inspiraciones del paciente durante un minuto observando las elevaciones del tórax. (correcta)",
                 "Usar únicamente la auscultación para contar las respiraciones.",
                 "Contar únicamente las exhalaciones durante un minuto.",
                 "Contar las respiraciones durante 30 segundos y multiplicar por 2."
@@ -149,7 +149,7 @@ class QuizViewModel : ViewModel() {
             "¿Qué características deben observarse además de la frecuencia respiratoria durante su medición?",
             listOf(
                 "La presión arterial.",
-                "a El ritmo, profundidad y volumen de la respiración, así como el color de piel y uñas. (correcta)",
+                "El ritmo, profundidad y volumen de la respiración, así como el color de piel y uñas. (correcta)",
                 "El peso y la temperatura corporal.",
                 "El nivel de conciencia del paciente."
             )

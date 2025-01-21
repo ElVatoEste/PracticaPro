@@ -1,21 +1,73 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# Preservar anotaciones necesarias
+-keepattributes *Annotation*
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Mantener anotaciones de Retrofit
+-keep @retrofit2.http.* class * { *; }
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Mantener anotaciones de Room
+-keep @androidx.room.* class * { *; }
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Mantener anotaciones de Gson
+-keep class com.google.gson.annotations.** { *; }
+
+# Mantener Retrofit y las interfaces de API
+-keep class retrofit2.** { *; }
+-keep interface retrofit2.http.* { *; }
+
+# Evitar advertencias de Retrofit
+-dontwarn retrofit2.**
+-dontwarn okhttp3.**
+
+# Mantener Gson y modelos relacionados
+-keep class com.google.gson.** { *; }
+-keep class com.google.gson.annotations.** { *; }
+
+# Preservar modelos de datos JSON
+-keep class com.vatodev.practicapro.model.** { *; }
+
+# Mantener clases de Room
+-keep class androidx.room.** { *; }
+-keep @androidx.room.* class * { *; }
+
+# Mantener bases de datos y DAOs
+-keep class * extends androidx.room.RoomDatabase { *; }
+-keep @androidx.room.Database class * { *; }
+-keep @androidx.room.Entity class * { *; }
+-keep @androidx.room.Dao class * { *; }
+
+# Mantener Compose
+-keep class androidx.compose.** { *; }
+-keep class kotlin.** { *; }
+
+# Evitar advertencias de Compose
+-dontwarn androidx.compose.**
+
+# Mantener Kotlin Coroutines
+-keepclassmembers class kotlinx.coroutines.** { *; }
+-dontwarn kotlinx.coroutines.**
+
+# Mantener Material Design 3
+-keep class com.google.android.material.** { *; }
+-dontwarn com.google.android.material.**
+
+# Mantener todas las constantes de BuildConfig
+-keepclassmembers class **.BuildConfig {
+    public static final *;
+}
+
+-keep class com.vatodev.practicapro.model.** { *; }
+-keep class com.vatodev.practicapro.entitys.** { *; }
+
+# Mantener clases de Compose
+-keep class androidx.compose.** { *; }
+-dontwarn androidx.compose.**
+
+# Evitar eliminaciones relacionadas con Kotlin
+-keepclassmembers class kotlin.** { *; }
+-dontwarn kotlin.**
+
+# Mantener clases con reflexiones
+-keepattributes Signature, EnclosingMethod, InnerClasses
+-keepclasseswithmembers class * {
+    public <init>(...);
+}

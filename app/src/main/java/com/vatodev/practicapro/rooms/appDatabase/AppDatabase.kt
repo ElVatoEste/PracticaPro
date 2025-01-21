@@ -8,7 +8,7 @@ import com.vatodev.practicapro.rooms.entitys.PendingRequest
 import com.vatodev.practicapro.rooms.entitys.Note
 import com.vatodev.practicapro.rooms.entitys.User
 
-@Database(entities = [User::class, Note::class, PendingRequest::class, Materia::class], version = 1, exportSchema = false)
+@Database(entities = [User::class, Note::class, PendingRequest::class, Materia::class], version = 11, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun noteDao(): NoteDao

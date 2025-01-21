@@ -29,9 +29,16 @@ fun BottomNavigationBar(navController: NavController, userViewModel: UserViewMod
     val currentRoute = currentBackStackEntry?.destination?.route
     val scope = rememberCoroutineScope()
 
-    Log.d("BottomNavigationBar", "Current Route: $currentRoute")
+    val excludedRoutes = setOf(
+        Routes.LOGIN,
+        Routes.SPLASH,
+        Routes.REGISTER,
+        Routes.QUIZ_PROCEDIMIENTOS,
+        Routes.QUIZ_PROC_TF,
+        Routes.QUIZ_SCREEN
+    )
 
-    if (currentRoute != Routes.LOGIN && currentRoute != Routes.SPLASH && currentRoute != Routes.REGISTER ) {
+    if (currentRoute !in excludedRoutes ) {
         Surface(
             modifier = Modifier.height(56.dp),
             shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),

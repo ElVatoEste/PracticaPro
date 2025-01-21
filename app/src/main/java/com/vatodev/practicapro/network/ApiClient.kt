@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 
 object ApiClient {
     private const val BASE_URL = "https://practica-pro-back.vercel.app/"
-    private const val LOCAL_URL = "http://192.168.0.3:3000/"
+    private const val LOCAL_URL = "http://192.168.0.7:3000/"
     private const val IS_LOCAL = false
     private const val TAG = "ApiClient"
 

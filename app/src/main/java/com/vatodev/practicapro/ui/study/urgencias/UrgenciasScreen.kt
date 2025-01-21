@@ -125,7 +125,7 @@ fun UrgenciasScreen() {
             TechniqueCard(
                 title = "Retiro de Sonda Nasogástrica",
                 description = "Guía paso a paso para retirar una sonda nasogástrica sin causar molestias al paciente.",
-                imageRes = R.drawable.ic_emergency,
+                imageRes = R.drawable.ic_emergency6,
                 onClick = {
                     dialogTitle = "Retiro de Sonda Nasogástrica"
                     selectedSteps = stepsNaso

@@ -13,4 +13,7 @@ interface UserDao {
 
     @Query("DELETE FROM user")
     suspend fun deleteUser()
+
+    @Query("SELECT id FROM User LIMIT 1")
+    suspend fun getCurrentUserId(): Int
 }

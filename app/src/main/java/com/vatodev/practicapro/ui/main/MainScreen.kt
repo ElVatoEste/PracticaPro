@@ -17,6 +17,8 @@ import androidx.navigation.NavController
 import com.vatodev.practicapro.R
 import com.vatodev.practicapro.components.AnimatedModuleCard
 import com.vatodev.practicapro.components.module.Module
+import com.vatodev.practicapro.network.NetworkObserver
+import com.vatodev.practicapro.repository.NotesRepository
 import com.vatodev.practicapro.viewmodel.NotesViewModel
 import kotlinx.coroutines.delay
 
@@ -28,24 +30,37 @@ fun MainScreen(navController: NavController) {
     val context = navController.context
 
     LaunchedEffect(Unit) {
+        delay(650)
+        isLoaded = true
 
         val sharedPreferences = context.getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
         val areNotesLoaded = sharedPreferences.getBoolean("notes_loaded", false)
 
-        if (!areNotesLoaded) {
-            // Solo carga las notas si no se han cargado en esta sesión
-            notesViewModel.loadNotes(context)
+        // Observar cambios en la conectividad
+        NetworkObserver.isNetworkAvailable.collect { isNetworkAvailable ->
+            if (isNetworkAvailable) {
+                try {
+                    // Primero, procesar las peticiones pendientes
+                    NotesRepository.processPendingRequests(context)
+                    Log.d("MainScreen", "Peticiones pendientes procesadas.")
 
-            // Marca las notas como cargadas
-            sharedPreferences.edit().putBoolean("notes_loaded", true).apply()
-            Log.d("MainScreen", "Notas cargadas y marcadas como cargadas.")
-        } else {
-            Log.d("MainScreen", "Las notas ya se cargaron previamente en esta sesión.")
+                    // Luego, sincronizar las notas
+                    if (!areNotesLoaded) {
+                        notesViewModel.loadNotes(context)
+                        sharedPreferences.edit().putBoolean("notes_loaded", true).apply()
+                        Log.d("MainScreen", "Notas cargadas y marcadas como cargadas.")
+                    } else {
+                        Log.d("MainScreen", "Las notas ya se cargaron previamente en esta sesión.")
+                    }
+                } catch (e: Exception) {
+                    Log.e("MainScreen", "Error durante la sincronización o procesamiento de peticiones: ${e.message}", e)
+                }
+            } else {
+                Log.d("MainScreen", "Sin conexión a Internet. No se cargaron las notas ni se procesaron las peticiones pendientes.")
+            }
         }
-
-        delay(650) // Simula una carga inicial
-        isLoaded = true
     }
+
 
     if (!isLoaded) {
         Surface(

@@ -49,7 +49,7 @@ fun LoginScreen(
     LaunchedEffect(Unit) {
         delay(200)
         logoOffsetY.animateTo(
-            targetValue = -180f,
+            targetValue = -120f,
             animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
         )
         logoScale.animateTo(

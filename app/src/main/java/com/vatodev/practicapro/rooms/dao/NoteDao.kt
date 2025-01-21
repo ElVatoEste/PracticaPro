@@ -30,5 +30,8 @@ interface NoteDao {
         WHERE subjectId = :subjectId
     """)
     suspend fun hasReachedMaxAttempts(subjectId: Int): Boolean
+
+    @Query("DELETE FROM Note")
+    suspend fun deleteAllNotes()
 }
 

@@ -79,7 +79,7 @@ fun RegisterScreen(
     LaunchedEffect(Unit) {
         delay(200)
         logoOffsetY.animateTo(
-            targetValue = -180f,
+            targetValue = -220f,
             animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
         )
         logoScale.animateTo(

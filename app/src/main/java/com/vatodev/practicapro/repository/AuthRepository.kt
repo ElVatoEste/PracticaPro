@@ -34,7 +34,7 @@ object AuthRepository {
                 val isNetworkAvailable = NetworkObserver.isNetworkAvailable.first()
                 if (!isNetworkAvailable) throw Exception("No hay conexión a internet.")
                 val response = authService.login(LoginRequest(email, password))
-                buildUser(response.user.nombre, response.user.email, response.accessToken)
+                buildUser(response.user.id, response.user.nombre, response.user.email, response.accessToken)
             }
         }.recoverCatching { throwable ->
             handleHttpErrors(throwable)
@@ -87,9 +87,10 @@ object AuthRepository {
     }
 
     // 📌 Construcción de objeto User
-    private fun buildUser(nombre: String, email: String, token: String): User {
+    private fun buildUser(id: Int, nombre: String, email: String, token: String): User {
         val expirationDate = System.currentTimeMillis() + 7.days()
         return User(
+            id = id,
             username = nombre,
             email = email,
             token = token,
@@ -99,12 +100,18 @@ object AuthRepository {
 
     // 🔄 Método de logout
     suspend fun logout(context: Context, userViewModel: UserViewModel) {
-        val userDao = DatabaseProvider.getDatabase(context).userDao()
+        val database = DatabaseProvider.getDatabase(context)
+        val userDao = database.userDao()
+        val noteDao = database.noteDao() // Obtener el NoteDao para manejar las notas
+
         withContext(Dispatchers.IO) {
-            userDao.deleteUser()
+            userDao.deleteUser() // Eliminar el usuario
+            noteDao.deleteAllNotes() // Eliminar todas las notas
         }
+
         userViewModel.clearUserProfile()
     }
+
 
     // 📌 Guardar usuario en la base de datos
     private suspend fun saveUserToDatabase(context: Context, user: User) {
@@ -118,6 +125,7 @@ object AuthRepository {
     private fun mockLogin(email: String, password: String): User? {
         return if (email == "test@test.com" && password == "password") {
             User(
+                id = 999,
                 username = "Test User",
                 email = "test@test.com",
                 token = "mock_token_123",
@@ -159,7 +167,7 @@ object AuthRepository {
                 throw Exception("Error HTTP: ${throwable.message()}")
             }
 
-            else -> throw Exception("Error inesperado: ${throwable.message}")
+            else -> throw Exception(throwable.message)
         }
     }
 }

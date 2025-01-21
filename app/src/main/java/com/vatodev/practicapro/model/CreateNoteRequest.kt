@@ -7,3 +7,5 @@ data class CreateNoteRequest(
     val idMateria: Int,
     val puntaje: Int
 )
+
+
