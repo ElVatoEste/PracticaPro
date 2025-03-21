@@ -16,5 +16,8 @@ interface AuthService {
 
     @POST("auth/resend-verification")
     suspend fun resentEmail(@Body emailRequest: EmailRequest): MessageResponse
+
+    @POST("auth/reset-password")
+    suspend fun resetPassword(@Body resetPasswordRequest: ResetPasswordRequest): MessageResponse
 }
 

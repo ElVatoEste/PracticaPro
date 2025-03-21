@@ -153,7 +153,7 @@ fun MainScreen(navController: NavController) {
                                         when (module.name) {
                                             "Técnicas de Asepsia y Antisepsia" -> navController.navigate("tecnicas")
                                             "Procedimientos Básicos" -> navController.navigate("procedimientos")
-                                            "Administración de Medicamentos" -> navController.navigate("administracion")
+                                            "Vía de Administración de Medicamentos" -> navController.navigate("administracion")
                                             "Urgencias Médicas" -> navController.navigate("urgencias")
                                         }
                                     }

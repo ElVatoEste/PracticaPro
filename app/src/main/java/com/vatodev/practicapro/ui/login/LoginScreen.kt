@@ -21,6 +21,8 @@ import com.vatodev.practicapro.R
 import com.vatodev.practicapro.components.NormalTextField
 import com.vatodev.practicapro.components.PasswordTextField
 import com.vatodev.practicapro.components.VerificationCodeModal
+import com.vatodev.practicapro.components.ResetPasswordModal
+import com.vatodev.practicapro.viewmodel.ResetPasswordViewModel
 import com.vatodev.practicapro.viewmodel.VerificationViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -31,7 +33,8 @@ fun LoginScreen(
     onNavigateToRegister: () -> Unit,
     context: android.content.Context,
     viewModel: LoginViewModel = viewModel(),
-    verificationViewModel: VerificationViewModel = viewModel()
+    verificationViewModel: VerificationViewModel = viewModel(),
+    resetViewModel: ResetPasswordViewModel = viewModel()
 ) {
     val email by viewModel.email
     val password by viewModel.password
@@ -39,6 +42,9 @@ fun LoginScreen(
     val isLoading by viewModel.isLoading
     val showEmailNotConfirmedDialog by viewModel.showEmailNotConfirmedDialog
     val focusManager = LocalFocusManager.current
+
+    // Estado para el modal de restablecer contraseña
+    var showResetPasswordDialog by remember { mutableStateOf(false) }
 
     // Animaciones
     val logoOffsetY = remember { Animatable(0f) }
@@ -49,7 +55,7 @@ fun LoginScreen(
     LaunchedEffect(Unit) {
         delay(200)
         logoOffsetY.animateTo(
-            targetValue = -120f,
+            targetValue = -140f,
             animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
         )
         logoScale.animateTo(
@@ -138,7 +144,7 @@ fun LoginScreen(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 8.dp),
                     enabled = !isLoading,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF7DBB00),
@@ -155,7 +161,14 @@ fun LoginScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
+                // Texto para restablecer contraseña
+                TextButton(onClick = { showResetPasswordDialog = true }) {
+                    Text(
+                        text = "Olvidé mi contraseña",
+                        color = Color(0xFF7DBB00),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
 
                 // Texto para crear una cuenta
                 TextButton(onClick = onNavigateToRegister) {
@@ -175,6 +188,7 @@ fun LoginScreen(
         }
     }
 
+    // Modal de verificación de correo
     if (showEmailNotConfirmedDialog) {
         VerificationCodeModal(
             isVisible = showEmailNotConfirmedDialog,
@@ -187,6 +201,25 @@ fun LoginScreen(
                     viewModel.dismissEmailNotConfirmedDialog()
                     snackbarHostState.showSnackbar(
                         "Correo confirmado exitosamente",
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }
+        )
+    }
+
+    // Modal de restablecimiento de contraseña
+    if (showResetPasswordDialog) {
+        ResetPasswordModal(
+            isVisible = showResetPasswordDialog,
+            onDismiss = { showResetPasswordDialog = false },
+            context = context,
+            viewModel = resetViewModel,
+            onResetSuccess = { resetEmail ->
+                scope.launch {
+                    showResetPasswordDialog = false
+                    snackbarHostState.showSnackbar(
+                        "Se ha enviado el correo de restablecimiento a: $resetEmail",
                         duration = SnackbarDuration.Short
                     )
                 }

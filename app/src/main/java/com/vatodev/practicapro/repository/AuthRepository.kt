@@ -60,6 +60,17 @@ object AuthRepository {
         }
     }
 
+    suspend fun sendResetPasswordCode(email: String): Result<String> {
+        return runCatching {
+            val isNetworkAvailable = NetworkObserver.isNetworkAvailable.first()
+            if (!isNetworkAvailable) throw Exception("No hay conexión a internet.")
+            val response = authService.resetPassword(ResetPasswordRequest(email))
+            if (response.statusCode == 200) response.message else throw Exception(response.message)
+        }.recoverCatching { throwable ->
+            handleHttpErrors(throwable).toString()
+        }
+    }
+
     // 📌 CONFIRMAR EMAIL
     suspend fun confirmEmail(email: String, code: String): Result<String> {
         return runCatching {

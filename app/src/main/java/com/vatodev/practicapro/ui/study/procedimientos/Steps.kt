@@ -3,13 +3,13 @@ package com.vatodev.practicapro.ui.study.procedimientos
 val stepsTalla = listOf(
     "1. Informe al paciente las actividades que se van a realizar para que esté enterado y sea más fácil medirlo.",
     "2. Indique al sujeto que se quite el calzado, gorras, adornos y se suelte el cabello. Si es necesario ayúdele.",
-    "3. Coloque a la persona debajo del estadiómetro de espalda a él con la mirada al frente, sobre una línea imaginaria vertical que divida su cuerpo en dos hemisferios.",
+    "3. Coloque a la persona debajo del tallímetro de espalda a él con la mirada al frente, sobre una línea imaginaria vertical que divida su cuerpo en dos hemisferios.",
     "4. Verifique que los pies estén en posición correcta.",
     "5. Asegúrese que la cabeza, espalda, pantorrillas, talones y glúteos estén en contacto con la pared y sus brazos caigan naturalmente a lo largo del cuerpo.",
     "6. Acomode la cabeza en posición recta coloque la palma de la mano izquierda abierta sobre el mentón del sujeto, y suavemente cierre sus dedos.",
-    "7. Trace una línea imaginaria (Plano de Frankfort) que va del orificio del oído a la base de la órbita del ojo. Esta línea debe ser paralela a la base del estadiómetro y formar un ángulo recto con respecto la pared.",
-    "8. Si la marca del estadiómetro se encuentra entre un centímetro y otro, anote el valor que esté más próximo; si está a la mitad, se tomará el del centímetro anterior.",
-    "9. Baje el estadiómetro y tome cuidadosamente la lectura en centímetros. Regístrelo."
+    "7. Trace una línea imaginaria (Plano de Frankfort) que va del orificio del oído a la base de la órbita del ojo. Esta línea debe ser paralela a la base del tallímetro y formar un ángulo recto con respecto la pared.",
+    "8. Si la marca del tallímetro se encuentra entre un centímetro y otro, anote el valor que esté más próximo; si está a la mitad, se tomará el del centímetro anterior.",
+    "9. Baje el tallímetro y tome cuidadosamente la lectura en centímetros. Regístrelo."
 )
 
 val stepsPeso = listOf(
@@ -28,12 +28,12 @@ val stepsFrecuenciaCardiaca = listOf(
             "En el caso de pacientes pediátricos explicarles el procedimiento a los padres.",
     "2. Realizar higiene de manos.",
     "3. Ayudar al enfermo a adoptar una posición cómoda que permita el acceso a la zona elegida.",
-    "4. Elegir el lugar de la medición: radial, braquial, carótida, temporal, femoral, tibial posterior, poplítea o pedia.",
+    "4. Elegir el lugar de la medición: muñeca, antebrazo, lado lateral del cuello.",
     "5. Si se va a medir en la arteria radial, colocar la extremidad semiflexionada con la palma de la mano hacia arriba.",
     "6. Apoyar la yema de los dedos índice, corazón y anular de la mano dominante en el punto seleccionado y localizar el latido arterial. " +
             "El uso del pulgar está contraindicado porque tiene pulso propio que puede confundirse con el del paciente.",
-    "7. Contar durante 15 segundos, multiplicando el resultado por cuatro. Si el pulso es irregular se cuenta durante un minuto completo y/o tomar pulso apical.",
-    "8. Valorar el ritmo (regular o irregular), amplitud (fuerte o débil) y tensión (blando o duro).",
+    "7. Contar durante 30 segundos, multiplicando el resultado por 2. Si el pulso es irregular se cuenta durante un minuto completo y/o tomar pulso apical.",
+    "8. Valorar el ritmo (regular o irregular) y amplitud (fuerte o débil).",
     "9. Registrar el valor."
 )
 

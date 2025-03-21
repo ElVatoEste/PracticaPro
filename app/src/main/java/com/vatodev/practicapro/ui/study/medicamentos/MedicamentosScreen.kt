@@ -41,7 +41,7 @@ fun MedicamentosScreen() {
     ) {
         // Título principal
         Text(
-            text = "Administración de Medicamentos",
+            text = "Vía de Administración de Medicamentos",
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
@@ -59,7 +59,7 @@ fun MedicamentosScreen() {
         // Imagen representativa
         Image(
             painter = painterResource(id = R.drawable.ic_medicines1),
-            contentDescription = "Administración de Medicamentos",
+            contentDescription = "Vía de Administración de Medicamentos",
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()

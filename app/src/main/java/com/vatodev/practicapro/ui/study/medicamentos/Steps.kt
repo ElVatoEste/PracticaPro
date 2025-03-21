@@ -36,10 +36,10 @@ val stepsMuscular = listOf(
 )
 
 val stepsVenosa = listOf(
-    "1. Aplique el torniquete por encima del codo en la extremidad superior para garantizar un llenado adecuado de la vena. Haga esto en ambos brazos con el fin de identificar la vena más adecuada para la colocación del catéter i.v. Por lo general, se elige la vena más grande, más recta y periférica que puede acomodar el tamaño del catéter que se va a insertar.",
-    "2. Suelte el torniquete, verifique dos veces y asegure todos los materiales necesarios, encienda la bomba de infusión, lave el tubo con fluidos y asegúrese de que el tubo no tenga burbujas de aire atrapadas.",
-    "3. Aplique el torniquete de manera ajustada y bien proximal al sitio elegido (utilice menos presión para los muy mayores y jóvenes porque la piel es más delgada y fácil de dañar)",
-    "4. Póngase guantes y protección para los ojos. ",
+    "1. Póngase guantes y protección para los ojos. ",
+    "2. Aplique el torniquete por encima del codo en la extremidad superior para garantizar un llenado adecuado de la vena. Haga esto en ambos brazos con el fin de identificar la vena más adecuada para la colocación del catéter i.v. Por lo general, se elige la vena más grande, más recta y periférica que puede acomodar el tamaño del catéter que se va a insertar.",
+    "3. Suelte el torniquete, verifique dos veces y asegure todos los materiales necesarios, encienda la bomba de infusión, lave el tubo con fluidos y asegúrese de que el tubo no tenga burbujas de aire atrapadas.",
+    "4. Aplique el torniquete de manera ajustada y bien proximal al sitio elegido (utilice menos presión para los muy mayores y jóvenes porque la piel es más delgada y fácil de dañar)",
     "5. Permita que la vena se distienda para ayudar a la colocación de la bránula",
     "6. Limpie el sitio con un limpiador aséptico aprobado. La zona se debe limpiar con movimientos de ida y vuelta durante un mínimo de 30 s y luego se deja secar.",
     "7. Con la mano no dominante, sostenga con firmeza la mano del paciente y utilice el pulgar a fin de retraer con suavidad la piel distal al sitio de inserción hacia los dedos. Esto asegurará la vena para reducir la posibilidad de que esta se mueva y mantener la piel tensa. ",
