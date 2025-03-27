@@ -22,7 +22,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vatodev.practicapro.R
-import com.vatodev.practicapro.components.*
+import com.vatodev.practicapro.components.module.SectionContent
+import com.vatodev.practicapro.components.module.SectionTitle
+import com.vatodev.practicapro.components.module.TechniqueCard
+import com.vatodev.practicapro.components.general.MultiStepDialog
 
 @Composable
 fun MedicamentosScreen() {

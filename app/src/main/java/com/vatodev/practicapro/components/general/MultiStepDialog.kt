@@ -1,4 +1,4 @@
-package com.vatodev.practicapro.components
+package com.vatodev.practicapro.components.general
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi

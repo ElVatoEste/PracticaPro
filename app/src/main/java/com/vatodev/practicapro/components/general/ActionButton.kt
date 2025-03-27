@@ -1,4 +1,4 @@
-package com.vatodev.practicapro.components
+package com.vatodev.practicapro.components.general
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
@@ -36,7 +36,8 @@ fun ActionButton(
 @Preview(showBackground = true)
 @Composable
 fun ActionButtonPreview() {
-    ActionButton(text = "Realizar Evaluación",
+    ActionButton(
+        text = "Realizar Evaluación",
         onClick = { /* Acción al hacer clic */ },
         enabled = false
     )

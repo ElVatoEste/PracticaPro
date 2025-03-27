@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -74,6 +75,35 @@ fun BottomNavigationBar(navController: NavController, userViewModel: UserViewMod
                             color = if (currentRoute == Routes.MAIN) Color.White else Color(
                                 0xFFFFFFFF
                             )
+                        )
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Color.White,
+                        unselectedIconColor = Color.Gray,
+                        selectedTextColor = Color.White,
+                        unselectedTextColor = Color.Gray,
+                        indicatorColor = Color(0xFF4CAF50)
+                    )
+                )
+
+                // Botón Usuario (CENTRO)
+                NavigationBarItem(
+                    selected = currentRoute == Routes.USER,
+                    onClick = {
+                        navController.navigate(Routes.USER)
+                    },
+                    icon = {
+                        Icon(
+                            Icons.Default.Person,
+                            contentDescription = "Usuario",
+                            tint = if (currentRoute == Routes.USER) Color.White else Color(0xFFFFFFFF)
+                        )
+                    },
+                    label = {
+                        Text(
+                            text = "Usuario",
+                            fontSize = 13.sp,
+                            color = if (currentRoute == Routes.USER) Color.White else Color(0xFFFFFFFF)
                         )
                     },
                     colors = NavigationBarItemDefaults.colors(

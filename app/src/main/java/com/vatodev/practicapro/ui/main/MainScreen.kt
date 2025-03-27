@@ -15,12 +15,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.vatodev.practicapro.R
-import com.vatodev.practicapro.components.AnimatedModuleCard
+import com.vatodev.practicapro.components.module.AnimatedModuleCard
 import com.vatodev.practicapro.components.module.Module
 import com.vatodev.practicapro.network.NetworkObserver
 import com.vatodev.practicapro.repository.NotesRepository
 import com.vatodev.practicapro.viewmodel.NotesViewModel
 import kotlinx.coroutines.delay
+import com.vatodev.practicapro.navigation.Routes
 
 @Composable
 fun MainScreen(navController: NavController) {
@@ -106,7 +107,7 @@ fun MainScreen(navController: NavController) {
                     ),
                     modifier = Modifier.fillMaxWidth(),
                     delayMillis = 100,
-                    onClick = { navController.navigate("calculadora") }
+                    onClick = { navController.navigate(Routes.CALCULADORA) }
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -151,10 +152,18 @@ fun MainScreen(navController: NavController) {
                                     delayMillis = 200 * (rowIndex * 2 + moduleIndex),
                                     onClick = {
                                         when (module.name) {
-                                            "Técnicas de Asepsia y Antisepsia" -> navController.navigate("tecnicas")
-                                            "Procedimientos Básicos" -> navController.navigate("procedimientos")
-                                            "Vía de Administración de Medicamentos" -> navController.navigate("administracion")
-                                            "Urgencias Médicas" -> navController.navigate("urgencias")
+                                            "Técnicas de Asepsia y Antisepsia" -> {
+                                                navController.navigate(Routes.TECNICAS)
+                                            }
+                                            "Procedimientos Básicos" -> {
+                                                navController.navigate(Routes.PROCEDIMIENTOS)
+                                            }
+                                            "Administración de Medicamentos" -> {
+                                                navController.navigate(Routes.ADMINISTRACION)
+                                            }
+                                            "Urgencias Médicas" -> {
+                                                navController.navigate(Routes.URGENCIAS)
+                                            }
                                         }
                                     }
                                 )

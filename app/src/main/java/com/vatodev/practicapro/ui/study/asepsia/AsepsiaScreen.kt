@@ -21,7 +21,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.vatodev.practicapro.R
-import com.vatodev.practicapro.components.*
+import com.vatodev.practicapro.components.general.ActionButton
+import com.vatodev.practicapro.components.general.VideoPlayerScreen
+import com.vatodev.practicapro.components.module.SectionContent
+import com.vatodev.practicapro.components.module.SectionTitle
+import com.vatodev.practicapro.components.general.MultiStepDialog
 import com.vatodev.practicapro.rooms.appDatabase.DatabaseProvider
 import com.vatodev.practicapro.viewmodel.helper.DialogState
 
@@ -76,7 +80,7 @@ fun AsepsiaScreen(navController: NavController) {
 
         // Imagen representativa
         Image(
-            painter = painterResource(id = R.drawable.ic_asepsia1),
+            painter = painterResource(id = R.drawable.ic_asepsia2),
             contentDescription = "Imagen de Asepsia",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -93,23 +97,9 @@ fun AsepsiaScreen(navController: NavController) {
 
         // Reproductor de video
         SectionTitle("Video Lavado de manos clínico")
-        VideoPlayerScreen(videoUri = "android.resource://${LocalContext.current.packageName}/${R.raw.lavado_clinico}")
-        Text(
-            text = "Pontificia Universidad Javeriana Cali. (s.f.). Técnica Lavado de Manos Clínico [Video]. YouTube. https://www.youtube.com/watch?v=9W6BOGFjnxs",
-            fontSize = 14.sp,
-            textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth(),
-            color = Color.Gray
-        )
-        // Reproductor de video
-        SectionTitle("Lavado de manos quirúrgicos")
-        VideoPlayerScreen(videoUri = "android.resource://${LocalContext.current.packageName}/${R.raw.lavado_quirurgico}")
-        Text(
-            text = "Universidad Andrés Bello. (s.f.). Técnica de lavado de manos quirúrgico [Video]. YouTube. https://www.youtube.com/watch?v=68O40dKcPlM",
-            fontSize = 14.sp,
-            textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth(),
-            color = Color.Gray
+        VideoPlayerScreen(
+            videoAspectRatio = 1f,
+            videoUri = "android.resource://${LocalContext.current.packageName}/${R.raw.videotutorial}"
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -144,4 +134,6 @@ fun AsepsiaScreen(navController: NavController) {
         )
     }
 }
+
+
 

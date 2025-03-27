@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
@@ -28,9 +27,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vatodev.practicapro.R
-import com.vatodev.practicapro.components.NormalTextField
-import com.vatodev.practicapro.components.PasswordTextField
-import com.vatodev.practicapro.components.VerificationCodeModal
+import com.vatodev.practicapro.components.general.NormalTextField
+import com.vatodev.practicapro.components.general.PasswordTextField
+import com.vatodev.practicapro.components.modals.VerificationCodeModal
 import com.vatodev.practicapro.network.NetworkObserver
 import com.vatodev.practicapro.viewmodel.RegisterViewModel
 import com.vatodev.practicapro.viewmodel.VerificationViewModel

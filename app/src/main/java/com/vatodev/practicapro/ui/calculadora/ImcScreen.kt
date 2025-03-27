@@ -14,9 +14,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.vatodev.practicapro.components.ActionButton
-import com.vatodev.practicapro.components.GenderToggleButton
-import com.vatodev.practicapro.components.Table
+import com.vatodev.practicapro.components.general.ActionButton
+import com.vatodev.practicapro.components.general.GenderToggleButton
+import com.vatodev.practicapro.components.general.Table
 import com.vatodev.practicapro.viewmodel.ImcViewModel
 
 @Composable

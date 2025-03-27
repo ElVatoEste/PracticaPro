@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vatodev.practicapro.R
-import com.vatodev.practicapro.components.TechniqueCard
+import com.vatodev.practicapro.components.module.TechniqueCard
 
 
 @Composable

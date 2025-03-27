@@ -11,7 +11,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.vatodev.practicapro.components.ActionButton
+import com.vatodev.practicapro.components.general.ActionButton
 import com.vatodev.practicapro.viewmodel.PamViewModel
 
 @Composable

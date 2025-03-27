@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class NotesViewModel : ViewModel() {
 
-    private val note = mutableStateOf<List<Note>>(emptyList())
+    val note = mutableStateOf<List<Note>>(emptyList())
 
     private val successMessage = mutableStateOf<String?>(null)
     private val errorMessage = mutableStateOf<String?>(null)

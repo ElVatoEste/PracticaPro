@@ -1,4 +1,4 @@
-package com.vatodev.practicapro.components
+package com.vatodev.practicapro.components.module
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -9,8 +9,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import com.vatodev.practicapro.components.module.Module
-import com.vatodev.practicapro.components.module.ModuleCard
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

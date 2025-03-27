@@ -26,7 +26,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.vatodev.practicapro.R
-import com.vatodev.practicapro.components.*
+import com.vatodev.practicapro.components.general.ActionButton
+import com.vatodev.practicapro.components.module.SectionContent
+import com.vatodev.practicapro.components.module.SectionTitle
+import com.vatodev.practicapro.components.module.TechniqueCard
+import com.vatodev.practicapro.components.general.MultiStepDialog
 import com.vatodev.practicapro.navigation.Routes
 import com.vatodev.practicapro.rooms.appDatabase.DatabaseProvider
 

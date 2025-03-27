@@ -1,18 +1,21 @@
-package com.vatodev.practicapro.components
+package com.vatodev.practicapro.components.module
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 
+// Composables para título y contenido
 @Composable
-fun SectionContent(content: String) {
+fun SectionTitle(title: String) {
     Text(
-        text = content,
-        fontSize = 16.sp,
-        textAlign = TextAlign.Justify,
+        text = title,
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Start,
         modifier = Modifier.fillMaxWidth()
     )
 }

@@ -25,6 +25,7 @@ import com.vatodev.practicapro.ui.study.medicamentos.MedicamentosScreen
 import com.vatodev.practicapro.ui.study.procedimientos.quiz.ProcQuiz
 import com.vatodev.practicapro.ui.study.procedimientos.quiz.TrueFalseQuizScreen
 import com.vatodev.practicapro.ui.study.urgencias.UrgenciasScreen
+import com.vatodev.practicapro.ui.user.UserScreen
 
 object Routes {
     const val SPLASH = "splash"
@@ -41,6 +42,7 @@ object Routes {
     const val REGISTER = "register"
     const val IMC = "imc"
     const val PAM = "pam"
+    const val USER = "user"
 }
 
 @Composable
@@ -138,6 +140,10 @@ fun AppNavigation(navController: NavHostController) {
 
         composable(Routes.URGENCIAS) {
             UrgenciasScreen()
+        }
+
+        composable(Routes.USER){
+            UserScreen()
         }
     }
 }

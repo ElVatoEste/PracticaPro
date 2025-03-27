@@ -18,10 +18,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vatodev.practicapro.R
-import com.vatodev.practicapro.components.NormalTextField
-import com.vatodev.practicapro.components.PasswordTextField
-import com.vatodev.practicapro.components.VerificationCodeModal
-import com.vatodev.practicapro.components.ResetPasswordModal
+import com.vatodev.practicapro.components.general.NormalTextField
+import com.vatodev.practicapro.components.general.PasswordTextField
+import com.vatodev.practicapro.components.modals.VerificationCodeModal
+import com.vatodev.practicapro.components.modals.ResetPasswordModal
 import com.vatodev.practicapro.viewmodel.ResetPasswordViewModel
 import com.vatodev.practicapro.viewmodel.VerificationViewModel
 import kotlinx.coroutines.delay

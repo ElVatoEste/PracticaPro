@@ -11,15 +11,14 @@ import kotlinx.coroutines.withContext
 
 class UserViewModel : ViewModel() {
 
-    val token = mutableStateOf<String?>(null)
+    private val token = mutableStateOf<String?>(null)
 
-    private val userProfile = mutableStateOf<UserProfileResponse?>(null)
+    val userProfile = mutableStateOf<UserProfileResponse?>(null)
 
-    fun updateToken(newToken: String) {
+    private fun updateToken(newToken: String) {
         token.value = newToken
         ApiClient.setToken(newToken)
     }
-
 
     fun clearUserProfile() {
         token.value = null
@@ -27,11 +26,27 @@ class UserViewModel : ViewModel() {
         ApiClient.setToken(null)
     }
 
-    suspend fun loadTokenFromRoom(context: Context) {
+    suspend fun loadUserProfileFromRoom(context: Context) {
         val userDao = DatabaseProvider.getDatabase(context).userDao()
-        val user = withContext(Dispatchers.IO) {
+        val userEntity = withContext(Dispatchers.IO) {
             userDao.getUser()
         }
-        user?.token?.let { updateToken(it) }
+        userEntity?.let { user ->
+            // Actualizamos el token
+            updateToken(user.token)
+            // Mapeamos la entidad a tu modelo de perfil (asegúrate de que los nombres de campos sean correctos)
+            userProfile.value = UserProfileResponse(
+                id = user.id,
+                nombre = user.username,
+                email = user.email
+            )
+        }
     }
+    suspend fun loadTokenFromRoom(context: Context) {
+            val userDao = DatabaseProvider.getDatabase(context).userDao()
+            val user = withContext(Dispatchers.IO) {
+                userDao.getUser()
+            }
+            user?.token?.let { updateToken(it) }
+        }
 }

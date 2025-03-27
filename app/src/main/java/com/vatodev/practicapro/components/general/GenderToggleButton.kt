@@ -1,4 +1,4 @@
-package com.vatodev.practicapro.components
+package com.vatodev.practicapro.components.general
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape

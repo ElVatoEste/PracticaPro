@@ -1,4 +1,4 @@
-package com.vatodev.practicapro.components
+package com.vatodev.practicapro.components.module
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
