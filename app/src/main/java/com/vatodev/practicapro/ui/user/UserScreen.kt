@@ -133,7 +133,6 @@ fun UserScreen(
         ) {
             SettingsModalContent(onClose = { showSettings = false }) {
                 ChangePasswordSection()
-                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }

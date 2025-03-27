@@ -123,7 +123,8 @@ fun ChangePasswordSection(viewModel: ChangePasswordViewModel = viewModel()) {
                             viewModel.changePassword(currentPassword, newPassword)
                         }
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7DBB00))
                 ) {
                     Text("Enviar")
                 }

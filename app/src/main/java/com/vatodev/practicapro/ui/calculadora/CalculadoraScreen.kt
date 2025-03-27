@@ -24,7 +24,7 @@ fun CalculadoraScreen(navController: NavController) {
             module = Module(
                 name = "Índice de Masa Corporal (IMC)",
                 description = "Calcula el índice de masa corporal usando la fórmula: IMC = Peso (kg) / Altura^2 (m).",
-                imageRes = R.drawable.ic_asepsia
+                imageRes = R.drawable.ic_cal1
             ),
             onClick = {
                 navController.navigate(Routes.IMC)
@@ -36,7 +36,7 @@ fun CalculadoraScreen(navController: NavController) {
             module = Module(
                 name = "Presión Arterial Media (PAM)",
                 description = "Calcula la presión arterial media usando la fórmula: PAM = (2 * PD + PS) / 3.",
-                imageRes = R.drawable.ic_asepsia
+                imageRes = R.drawable.ic_cal2
             ),
             onClick = {
                 navController.navigate(Routes.PAM)
