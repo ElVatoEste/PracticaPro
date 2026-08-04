@@ -51,3 +51,10 @@ con un token vacío — ver [backend.md](backend.md).
 
 No hace falta configurar nada: no hay claves ni `local.properties`
 requerido más allá del `sdk.dir` que genera Android Studio.
+
+## v2 — offline-first con backend latente
+
+El backend está caído sin fecha de vuelta. La estrategia v2 está en
+[../v2/README.md](../v2/README.md): aislar la capa de red tras un
+interruptor en lugar de borrarla, y arreglar la pérdida de datos que
+documenta [../v2/hallazgos.md](../v2/hallazgos.md).
