@@ -1,20 +1,33 @@
 package com.vatodev.practicapro.components.quizes
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.vatodev.practicapro.ui.theme.Dato
+import com.vatodev.practicapro.ui.theme.EtiquetaTracked
+import com.vatodev.practicapro.ui.theme.LocalEstado
 
+/**
+ * Resultado de la respuesta. El color del bloque porta el estado; el texto
+ * explica en lugar de repetirlo.
+ */
 @Composable
 fun Feedback(
     isCorrect: Boolean?,
@@ -22,55 +35,48 @@ fun Feedback(
     timeBonus: Int,
     onNext: () -> Unit
 ) {
-    if (isCorrect == null) return // No mostrar feedback si no se ha seleccionado una respuesta
+    if (isCorrect == null) return
 
-    Card(
+    val estado = LocalEstado.current
+    val acento = if (isCorrect) estado.progreso else estado.error
+
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
-            .clickable { onNext() }, // Avanza solo cuando se hace clic
-        colors = CardDefaults.cardColors(
-            containerColor = if (isCorrect) Color(0xFF7DBB00) else Color(0xFFFF5252)
-        ),
-        elevation = CardDefaults.cardElevation(4.dp)
+            .background(acento.copy(alpha = 0.14f))
+            .clickable(onClick = onNext)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // Icono de estado
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 imageVector = if (isCorrect) Icons.Default.CheckCircle else Icons.Default.Close,
                 contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier.size(40.dp)
+                tint = acento,
+                modifier = Modifier.size(17.dp)
             )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Mensaje de feedback
+            Spacer(Modifier.size(8.dp))
             Text(
-                text = if (isCorrect) {
-                    "¡Correcto! +$timeBonus puntos obtenidos"
-                } else {
-                    "Incorrecto. Intenta de nuevo."
-                },
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                textAlign = TextAlign.Center
+                text = if (isCorrect) "CORRECTO" else "INCORRECTO",
+                style = EtiquetaTracked.copy(fontSize = 13.sp),
+                color = acento
             )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Explicación
-            Text(
-                text = explanation,
-                fontSize = 14.sp,
-                color = Color.White,
-                textAlign = TextAlign.Center
-            )
+            if (isCorrect && timeBonus > 0) {
+                Spacer(Modifier.weight(1f))
+                Text(text = "+$timeBonus", style = Dato.copy(fontSize = 14.sp), color = acento)
+            }
         }
+
+        Text(
+            text = explanation,
+            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Text(
+            text = "Toca para continuar",
+            style = Dato.copy(fontSize = 11.sp),
+            color = estado.textoSuave
+        )
     }
 }

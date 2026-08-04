@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +36,7 @@ fun ModuleCard(module: Module, modifier: Modifier = Modifier, onClick: () -> Uni
         modifier = modifier
             .height(240.dp), // Altura ajustada
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF5F5F5) // Fondo claro
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         elevation = CardDefaults.cardElevation(8.dp), // Efecto de elevación
         shape = RoundedCornerShape(12.dp) // Esquinas redondeadas

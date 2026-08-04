@@ -1,22 +1,37 @@
 package com.vatodev.practicapro.ui.calculadora
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.vatodev.practicapro.components.general.ActionButton
+import com.vatodev.practicapro.components.general.BotonPrimario
+import com.vatodev.practicapro.components.general.CampoNumerico
+import com.vatodev.practicapro.components.general.BotonSecundario
+import com.vatodev.practicapro.components.general.Escala
+import com.vatodev.practicapro.components.general.Etiqueta
+import com.vatodev.practicapro.components.general.filtrarDecimal
+import com.vatodev.practicapro.components.general.Filete
+import com.vatodev.practicapro.components.general.FilaDato
 import com.vatodev.practicapro.components.general.GenderToggleButton
-import com.vatodev.practicapro.components.general.Table
+import com.vatodev.practicapro.components.general.Tramo
+import com.vatodev.practicapro.ui.theme.LocalEstado
 import com.vatodev.practicapro.viewmodel.ImcViewModel
 
 @Composable
@@ -24,149 +39,111 @@ fun ImcScreen(
     navController: NavController,
     viewModel: ImcViewModel = viewModel()
 ) {
-    var weight by remember { mutableStateOf("") }
-    var height by remember { mutableStateOf("") }
-    var age by remember { mutableStateOf("") }
-    var selectedGender by remember { mutableStateOf("Hombre") }
-    var showTable by remember { mutableStateOf(false) }
+    var peso by remember { mutableStateOf("") }
+    var talla by remember { mutableStateOf("") }
+    var edad by remember { mutableStateOf("") }
+    var genero by remember { mutableStateOf("Hombre") }
 
-    val imcResult by viewModel.imcResult.collectAsState()
-    val classification by viewModel.classification.collectAsState()
+    val resultado by viewModel.resultado
+    val estado = LocalEstado.current
 
-    // Contenedor de scroll vertical para toda la pantalla
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState()), // Scroll vertical
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 20.dp)
     ) {
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            elevation = CardDefaults.cardElevation(4.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFF8F7F7))
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                // Botones de selección de género
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    GenderToggleButton(
-                        label = "Hombre",
-                        selected = selectedGender == "Hombre",
-                        onClick = { selectedGender = "Hombre" }
-                    )
-                    GenderToggleButton(
-                        label = "Mujer",
-                        selected = selectedGender == "Mujer",
-                        onClick = { selectedGender = "Mujer" }
-                    )
-                }
+        Spacer(Modifier.height(20.dp))
+        Etiqueta("Índice de masa corporal")
 
-                // Campo de entrada para la edad
-                OutlinedTextField(
-                    value = age,
-                    onValueChange = { age = it.filter { char -> char.isDigit() } },
-                    label = { Text("Edad (años)") },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Done
-                    ),
-                    modifier = Modifier.fillMaxWidth()
-                )
+        Spacer(Modifier.height(22.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            GenderToggleButton("Hombre", genero == "Hombre") { genero = "Hombre" }
+            GenderToggleButton("Mujer", genero == "Mujer") { genero = "Mujer" }
+        }
 
-                // Campo de entrada para el peso
-                OutlinedTextField(
-                    value = weight,
-                    onValueChange = { weight = it.filter { char -> char.isDigit() || char == '.' } },
-                    label = { Text("Peso (kg)") },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Done
-                    ),
-                    modifier = Modifier.fillMaxWidth()
-                )
+        Spacer(Modifier.height(16.dp))
+        CampoNumerico(edad, { edad = it.filter(Char::isDigit) }, "Edad (años)")
+        Spacer(Modifier.height(12.dp))
+        CampoNumerico(peso, { peso = it.filtrarDecimal() }, "Peso (kg)")
+        Spacer(Modifier.height(12.dp))
+        CampoNumerico(talla, { talla = it.filtrarDecimal() }, "Talla (m)")
 
-                // Campo de entrada para la altura
-                OutlinedTextField(
-                    value = height,
-                    onValueChange = { height = it.filter { char -> char.isDigit() || char == '.' } },
-                    label = { Text("Altura (m)") },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Done
-                    ),
-                    modifier = Modifier.fillMaxWidth()
+        Spacer(Modifier.height(22.dp))
+        BotonPrimario(
+            texto = "Calcular",
+            habilitado = peso.toDoubleOrNull() != null &&
+                talla.toDoubleOrNull() != null &&
+                edad.toIntOrNull() != null,
+            onClick = {
+                viewModel.calcular(
+                    peso = peso.toDouble(),
+                    talla = talla.toDouble(),
+                    genero = genero,
+                    edad = edad.toInt()
                 )
             }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Botón para calcular el IMC
-        ActionButton(
-            onClick = {
-                val weightValue = weight.toDoubleOrNull()
-                val heightValue = height.toDoubleOrNull()
-                val ageValue = age.toIntOrNull()
-
-                if (weightValue != null && heightValue != null && ageValue != null) {
-                    viewModel.calculateImc(weightValue, heightValue, selectedGender, ageValue)
-                }
-            },
-            text = "Calcular IMC"
         )
 
-        // Botón para salir
-        ActionButton(
-            onClick = { navController.popBackStack() },
-            text = "Regresar"
-        )
+        resultado?.let { r ->
+            Spacer(Modifier.height(32.dp))
+            Etiqueta("Resultado")
+            Spacer(Modifier.height(14.dp))
 
-        // Mostrar el resultado del IMC
-        imcResult?.let { imc ->
-            Text(
-                text = "IMC: ${String.format("%.2f", imc)}",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(top = 8.dp)
+            Escala(
+                valor = r.imc.toFloat(),
+                unidad = "kg/m²",
+                tramos = r.bandas.mapIndexed { indice, banda ->
+                    Tramo(
+                        etiqueta = banda.etiqueta,
+                        hasta = if (banda.hasta == Double.MAX_VALUE) 45f else banda.hasta.toFloat(),
+                        color = colorDeBanda(indice, r.bandas.size, estado.progreso, estado.logro, estado.error)
+                    )
+                },
+                minimo = 14f,
+                maximo = 45f
             )
+
+            Spacer(Modifier.height(26.dp))
+            Filete()
+            FilaDato("Clasificación", r.clasificacion)
+            Filete()
+            FilaDato(
+                etiqueta = "Peso ideal",
+                valor = "%.1f – %.1f kg".format(r.pesoIdeal.start, r.pesoIdeal.endInclusive)
+            )
+            Filete()
+            FilaDato(
+                etiqueta = "Diferencia",
+                valor = diferencia(peso.toDoubleOrNull(), r.pesoIdeal),
+                colorValor = estado.textoSuave
+            )
+            Filete()
         }
 
-        // Mostrar la clasificación del IMC
-        classification?.let {
-            Text(
-                text = "Clasificación: $it",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-        }
-
-        // Botón para mostrar/ocultar la tabla
-        ActionButton(
-            onClick = { showTable = !showTable },
-            text = if (showTable) "Ocultar Tabla de Clasificación" else "Mostrar Tabla de Clasificación"
-        )
-
-        if (showTable) {
-            Table(
-                headers = listOf("Clasificación", "IMC"),
-                rows = listOf(
-                    listOf("Bajo peso", "< 18.5"),
-                    listOf("Peso normal", "18.5 - 24.9"),
-                    listOf("Sobrepeso", "25.0 - 29.9"),
-                    listOf("Obesidad grado 1", "30.0 - 34.9"),
-                    listOf("Obesidad grado 2", "35.0 - 39.9"),
-                    listOf("Obesidad grado 3", "≥ 40.0")
-                )
-            )
-        }
+        Spacer(Modifier.height(20.dp))
+        BotonSecundario(texto = "Regresar", onClick = { navController.popBackStack() })
+        Spacer(Modifier.height(28.dp))
     }
+}
+
+
+/** Verde la banda normal, morado las intermedias, coral los extremos altos. */
+private fun colorDeBanda(
+    indice: Int,
+    total: Int,
+    progreso: androidx.compose.ui.graphics.Color,
+    logro: androidx.compose.ui.graphics.Color,
+    error: androidx.compose.ui.graphics.Color
+) = when {
+    indice == 1 -> progreso
+    indice >= total - 1 -> error
+    else -> logro
+}
+
+private fun diferencia(peso: Double?, ideal: ClosedRange<Double>): String = when {
+    peso == null -> "—"
+    peso < ideal.start -> "%.1f kg por debajo".format(ideal.start - peso)
+    peso > ideal.endInclusive -> "%.1f kg por encima".format(peso - ideal.endInclusive)
+    else -> "Dentro del rango"
 }

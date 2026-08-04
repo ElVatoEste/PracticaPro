@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.SentimentDissatisfied
 import androidx.compose.material.icons.filled.WarningAmber
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import com.vatodev.practicapro.ui.theme.LocalEstado
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,10 +36,10 @@ fun FinalSummary(score: Int, navController: NavController) {
     }
 
     val backgroundColor = when {
-        score == 100 -> Color(0xFF4CAF50) // Verde éxito
-        score >= 75 -> Color(0xFFFFC107) // Amarillo dorado
-        score >= 50 -> Color(0xFFFF5722) // Naranja oscuro
-        else -> Color(0xFFF44336) // Rojo error
+        score == 100 -> LocalEstado.current.progreso
+        score >= 75 -> LocalEstado.current.logro
+        score >= 50 -> LocalEstado.current.logro
+        else -> LocalEstado.current.error
     }
 
     AlertDialog(

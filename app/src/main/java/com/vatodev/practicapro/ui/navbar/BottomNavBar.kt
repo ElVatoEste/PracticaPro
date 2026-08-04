@@ -1,26 +1,33 @@
 package com.vatodev.practicapro.ui.navbar
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import com.vatodev.practicapro.components.general.Filete
 import com.vatodev.practicapro.navigation.Routes
 import com.vatodev.practicapro.network.BackendGate
 import com.vatodev.practicapro.repository.AuthRepository
+import com.vatodev.practicapro.ui.theme.EtiquetaTracked
+import com.vatodev.practicapro.ui.theme.LocalEstado
 import com.vatodev.practicapro.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
@@ -29,6 +36,7 @@ fun BottomNavigationBar(navController: NavController, userViewModel: UserViewMod
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
     val scope = rememberCoroutineScope()
+    val estado = LocalEstado.current
 
     val excludedRoutes = setOf(
         Routes.LOGIN,
@@ -39,118 +47,76 @@ fun BottomNavigationBar(navController: NavController, userViewModel: UserViewMod
         Routes.QUIZ_SCREEN
     )
 
-    if (currentRoute !in excludedRoutes ) {
-        Surface(
-            modifier = Modifier.height(56.dp),
-            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-            color = Color(0xFF7DBB00),
-            shadowElevation = 6.dp
+    if (currentRoute in excludedRoutes) return
+
+    Column {
+        Filete()
+        NavigationBar(
+            modifier = Modifier.height(64.dp),
+            containerColor = MaterialTheme.colorScheme.background,
+            tonalElevation = 0.dp
         ) {
-            NavigationBar(
-                modifier = Modifier.height(52.dp),
-                containerColor = Color.Transparent,
-                contentColor = Color.White
-            ) {
-                // Botón Home
-                NavigationBarItem(
-                    selected = currentRoute == Routes.MAIN,
-                    onClick = {
-                        navController.navigate(Routes.MAIN) {
+            Destino(
+                icono = Icons.Default.Home,
+                etiqueta = "Inicio",
+                seleccionado = currentRoute == Routes.MAIN,
+                activo = estado.progreso,
+                inactivo = estado.textoSuave,
+                onClick = {
+                    navController.navigate(Routes.MAIN) {
+                        popUpTo(Routes.MAIN) { inclusive = true }
+                    }
+                }
+            )
+            Destino(
+                icono = Icons.Default.Person,
+                etiqueta = "Perfil",
+                seleccionado = currentRoute == Routes.USER,
+                activo = estado.progreso,
+                inactivo = estado.textoSuave,
+                onClick = { navController.navigate(Routes.USER) }
+            )
+            Destino(
+                icono = Icons.AutoMirrored.Filled.Logout,
+                etiqueta = "Salir",
+                seleccionado = false,
+                activo = estado.progreso,
+                inactivo = estado.textoSuave,
+                onClick = {
+                    scope.launch {
+                        AuthRepository.logout(navController.context, userViewModel)
+                        val destino = if (BackendGate.isEnabled) Routes.LOGIN else Routes.REGISTER
+                        navController.navigate(destino) {
                             popUpTo(Routes.MAIN) { inclusive = true }
                         }
-                    },
-                    icon = {
-                        Icon(
-                            Icons.Default.Home,
-                            contentDescription = "Inicio",
-                            tint = if (currentRoute == Routes.MAIN) Color.White else Color(
-                                0xFFFFFFFF
-                            )
-                        )
-                    },
-                    label = {
-                        Text(
-                            text = "Inicio",
-                            fontSize = 13.sp,
-                            color = if (currentRoute == Routes.MAIN) Color.White else Color(
-                                0xFFFFFFFF
-                            )
-                        )
-                    },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color.White,
-                        unselectedIconColor = Color.Gray,
-                        selectedTextColor = Color.White,
-                        unselectedTextColor = Color.Gray,
-                        indicatorColor = Color(0xFF4CAF50)
-                    )
-                )
-
-                // Botón Usuario (CENTRO)
-                NavigationBarItem(
-                    selected = currentRoute == Routes.USER,
-                    onClick = {
-                        navController.navigate(Routes.USER)
-                    },
-                    icon = {
-                        Icon(
-                            Icons.Default.Person,
-                            contentDescription = "Usuario",
-                            tint = if (currentRoute == Routes.USER) Color.White else Color(0xFFFFFFFF)
-                        )
-                    },
-                    label = {
-                        Text(
-                            text = "Usuario",
-                            fontSize = 13.sp,
-                            color = if (currentRoute == Routes.USER) Color.White else Color(0xFFFFFFFF)
-                        )
-                    },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color.White,
-                        unselectedIconColor = Color.Gray,
-                        selectedTextColor = Color.White,
-                        unselectedTextColor = Color.Gray,
-                        indicatorColor = Color(0xFF4CAF50)
-                    )
-                )
-
-                // Botón Logout
-                NavigationBarItem(
-                    selected = false,
-                    onClick = {
-                        scope.launch {
-                            AuthRepository.logout(navController.context, userViewModel)
-                            val destination =
-                                if (BackendGate.isEnabled) Routes.LOGIN else Routes.REGISTER
-                            navController.navigate(destination) {
-                                popUpTo(Routes.MAIN) { inclusive = true }
-                            }
-                        }
-                    },
-                    icon = {
-                        Icon(
-                            Icons.Default.Logout,
-                            contentDescription = "Cerrar Sesión",
-                            tint = Color(0xFFFFFFFF)
-                        )
-                    },
-                    label = {
-                        Text(
-                            text = "Cerrar Sesión",
-                            fontSize = 13.sp,
-                            color = Color(0xFFF8F8F8)
-                        )
                     }
-                )
-            }
+                }
+            )
         }
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun PreviewBottomNavigationBar() {
-    val navController = rememberNavController()
-    BottomNavigationBar(navController = navController, userViewModel = UserViewModel())
+private fun androidx.compose.foundation.layout.RowScope.Destino(
+    icono: ImageVector,
+    etiqueta: String,
+    seleccionado: Boolean,
+    activo: Color,
+    inactivo: Color,
+    onClick: () -> Unit
+) {
+    NavigationBarItem(
+        selected = seleccionado,
+        onClick = onClick,
+        icon = { Icon(icono, contentDescription = etiqueta) },
+        label = { Text(etiqueta.uppercase(), style = EtiquetaTracked.copy(fontSize = 11.sp)) },
+        colors = NavigationBarItemDefaults.colors(
+            selectedIconColor = activo,
+            selectedTextColor = activo,
+            unselectedIconColor = inactivo,
+            unselectedTextColor = inactivo,
+            indicatorColor = Color.Transparent
+        )
+    )
 }
+

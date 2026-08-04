@@ -32,6 +32,7 @@ import com.vatodev.practicapro.components.general.PasswordTextField
 import com.vatodev.practicapro.viewmodel.RegisterViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.vatodev.practicapro.ui.theme.LocalEstado
 
 @Preview
 @Composable
@@ -170,7 +171,7 @@ fun RegisterScreen(
                         checked = isPrivacyPolicyAccepted,
                         onCheckedChange = { isPrivacyPolicyAccepted = it },
                         colors = CheckboxDefaults.colors(
-                            checkedColor = Color(0xFF7DBB00),
+                            checkedColor = LocalEstado.current.progreso,
                             uncheckedColor = Color.Gray
                         )
                     )
@@ -178,7 +179,7 @@ fun RegisterScreen(
                     // Texto que incluye el link "Política de Privacidad"
                     val annotatedLinkString = buildAnnotatedString {
                         append("Al crear una cuenta, aceptas la ")
-                        withStyle(style = SpanStyle(color = Color(0xFF7DBB00))) {
+                        withStyle(style = SpanStyle(color = LocalEstado.current.progreso)) {
                             append("Política de Privacidad")
                         }
                     }
@@ -218,14 +219,14 @@ fun RegisterScreen(
                         .padding(horizontal = 16.dp),
                     enabled = !isLoading && isPrivacyPolicyAccepted,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF7DBB00),
+                        containerColor = LocalEstado.current.progreso,
                         contentColor = Color.White
                     )
                 ) {
                     if (isLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(24.dp),
-                            color = Color(0xFF7DBB00)
+                            color = LocalEstado.current.progreso
                         )
                     } else {
                         Text("Registrarse")

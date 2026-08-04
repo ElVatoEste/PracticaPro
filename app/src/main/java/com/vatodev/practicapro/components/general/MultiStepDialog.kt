@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.vatodev.practicapro.ui.theme.LocalEstado
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -45,7 +46,7 @@ fun MultiStepDialog(title: String, steps: List<String>, onDismiss: () -> Unit) {
                     text = title,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF7DBB00)// Color primario
+                    color = LocalEstado.current.progreso
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -56,7 +57,7 @@ fun MultiStepDialog(title: String, steps: List<String>, onDismiss: () -> Unit) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp),
-                    color = Color(0xFF7DBB00),
+                    color = LocalEstado.current.progreso,
                     trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f) // Color del fondo de la barra
                 )
 
@@ -98,7 +99,7 @@ fun MultiStepDialog(title: String, steps: List<String>, onDismiss: () -> Unit) {
                     if (currentStep > 0) {
                         TextButton(
                             onClick = { currentStep-- },
-                            colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFF7DBB00)) // Color del botón
+                            colors = ButtonDefaults.textButtonColors(contentColor = LocalEstado.current.progreso) // Color del botón
                         ) {
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
@@ -113,7 +114,7 @@ fun MultiStepDialog(title: String, steps: List<String>, onDismiss: () -> Unit) {
                     if (currentStep < steps.size - 1) {
                         TextButton(
                             onClick = { currentStep++ },
-                            colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFF7DBB00)) // Color del botón
+                            colors = ButtonDefaults.textButtonColors(contentColor = LocalEstado.current.progreso) // Color del botón
                         ) {
                             Text("Siguiente")
                             Icon(
@@ -124,7 +125,7 @@ fun MultiStepDialog(title: String, steps: List<String>, onDismiss: () -> Unit) {
                     } else {
                         TextButton(
                             onClick = onDismiss,
-                            colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFF7DBB00)) // Color del botón
+                            colors = ButtonDefaults.textButtonColors(contentColor = LocalEstado.current.progreso) // Color del botón
                         ) {
                             Text("Cerrar")
                         }

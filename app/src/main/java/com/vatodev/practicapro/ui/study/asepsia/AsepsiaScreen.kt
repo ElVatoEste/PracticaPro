@@ -28,6 +28,7 @@ import com.vatodev.practicapro.components.module.SectionTitle
 import com.vatodev.practicapro.components.general.MultiStepDialog
 import com.vatodev.practicapro.rooms.appDatabase.DatabaseProvider
 import com.vatodev.practicapro.viewmodel.helper.DialogState
+import com.vatodev.practicapro.ui.theme.LocalEstado
 
 @Composable
 fun AsepsiaScreen(navController: NavController) {
@@ -67,7 +68,7 @@ fun AsepsiaScreen(navController: NavController) {
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
-            color = Color(0xFF7DBB00)
+            color = LocalEstado.current.progreso
         )
 
         // Subtítulo

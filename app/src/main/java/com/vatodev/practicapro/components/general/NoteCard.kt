@@ -11,6 +11,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.vatodev.practicapro.ui.theme.LocalEstado
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,11 +19,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vatodev.practicapro.rooms.entitys.Note
 
+/** Verde a partir de 80, morado entre 60 y 79, coral por debajo. */
+@Composable
 fun getScoreColor(score: Int): Color {
+    val estado = LocalEstado.current
     return when {
-        score >= 80 -> Color(0xFF2E7D32) // Verde 600
-        score in 60..79 -> Color(0xFFF9A825) // Amarillo 800
-        else -> Color(0xFFC62828) // Rojo 700
+        score >= 80 -> estado.progreso
+        score in 60..79 -> estado.logro
+        else -> estado.error
     }
 }
 
@@ -34,7 +38,7 @@ fun NoteCard(note: Note) {
             .fillMaxWidth()
             .padding(vertical = 4.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF5F5F5)
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
         Row(

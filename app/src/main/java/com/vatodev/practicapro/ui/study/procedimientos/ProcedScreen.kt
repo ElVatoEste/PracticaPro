@@ -33,6 +33,7 @@ import com.vatodev.practicapro.components.module.TechniqueCard
 import com.vatodev.practicapro.components.general.MultiStepDialog
 import com.vatodev.practicapro.navigation.Routes
 import com.vatodev.practicapro.rooms.appDatabase.DatabaseProvider
+import com.vatodev.practicapro.ui.theme.LocalEstado
 
 @Composable
 fun ProcedScreen(navController: NavController?) {
@@ -73,7 +74,7 @@ fun ProcedScreen(navController: NavController?) {
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
-            color = Color(0xFF7DBB00)
+            color = LocalEstado.current.progreso
         )
 
         // Subtítulo
