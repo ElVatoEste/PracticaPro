@@ -6,13 +6,12 @@ import com.vatodev.practicapro.entitys.ApiNote
 import com.vatodev.practicapro.model.CreateNoteRequest
 import com.vatodev.practicapro.model.CreateOfflineNoteRequest
 import com.vatodev.practicapro.network.ApiClient
-import com.vatodev.practicapro.network.NetworkObserver
+import com.vatodev.practicapro.network.BackendGate
 import com.vatodev.practicapro.rooms.appDatabase.DatabaseProvider
 import com.vatodev.practicapro.rooms.entitys.Note
 import com.vatodev.practicapro.rooms.entitys.PendingRequest
 import com.vatodev.practicapro.service.NotesService
 import com.vatodev.practicapro.utils.toRoomEntity
-import kotlinx.coroutines.flow.first
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -22,9 +21,8 @@ object NotesRepository {
         ApiClient.retrofit.create(NotesService::class.java)
     }
 
-    // ✅ Obtener notas y guardarlas en Room
     suspend fun getNotes(context: Context): Result<List<Note>> {
-        return fetchAndSaveNotes(context) // Sincroniza con el servidor
+        return fetchAndSaveNotes(context)
             .mapCatching {
                 val localNotes = getLocalNotes(context).getOrThrow()
                 Log.d("GetNotes", "Notas después de sincronización: $localNotes")
@@ -38,8 +36,7 @@ object NotesRepository {
 
     private suspend fun fetchAndSaveNotes(context: Context): Result<Int> {
         return runCatching {
-            val isNetworkAvailable = NetworkObserver.isNetworkAvailable.first()
-            if (isNetworkAvailable) {
+            if (BackendGate.isReachable()) {
                 val notesFromApi = notesService.getNotes()
                 Log.d("FetchNotes", "Notas obtenidas del servicio: $notesFromApi")
 
@@ -70,28 +67,47 @@ object NotesRepository {
     }
 
 
-    // Crear una nueva nota
-    suspend fun createNote(context: Context, request: CreateNoteRequest): Result<ApiNote> {
+    /**
+     * Escribe en Room de forma incondicional y sincroniza después. Un fallo
+     * de red no puede propagarse como fallo de la operación.
+     */
+    suspend fun createNote(context: Context, request: CreateNoteRequest): Result<Note> {
         return runCatching {
-            val isNetworkAvailable = NetworkObserver.isNetworkAvailable.first()
-            if (isNetworkAvailable) {
-                val note = notesService.createNote(request)
-                val localNote = note.toRoomEntity(context)
+            val localNote = buildLocalNote(context, request)
+            saveNoteLocally(context, localNote)
+            Log.d("NotesRepository", "Nota guardada en Room: $localNote")
 
-                // Guardar la nota en Room
-                saveNoteLocally(context, localNote)
-                Log.d("NotesRepository", "Nota creada y guardada en Room: $localNote")
-                note
+            if (BackendGate.isReachable()) {
+                runCatching { notesService.createNote(request) }
+                    .onSuccess { Log.d("NotesRepository", "Nota sincronizada: $it") }
+                    .onFailure {
+                        Log.w("NotesRepository", "Sincronización fallida, se encola: ${it.message}")
+                        savePendingRequest(context, "notas", request)
+                    }
             } else {
                 savePendingRequest(context, "notas", request)
-                throw Exception("Nota guardada localmente. Se enviará cuando haya conexión.")
             }
-        }.recoverCatching { throwable ->
-            throw Exception("Error al crear la nota: ${throwable.message}")
+
+            localNote
         }
     }
 
-    // ✅ Guardar una lista de notas en Room
+    /** Id negativo y decreciente, para no colisionar con los del servidor. */
+    private suspend fun buildLocalNote(context: Context, request: CreateNoteRequest): Note {
+        val database = DatabaseProvider.getDatabase(context)
+        val noteDao = database.noteDao()
+        val materia = database.materiaDao().getMateriaById(request.idMateria)
+
+        return Note(
+            id = minOf(noteDao.minId() ?: 0, 0) - 1,
+            score = request.puntaje,
+            attempt = noteDao.countBySubject(request.idMateria) + 1,
+            date = System.currentTimeMillis().toString(),
+            subjectId = request.idMateria,
+            subjectName = materia?.name ?: "Desconocido"
+        )
+    }
+
     private suspend fun saveNotesLocally(context: Context, notes: List<Note>) {
         val database = DatabaseProvider.getDatabase(context)
         val noteDao = database.noteDao()
@@ -111,21 +127,17 @@ object NotesRepository {
             val pendingRequestDao = database.pendingRequestDao()
             val userDao = database.userDao()
 
-            // Obtener el ID del usuario actual
             val userId = userDao.getCurrentUserId()
 
-            // Crear el objeto CreateOfflineNoteRequest con idUsuario
             val offlineRequest = CreateOfflineNoteRequest(
                 idUsuario = userId,
                 idMateria = request.idMateria,
                 puntaje = request.puntaje
             )
 
-            // Serializar la solicitud pendiente
             val json = Json { ignoreUnknownKeys = true }
             val requestJson = json.encodeToString(offlineRequest)
 
-            // Crear y guardar la solicitud pendiente
             val pendingRequest = PendingRequest(
                 endpoint = endpoint,
                 payload = requestJson,
@@ -140,7 +152,6 @@ object NotesRepository {
         }
     }
 
-    // ✅ Procesar las peticiones pendientes
     suspend fun processPendingRequests(context: Context) {
         val database = DatabaseProvider.getDatabase(context)
         val pendingRequestDao = database.pendingRequestDao()
@@ -152,27 +163,23 @@ object NotesRepository {
         }
 
         for (request in pendingRequests) {
-            try {
-                // Decodificar el payload para obtener la información de CreateOfflineNoteRequest
-                val payload = Json.decodeFromString<CreateOfflineNoteRequest>(request.payload)
-                Log.d("NotesRepository", "Petición procesada: ${request.id}")
-
-                // Llamar al endpoint con la solicitud decodificada
-                notesService.createOfflineNote(payload)
-
-                Log.d("NotesRepository", "Petición procesada exitosamente: ${request.id}")
-            } catch (e: Exception) {
-                // Log del error, pero la petición se elimina de todos modos
-                Log.e("NotesRepository", "Error al procesar la petición ${request.id}: ${e.message}", e)
-            } finally {
-                // Eliminar la solicitud pendiente, independientemente del resultado
-                try {
-                    pendingRequestDao.deleteRequestById(request.id)
-                    Log.d("NotesRepository", "Petición eliminada de la tabla: ${request.id}")
-                } catch (deleteException: Exception) {
-                    Log.e("NotesRepository", "Error al eliminar la petición ${request.id}: ${deleteException.message}", deleteException)
-                }
+            // Un payload ilegible no se arregla reintentando: se descarta.
+            val payload = runCatching {
+                Json.decodeFromString<CreateOfflineNoteRequest>(request.payload)
+            }.getOrElse {
+                Log.e("NotesRepository", "Payload ilegible en ${request.id}, se descarta", it)
+                pendingRequestDao.deleteRequestById(request.id)
+                continue
             }
+
+            runCatching { notesService.createOfflineNote(payload) }
+                .onSuccess {
+                    pendingRequestDao.deleteRequestById(request.id)
+                    Log.d("NotesRepository", "Petición ${request.id} sincronizada y eliminada")
+                }
+                .onFailure {
+                    Log.w("NotesRepository", "Petición ${request.id} sigue pendiente: ${it.message}")
+                }
         }
     }
 }

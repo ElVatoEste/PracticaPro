@@ -18,6 +18,13 @@ interface NoteDao {
     @Query("SELECT * FROM note WHERE subjectName = :quizName")
     suspend fun getNotes(quizName: String): List<Note>
 
+    /** Las notas locales usan ids negativos; los del servidor son positivos. */
+    @Query("SELECT MIN(id) FROM note")
+    suspend fun minId(): Int?
+
+    @Query("SELECT COUNT(*) FROM note WHERE subjectId = :subjectId")
+    suspend fun countBySubject(subjectId: Int): Int
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNote(note: Note)
 

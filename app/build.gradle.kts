@@ -1,6 +1,5 @@
     plugins {
         alias(libs.plugins.android.application)
-        // Kotlin va integrado en AGP 9: el plugin kotlin.android sobra.
         alias(libs.plugins.kotlin.compose)
         alias(libs.plugins.kotlinx.serialization)
         alias(libs.plugins.ksp)
@@ -17,6 +16,7 @@
             versionCode = 10
             versionName = "2.1.0"
             buildConfigField("String", "DEVELOPER_NAME", "\"Vato_dev\"")
+            buildConfigField("boolean", "BACKEND_ENABLED", "false")
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
 
@@ -43,8 +43,6 @@
     }
 
     kotlin {
-        // Unifica el JDK entre terminal e IDE. Sin esto, la terminal compila
-        // con el JDK de JAVA_HOME y Android Studio con su JBR.
         jvmToolchain(21)
 
         compilerOptions {
@@ -73,7 +71,6 @@
         //Retrofit
         implementation(libs.retrofit)
         implementation(libs.converter.gson)
-        // El BOM alinea okhttp con la versión que arrastra Retrofit.
         implementation(platform(libs.okhttp.bom))
         implementation(libs.logging.interceptor)
 
