@@ -30,13 +30,16 @@ private val PRESENTACION = mapOf(
 )
 
 @Composable
-fun MedicamentosScreen() {
+fun MedicamentosScreen(tecnicaInicial: String? = null) {
     val context = LocalContext.current
     var tecnicas by remember { mutableStateOf(emptyList<Tecnica>()) }
     var abierta by remember { mutableStateOf<Tecnica?>(null) }
 
     LaunchedEffect(Unit) {
         tecnicas = ContenidoRepository.tecnicas(context, MODULO.claveContenido)
+        if (abierta == null && tecnicaInicial != null) {
+            abierta = tecnicas.firstOrNull { it.clave == tecnicaInicial }
+        }
     }
 
     PantallaModulo(

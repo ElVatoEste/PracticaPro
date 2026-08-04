@@ -83,7 +83,7 @@ fun MainScreen(
                 progreso = enCurso,
                 onClick = {
                     MODULOS.firstOrNull { it.claveContenido == enCurso.modulo }
-                        ?.let { navController.navigate(it.ruta) }
+                        ?.let { navController.navigate(Routes.enTecnica(it.ruta, enCurso.clave)) }
                 }
             )
         }

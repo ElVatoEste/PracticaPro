@@ -35,7 +35,7 @@ private val PRESENTACION = mapOf(
 )
 
 @Composable
-fun AsepsiaScreen(navController: NavController) {
+fun AsepsiaScreen(navController: NavController, tecnicaInicial: String? = null) {
     val context = LocalContext.current
     var intentos by remember { mutableIntStateOf(0) }
     var tecnicas by remember { mutableStateOf(emptyList<Tecnica>()) }
@@ -44,6 +44,9 @@ fun AsepsiaScreen(navController: NavController) {
     LaunchedEffect(navController.currentBackStackEntry) {
         intentos = DatabaseProvider.getDatabase(context).noteDao().countBySubject(MODULO.subjectId, SesionRepository.idParaConsultas(context))
         tecnicas = ContenidoRepository.tecnicas(context, MODULO.claveContenido)
+        if (abierta == null && tecnicaInicial != null) {
+            abierta = tecnicas.firstOrNull { it.clave == tecnicaInicial }
+        }
     }
 
     PantallaModulo(

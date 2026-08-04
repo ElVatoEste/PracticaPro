@@ -9,7 +9,9 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.vatodev.practicapro.ui.splash.SplashScreen
 import com.vatodev.practicapro.ui.main.MainScreen
 import com.vatodev.practicapro.ui.calculadora.ImcScreen
@@ -40,6 +42,11 @@ object Routes {
     const val IMC = "imc"
     const val PAM = "pam"
     const val USER = "user"
+
+    const val ARG_TECNICA = "tecnica"
+
+    /** Ruta de módulo que abre directamente los pasos de una técnica. */
+    fun enTecnica(ruta: String, clave: String) = "$ruta?$ARG_TECNICA=$clave"
 
     /**
      * Rutas que ocupan toda la pantalla: sin barra inferior. Antes esta lista
@@ -108,16 +115,36 @@ fun AppNavigation(navController: NavHostController) {
             PamScreen(navController)
         }
 
-        composable(Routes.TECNICAS) {
-            AsepsiaScreen(navController)
+        composable(
+            "${Routes.TECNICAS}?${Routes.ARG_TECNICA}={${Routes.ARG_TECNICA}}",
+            arguments = listOf(
+                navArgument(Routes.ARG_TECNICA) {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) { entrada ->
+            val tecnica = entrada.arguments?.getString(Routes.ARG_TECNICA)
+            AsepsiaScreen(navController, tecnicaInicial = tecnica)
         }
 
         composable(Routes.QUIZ_SCREEN) {
             QuizScreen(navController, onDismiss = { navController.popBackStack() })
         }
 
-        composable(Routes.PROCEDIMIENTOS) {
-            ProcedScreen(navController)
+        composable(
+            "${Routes.PROCEDIMIENTOS}?${Routes.ARG_TECNICA}={${Routes.ARG_TECNICA}}",
+            arguments = listOf(
+                navArgument(Routes.ARG_TECNICA) {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) { entrada ->
+            val tecnica = entrada.arguments?.getString(Routes.ARG_TECNICA)
+            ProcedScreen(navController, tecnicaInicial = tecnica)
         }
 
         composable(Routes.QUIZ_PROCEDIMIENTOS) {
@@ -128,12 +155,32 @@ fun AppNavigation(navController: NavHostController) {
             TrueFalseQuizScreen(navController, onDismiss = { navController.popBackStack() })
         }
 
-        composable(Routes.ADMINISTRACION) {
-            MedicamentosScreen()
+        composable(
+            "${Routes.ADMINISTRACION}?${Routes.ARG_TECNICA}={${Routes.ARG_TECNICA}}",
+            arguments = listOf(
+                navArgument(Routes.ARG_TECNICA) {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) { entrada ->
+            val tecnica = entrada.arguments?.getString(Routes.ARG_TECNICA)
+            MedicamentosScreen(tecnicaInicial = tecnica)
         }
 
-        composable(Routes.URGENCIAS) {
-            UrgenciasScreen()
+        composable(
+            "${Routes.URGENCIAS}?${Routes.ARG_TECNICA}={${Routes.ARG_TECNICA}}",
+            arguments = listOf(
+                navArgument(Routes.ARG_TECNICA) {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) { entrada ->
+            val tecnica = entrada.arguments?.getString(Routes.ARG_TECNICA)
+            UrgenciasScreen(tecnicaInicial = tecnica)
         }
 
         composable(Routes.USER){

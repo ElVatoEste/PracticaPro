@@ -126,13 +126,26 @@ fun ImcScreen(
                     .weight(1f)
                     .fillMaxHeight()
             )
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.weight(1f)
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
             ) {
-                GenderToggleButton("Hombre", genero == "Hombre") { genero = "Hombre" }
-                GenderToggleButton("Mujer", genero == "Mujer") { genero = "Mujer" }
+                GenderToggleButton(
+                    label = "Hombre",
+                    selected = genero == "Hombre",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                ) { genero = "Hombre" }
+                GenderToggleButton(
+                    label = "Mujer",
+                    selected = genero == "Mujer",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                ) { genero = "Mujer" }
             }
         }
 

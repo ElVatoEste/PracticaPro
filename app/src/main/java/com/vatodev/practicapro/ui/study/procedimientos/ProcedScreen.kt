@@ -38,7 +38,7 @@ private val PRESENTACION = mapOf(
 )
 
 @Composable
-fun ProcedScreen(navController: NavController?) {
+fun ProcedScreen(navController: NavController?, tecnicaInicial: String? = null) {
     val context = LocalContext.current
     var intentos by remember { mutableIntStateOf(0) }
     var intentosVf by remember { mutableIntStateOf(0) }
@@ -50,6 +50,9 @@ fun ProcedScreen(navController: NavController?) {
         intentos = dao.countBySubject(MODULO.subjectId, SesionRepository.idParaConsultas(context))
         intentosVf = dao.countBySubject(SUBJECT_PROCEDIMIENTOS_VF, SesionRepository.idParaConsultas(context))
         tecnicas = ContenidoRepository.tecnicas(context, MODULO.claveContenido)
+        if (abierta == null && tecnicaInicial != null) {
+            abierta = tecnicas.firstOrNull { it.clave == tecnicaInicial }
+        }
     }
 
     PantallaModulo(
