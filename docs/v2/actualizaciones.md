@@ -29,36 +29,98 @@ El proyecto lleva parado desde finales de 2024.
 
 ---
 
-## Bloqueo previo: el JDK
+## El JDK: inventario y elección
+
+**No hay bloqueo.** Gradle arranca correctamente:
 
 ```
-$ java -version
-java version "1.8.0_491"
+$ ./gradlew --version
+Gradle 8.9
+Launcher JVM:  17.0.12 (Oracle Corporation 17.0.12+8-LTS-286)
+Daemon JVM:    C:\Program Files\Java\jdk-17 (no JDK specified, using current Java home)
 ```
 
-**El JDK del PATH es Java 8.** Gradle 8.x no arranca con él; por eso
-`./gradlew` desde la terminal falla mientras que Android Studio compila
-sin problemas — el IDE usa su JBR embebido. `.idea/misc.xml` confirma
-`project-jdk-name="jbr-21"`.
+`JAVA_HOME` apunta a `C:\Program Files\Java\jdk-17`, y Gradle usa
+`JAVA_HOME`, no el `java` del `PATH`.
 
-Antes de cualquier actualización, apuntar `JAVA_HOME` a un JDK 17 o
-superior:
+### El Java 8 del PATH es inofensivo (para Gradle)
 
-```powershell
-# PowerShell, sesión actual
-$env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
-$env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
-java -version   # debe decir 21
+```
+$ where java
+C:\Program Files (x86)\Common Files\Oracle\Java\java8path\java.exe   → 1.8.0_491 (JRE)
+
+$ where javac
+C:\Program Files\Java\jdk-17\bin\javac.exe                           → 17.0.12
 ```
 
-Para fijarlo por proyecto, en `gradle.properties`:
+El instalador de Oracle coloca un shim de Java 8 delante en el `PATH`.
+Solo afecta a invocaciones directas de `java`; Gradle, Maven y Android
+Studio resuelven por `JAVA_HOME` o por su propio JBR. Conviene limpiarlo
+para evitar sorpresas al ejecutar un `.jar` a mano, pero no bloquea nada
+de este plan.
+
+### JDKs instalados
+
+| Ruta | Tipo | Versión |
+|---|---|---|
+| `C:\Program Files\Java\jdk-17` | JDK | **17.0.12 LTS** ← `JAVA_HOME` |
+| `C:\Program Files\Java\jdk-21` | JDK | 21.0.6 LTS |
+| `C:\Program Files\Java\jdk-23` | JDK | 23.0.1 |
+| `C:\Program Files\Java\jre1.8.0_491` | JRE | 1.8.0_491 ← shim del `PATH` |
+| `C:\Program Files\Eclipse Adoptium\jdk-21.0.6.7-hotspot` | JDK | 21.0.6 LTS |
+| `C:\Users\bigma\.jdks\jbr-17.0.12` | JDK | 17.0.12 |
+| `C:\Users\bigma\.jdks\jbr-17.0.14` | JDK | 17.0.14 |
+| `C:\Program Files\Android\Android Studio\jbr` | JDK | **21.0.10** (ene 2026) |
+| `C:\Program Files\JetBrains\IntelliJ IDEA 2024.3.1\jbr` | JDK | 21.0.5 |
+
+Nueve instalaciones. Sobra material; falta acuerdo entre ellas.
+
+### El problema real: IDE y terminal no coinciden
+
+| Quién compila | Con qué JDK |
+|---|---|
+| Terminal (`./gradlew`) | 17.0.12 — por `JAVA_HOME` |
+| Android Studio | 21.0.10 — su JBR, según `.idea/misc.xml` (`jbr-21`) |
+
+Dos JDKs distintos sobre el mismo proyecto. Funciona por ahora, pero es
+justo el escenario donde aparece un fallo que solo se reproduce en un
+sitio, y donde la caché de Gradle se invalida sin motivo aparente al
+alternar entre IDE y terminal.
+
+### Recomendación: unificar en JDK 21
+
+JDK 21 es LTS, es lo que ya usa Android Studio, y es el destino natural
+para las versiones recientes de AGP. Fijarlo por proyecto para que no
+dependa de variables de entorno:
 
 ```properties
+# gradle.properties
 org.gradle.java.home=C:\\Program Files\\Android\\Android Studio\\jbr
 ```
 
-Sin esto, nada de lo que sigue se puede verificar desde la línea de
-comandos.
+Alternativa sin atarse a la ruta de instalación de Android Studio, que
+cambia al actualizar el IDE:
+
+```kotlin
+// app/build.gradle.kts
+kotlin {
+    jvmToolchain(21)
+}
+```
+
+El *toolchain* es la opción más robusta: Gradle localiza o descarga el
+JDK adecuado y el build deja de depender de qué tenga configurado cada
+máquina. Es también lo que hace reproducible el build en CI.
+
+Verificación tras el cambio:
+
+```bash
+./gradlew --version    # Daemon JVM debe decir 21
+```
+
+> No confundir el JDK que **ejecuta** Gradle (21) con el `jvmTarget` del
+> bytecode que **produce** (hoy 11, paso 5 lo sube a 17). Son ajustes
+> independientes: un JDK 21 puede emitir bytecode 17 sin problema.
 
 ---
 
@@ -68,7 +130,7 @@ Cada paso deja el proyecto compilando. No agrupar: si algo rompe, hay que
 saber qué lo rompió.
 
 ```
-1. JDK 17+ en PATH
+1. Unificar JDK (IDE y terminal en 21)
 2. Gradle wrapper
 3. AGP
 4. Kotlin
@@ -279,7 +341,7 @@ ProGuard que ya no valen. No dejarlo para el final del lote.
 
 | Paso | Urgencia | Motivo |
 |---|---|---|
-| JDK 17+ | **Ahora** | Sin esto no se compila desde terminal |
+| Unificar JDK en 21 | Media | Hoy IDE (21) y terminal (17) difieren |
 | targetSdk 36 | **Alta** | Plazo de Play Store — verificar en Play Console |
 | kapt → KSP | Media | Ahorro de tiempo en cada build; antes de F4 |
 | Gradle / AGP / Kotlin | Media | Requisito de los dos anteriores |
