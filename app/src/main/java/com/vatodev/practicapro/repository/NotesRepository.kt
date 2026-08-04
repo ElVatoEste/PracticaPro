@@ -34,7 +34,7 @@ object NotesRepository {
     }
 
     private suspend fun getLocalNotes(context: Context): Result<List<Note>> = runCatching {
-        DatabaseProvider.getDatabase(context).noteDao().getAllNotes()
+        DatabaseProvider.getDatabase(context).noteDao().getAllNotes(SesionRepository.idParaConsultas(context))
     }
 
     /**
@@ -61,12 +61,14 @@ object NotesRepository {
         val database = DatabaseProvider.getDatabase(context)
         val noteDao = database.noteDao()
         val materia = database.materiaDao().getMateriaById(request.idMateria)
+        val usuario = SesionRepository.idParaConsultas(context)
 
         return Note(
             id = minOf(noteDao.minId() ?: 0, 0) - 1,
+            userId = usuario,
             synced = false,
             score = request.puntaje,
-            attempt = noteDao.countBySubject(request.idMateria) + 1,
+            attempt = noteDao.countBySubject(request.idMateria, usuario) + 1,
             dateMillis = System.currentTimeMillis(),
             subjectId = request.idMateria,
             subjectName = materia?.name ?: "Desconocido"
@@ -85,8 +87,8 @@ object NotesRepository {
 
         val database = DatabaseProvider.getDatabase(context)
         val dao = database.noteDao()
-        val userId = database.userDao().getCurrentUserId()
-        val pendientes = dao.getUnsynced()
+        val userId = SesionRepository.idParaConsultas(context)
+        val pendientes = dao.getUnsynced(userId)
 
         if (pendientes.isEmpty()) return
         Log.d(TAG, "Notas pendientes de subir: ${pendientes.size}")

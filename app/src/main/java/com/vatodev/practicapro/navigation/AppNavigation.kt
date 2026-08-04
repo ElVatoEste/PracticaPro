@@ -14,7 +14,6 @@ import com.vatodev.practicapro.ui.splash.SplashScreen
 import com.vatodev.practicapro.ui.main.MainScreen
 import com.vatodev.practicapro.ui.calculadora.ImcScreen
 import com.vatodev.practicapro.ui.calculadora.PamScreen
-import com.vatodev.practicapro.network.BackendGate
 import com.vatodev.practicapro.ui.login.LoginScreen
 import com.vatodev.practicapro.ui.register.RegisterScreen
 import com.vatodev.practicapro.ui.study.asepsia.AsepsiaScreen
@@ -62,22 +61,19 @@ fun AppNavigation(navController: NavHostController) {
             SplashScreen(navController)
         }
 
-        if (BackendGate.isEnabled) {
-            composable(
-                Routes.LOGIN,
-                enterTransition = { slideInVertically() + fadeIn() },
-                exitTransition = { slideOutVertically() + fadeOut() }
-            ) {
-                LoginScreen(
-                    onLoginSuccess = {
-                        navController.navigate(Routes.MAIN) {
-                            popUpTo(Routes.LOGIN) { inclusive = true }
-                        }
-                    },
-                    context = navController.context,
-                    onNavigateToRegister = { navController.navigate(Routes.REGISTER) }
-                )
-            }
+        composable(
+            Routes.LOGIN,
+            enterTransition = { slideInVertically() + fadeIn() },
+            exitTransition = { slideOutVertically() + fadeOut() }
+        ) {
+            LoginScreen(
+                onLoginSuccess = {
+                    navController.navigate(Routes.MAIN) {
+                        popUpTo(Routes.LOGIN) { inclusive = true }
+                    }
+                },
+                onNavigateToRegister = { navController.navigate(Routes.REGISTER) }
+            )
         }
 
         composable(
@@ -88,10 +84,10 @@ fun AppNavigation(navController: NavHostController) {
             RegisterScreen(
                 onRegisterSuccess = {
                     navController.navigate(Routes.MAIN) {
-                        popUpTo(Routes.REGISTER) { inclusive = true }
+                        popUpTo(0) { inclusive = true }
                     }
                 },
-                context = navController.context
+                onNavigateToLogin = { navController.navigate(Routes.LOGIN) }
             )
         }
 

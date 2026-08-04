@@ -58,4 +58,69 @@ val MIGRATION_12_13 = object : Migration(12, 13) {
     }
 }
 
-val ALL_MIGRATIONS = arrayOf(MIGRATION_11_12, MIGRATION_12_13)
+/** Añade el progreso por técnica: en qué paso se quedó el usuario. */
+val MIGRATION_13_14 = object : Migration(13, 14) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """CREATE TABLE IF NOT EXISTS progreso_tecnica (
+                 clave TEXT NOT NULL,
+                 modulo TEXT NOT NULL,
+                 titulo TEXT NOT NULL,
+                 pasoActual INTEGER NOT NULL,
+                 totalPasos INTEGER NOT NULL,
+                 actualizado INTEGER NOT NULL,
+                 PRIMARY KEY(clave)
+               )"""
+        )
+    }
+}
+
+/**
+ * Cuentas locales múltiples.
+ *
+ * `user` deja de ser fila única y gana contraseña; `note` y `progreso_tecnica`
+ * ganan dueño. Lo existente se atribuye a la cuenta que ya hubiera, que entra
+ * sin contraseña hasta que fije una.
+ */
+val MIGRATION_14_15 = object : Migration(14, 15) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE user ADD COLUMN passwordHash TEXT NOT NULL DEFAULT ''")
+        db.execSQL("ALTER TABLE user ADD COLUMN salt TEXT NOT NULL DEFAULT ''")
+        db.execSQL("ALTER TABLE user ADD COLUMN creada INTEGER NOT NULL DEFAULT 0")
+        db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_user_email ON user (email)")
+
+        db.execSQL("ALTER TABLE note ADD COLUMN userId INTEGER NOT NULL DEFAULT -1")
+        db.execSQL(
+            "UPDATE note SET userId = COALESCE((SELECT id FROM user ORDER BY id LIMIT 1), -1)"
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_note_userId ON note (userId)")
+
+        db.execSQL(
+            """CREATE TABLE progreso_nuevo (
+                 clave TEXT NOT NULL,
+                 userId INTEGER NOT NULL,
+                 modulo TEXT NOT NULL,
+                 titulo TEXT NOT NULL,
+                 pasoActual INTEGER NOT NULL,
+                 totalPasos INTEGER NOT NULL,
+                 actualizado INTEGER NOT NULL,
+                 PRIMARY KEY(clave, userId)
+               )"""
+        )
+        db.execSQL(
+            """INSERT INTO progreso_nuevo (clave, userId, modulo, titulo, pasoActual, totalPasos, actualizado)
+               SELECT clave, COALESCE((SELECT id FROM user ORDER BY id LIMIT 1), -1),
+                      modulo, titulo, pasoActual, totalPasos, actualizado
+               FROM progreso_tecnica"""
+        )
+        db.execSQL("DROP TABLE progreso_tecnica")
+        db.execSQL("ALTER TABLE progreso_nuevo RENAME TO progreso_tecnica")
+    }
+}
+
+val ALL_MIGRATIONS = arrayOf(
+    MIGRATION_11_12,
+    MIGRATION_12_13,
+    MIGRATION_13_14,
+    MIGRATION_14_15
+)

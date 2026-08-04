@@ -9,8 +9,8 @@ import com.vatodev.practicapro.rooms.entitys.Note
 @Dao
 interface NoteDao {
 
-    @Query("SELECT * FROM note")
-    suspend fun getAllNotes(): List<Note>
+    @Query("SELECT * FROM note WHERE userId = :userId")
+    suspend fun getAllNotes(userId: Int): List<Note>
 
     @Query("SELECT * FROM note WHERE id = :noteId")
     suspend fun getNoteById(noteId: Int): Note?
@@ -22,12 +22,15 @@ interface NoteDao {
     @Query("SELECT MIN(id) FROM note")
     suspend fun minId(): Int?
 
-    @Query("SELECT COUNT(*) FROM note WHERE subjectId = :subjectId")
-    suspend fun countBySubject(subjectId: Int): Int
+    @Query("DELETE FROM note WHERE userId = :userId")
+    suspend fun borrarDeUsuario(userId: Int)
+
+    @Query("SELECT COUNT(*) FROM note WHERE subjectId = :subjectId AND userId = :userId")
+    suspend fun countBySubject(subjectId: Int, userId: Int): Int
 
     /** Notas que el servidor todavía no ha confirmado. */
-    @Query("SELECT * FROM note WHERE synced = 0")
-    suspend fun getUnsynced(): List<Note>
+    @Query("SELECT * FROM note WHERE synced = 0 AND userId = :userId")
+    suspend fun getUnsynced(userId: Int): List<Note>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNote(note: Note)

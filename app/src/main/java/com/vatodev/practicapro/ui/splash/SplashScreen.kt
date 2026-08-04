@@ -18,8 +18,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.vatodev.practicapro.navigation.Routes
-import com.vatodev.practicapro.network.BackendGate
-import com.vatodev.practicapro.rooms.appDatabase.DatabaseProvider
+import com.vatodev.practicapro.repository.AuthRepository
+import com.vatodev.practicapro.repository.SesionRepository
 import kotlinx.coroutines.delay
 import com.vatodev.practicapro.R
 
@@ -39,13 +39,10 @@ fun SplashScreen(navController: NavController, margin: Int = 8) {
         )
         delay(1000)
 
-        val userDao = DatabaseProvider.getDatabase(navController.context).userDao()
-        val user = userDao.getUser()
-        val isLoggedIn = user != null && user.expirationDate > System.currentTimeMillis()
-
+        val contexto = navController.context
         val destination = when {
-            isLoggedIn -> Routes.MAIN
-            BackendGate.isEnabled -> Routes.LOGIN
+            SesionRepository.usuario(contexto) != null -> Routes.MAIN
+            AuthRepository.hayCuentas(contexto) -> Routes.LOGIN
             else -> Routes.REGISTER
         }
         navController.navigate(destination) {

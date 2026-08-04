@@ -1,231 +1,225 @@
-// LATENTE: sin uso mientras BackendGate.isEnabled sea false.
-// Reactivación: docs/v2/plan.md, fase R.
 package com.vatodev.practicapro.ui.login
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.vatodev.practicapro.R
-import com.vatodev.practicapro.components.general.NormalTextField
+import androidx.compose.ui.unit.sp
+import com.vatodev.practicapro.components.general.BotonPrimario
+import com.vatodev.practicapro.components.general.BotonSecundario
+import com.vatodev.practicapro.components.general.Etiqueta
+import com.vatodev.practicapro.components.general.Filete
 import com.vatodev.practicapro.components.general.PasswordTextField
-import com.vatodev.practicapro.components.modals.VerificationCodeModal
-import com.vatodev.practicapro.components.modals.ResetPasswordModal
-import com.vatodev.practicapro.viewmodel.ResetPasswordViewModel
-import com.vatodev.practicapro.viewmodel.VerificationViewModel
-import kotlinx.coroutines.delay
+import com.vatodev.practicapro.repository.AuthRepository
+import com.vatodev.practicapro.rooms.entitys.User
+import com.vatodev.practicapro.ui.theme.Dato
+import com.vatodev.practicapro.ui.theme.LocalEstado
 import kotlinx.coroutines.launch
 
+/**
+ * Acceso a una cuenta local.
+ *
+ * Muestra las cuentas del dispositivo en lugar de pedir el correo a ciegas:
+ * son pocas y el usuario las reconoce por nombre.
+ */
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
-    onNavigateToRegister: () -> Unit,
-    context: android.content.Context,
-    viewModel: LoginViewModel = viewModel(),
-    verificationViewModel: VerificationViewModel = viewModel(),
-    resetViewModel: ResetPasswordViewModel = viewModel()
+    onNavigateToRegister: () -> Unit
 ) {
-    val email by viewModel.email
-    val password by viewModel.password
-    val error by viewModel.error
-    val isLoading by viewModel.isLoading
-    val showEmailNotConfirmedDialog by viewModel.showEmailNotConfirmedDialog
-    val focusManager = LocalFocusManager.current
+    val contexto = LocalContext.current
+    val alcance = rememberCoroutineScope()
+    val estado = LocalEstado.current
 
-    // Estado para el modal de restablecer contraseña
-    var showResetPasswordDialog by remember { mutableStateOf(false) }
+    var cuentas by remember { mutableStateOf(emptyList<User>()) }
+    var elegida by remember { mutableStateOf<User?>(null) }
+    var password by remember { mutableStateOf("") }
+    var error by remember { mutableStateOf<String?>(null) }
 
-    // Animaciones
-    val logoOffsetY = remember { Animatable(0f) }
-    val logoScale = remember { Animatable(1f) }
-    val inputsAlpha = remember { Animatable(0f) }
-
-    // Inicialización de animaciones
     LaunchedEffect(Unit) {
-        delay(200)
-        logoOffsetY.animateTo(
-            targetValue = -140f,
-            animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
-        )
-        logoScale.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
-        )
-        inputsAlpha.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
-        )
+        cuentas = AuthRepository.cuentas(contexto)
+        if (cuentas.size == 1) elegida = cuentas.first()
     }
 
-    // Helpers
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(Modifier.height(72.dp))
+        Text(
+            text = "PRACTICAPRO",
+            style = MaterialTheme.typography.displayLarge.copy(fontSize = 20.sp),
+            color = MaterialTheme.colorScheme.onSurface
+        )
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        snackbarHost = { SnackbarHost(snackbarHostState) }
-    ) { innerPadding ->
-        Box(
+        Spacer(Modifier.height(40.dp))
+
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            contentAlignment = Alignment.Center
+                .fillMaxWidth()
+                .widthIn(max = 420.dp)
         ) {
-            // Logo animado en el centro
-            Image(
-                painter = painterResource(id = R.drawable.logo_fm),
-                contentDescription = "Logo UAM Facultad Medicina",
-                modifier = Modifier
-                    .offset(y = logoOffsetY.value.dp)
-                    .scale(logoScale.value)
-                    .fillMaxWidth(0.8f)
-                    .aspectRatio(2f, matchHeightConstraintsFirst = false)
-            )
+            Etiqueta(if (elegida == null) "Elige tu cuenta" else "Entrar")
+            Spacer(Modifier.height(16.dp))
 
-            // Inputs debajo del logo, apareciendo después
-            Column(
-                modifier = Modifier
-                    .alpha(inputsAlpha.value)
-                    .padding(top = 150.dp)
-                    .fillMaxWidth(0.8f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(text = "Iniciar Sesión", style = MaterialTheme.typography.titleLarge)
-
-                // Campo de correo
-                NormalTextField(
-                    value = email,
-                    onValueChange = { viewModel.onEmailChange(it) },
-                    label = { Text("Correo Electrónico") },
-                    modifier = Modifier.fillMaxWidth(),
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Campo de contraseña
-                PasswordTextField(
-                    value = password,
-                    onValueChange = { viewModel.onPasswordChange(it) },
-                    label = { Text("Contraseña") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Botón de inicio de sesión
-                Button(
-                    onClick = {
-                        if (!isLoading) {
-                            viewModel.doLogin(
-                                context = context,
-                                onLoginSuccess = onLoginSuccess,
-                                onErrorSnackBar = { message ->
-                                    scope.launch {
-                                        snackbarHostState.showSnackbar(
-                                            message,
-                                            duration = SnackbarDuration.Short
-                                        )
-                                    }
-                                }
-                            )
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp),
-                    enabled = !isLoading,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF7DBB00),
-                        contentColor = Color.White
-                    )
-                ) {
-                    if (isLoading) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
-                            color = Color(0xFF7DBB00)
-                        )
-                    } else {
-                        Text("Iniciar Sesión")
+            val cuenta = elegida
+            if (cuenta == null) {
+                cuentas.forEach { c ->
+                    Filete()
+                    FilaCuenta(c) {
+                        elegida = c
+                        error = null
                     }
                 }
+                Filete()
+            } else {
+                Filete()
+                FilaCuenta(cuenta, seleccionada = true) {}
+                Filete()
 
-                // Texto para restablecer contraseña
-                TextButton(onClick = { showResetPasswordDialog = true }) {
+                Spacer(Modifier.height(20.dp))
+
+                if (cuenta.sinContrasena) {
                     Text(
-                        text = "Olvidé mi contraseña",
-                        color = Color(0xFF7DBB00),
-                        style = MaterialTheme.typography.bodyMedium
+                        text = "Esta cuenta se creó antes del acceso local y no tiene contraseña. " +
+                            "Entra y ponle una desde tu perfil.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = estado.textoSuave
                     )
+                    Spacer(Modifier.height(20.dp))
+                } else {
+                    PasswordTextField(
+                        value = password,
+                        onValueChange = { password = it; error = null },
+                        label = { Text("Contraseña") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(Modifier.height(12.dp))
                 }
 
-                // Texto para crear una cuenta
-                TextButton(onClick = onNavigateToRegister) {
+                error?.let {
                     Text(
-                        text = "¿No tienes cuenta? Crea una aquí",
-                        color = Color(0xFF7DBB00),
-                        style = MaterialTheme.typography.bodyMedium
+                        text = it,
+                        style = MaterialTheme.typography.bodyMedium.copy(fontSize = 13.sp),
+                        color = estado.error
                     )
+                    Spacer(Modifier.height(12.dp))
                 }
 
-                // Mostrar errores si existen
-                if (error != null) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = error!!, color = MaterialTheme.colorScheme.error)
+                BotonPrimario(
+                    texto = "Entrar",
+                    habilitado = cuenta.sinContrasena || password.isNotEmpty(),
+                    onClick = {
+                        alcance.launch {
+                            AuthRepository.iniciarSesion(contexto, cuenta.email, password)
+                                .onSuccess { onLoginSuccess() }
+                                .onFailure { error = it.message ?: "No se pudo entrar." }
+                        }
+                    }
+                )
+
+                if (cuentas.size > 1) {
+                    Spacer(Modifier.height(10.dp))
+                    BotonSecundario(
+                        texto = "Cambiar de cuenta",
+                        onClick = { elegida = null; password = ""; error = null }
+                    )
                 }
             }
+
+            Spacer(Modifier.height(28.dp))
+            Filete()
+            Spacer(Modifier.height(20.dp))
+
+            Text(
+                text = "¿Otra persona usa este dispositivo?",
+                style = MaterialTheme.typography.bodyMedium,
+                color = estado.textoSuave,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(Modifier.height(12.dp))
+            BotonSecundario(texto = "Crear otra cuenta", onClick = onNavigateToRegister)
         }
-    }
 
-    // Modal de verificación de correo
-    if (showEmailNotConfirmedDialog) {
-        VerificationCodeModal(
-            isVisible = showEmailNotConfirmedDialog,
-            onDismiss = { viewModel.dismissEmailNotConfirmedDialog() },
-            viewModel = verificationViewModel,
-            email = email,
-            context = context,
-            onConfirmSuccess = {
-                scope.launch {
-                    viewModel.dismissEmailNotConfirmedDialog()
-                    snackbarHostState.showSnackbar(
-                        "Correo confirmado exitosamente",
-                        duration = SnackbarDuration.Short
-                    )
-                }
-            }
-        )
+        Spacer(Modifier.height(40.dp))
     }
+}
 
-    // Modal de restablecimiento de contraseña
-    if (showResetPasswordDialog) {
-        ResetPasswordModal(
-            isVisible = showResetPasswordDialog,
-            onDismiss = { showResetPasswordDialog = false },
-            context = context,
-            viewModel = resetViewModel,
-            onResetSuccess = { resetEmail ->
-                scope.launch {
-                    showResetPasswordDialog = false
-                    snackbarHostState.showSnackbar(
-                        "Se ha enviado el correo de restablecimiento a: $resetEmail",
-                        duration = SnackbarDuration.Short
-                    )
+@Composable
+private fun FilaCuenta(cuenta: User, seleccionada: Boolean = false, onClick: () -> Unit) {
+    val estado = LocalEstado.current
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(enabled = !seleccionada, onClick = onClick)
+            .padding(vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(42.dp)
+                .clip(CircleShape)
+                .background(if (seleccionada) estado.progreso else estado.elevado),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = cuenta.username.trim().take(1).uppercase(),
+                style = MaterialTheme.typography.titleMedium,
+                color = if (seleccionada) {
+                    MaterialTheme.colorScheme.background
+                } else {
+                    estado.textoSuave
                 }
-            }
-        )
+            )
+        }
+        Spacer(Modifier.size(14.dp))
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(3.dp)
+        ) {
+            Text(
+                text = cuenta.username,
+                style = MaterialTheme.typography.titleMedium.copy(fontSize = 17.sp),
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = cuenta.email,
+                style = Dato.copy(fontSize = 12.sp),
+                color = estado.textoSuave
+            )
+        }
     }
 }

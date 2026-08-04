@@ -28,7 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vatodev.practicapro.components.general.BotonPrimario
 import com.vatodev.practicapro.components.general.Etiqueta
+import com.vatodev.practicapro.components.general.DegradadoHaciaFondo
 import com.vatodev.practicapro.components.general.Filete
+import com.vatodev.practicapro.components.general.ImagenDuotono
 import com.vatodev.practicapro.components.general.Intentos
 import com.vatodev.practicapro.ui.theme.Dato
 import com.vatodev.practicapro.ui.theme.LocalEstado
@@ -107,23 +109,13 @@ private fun HeroModulo(indice: String, titulo: String, imagen: Int) {
             .fillMaxWidth()
             .height(260.dp)
     ) {
-        Image(
-            painter = painterResource(imagen),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
+        ImagenDuotono(
+            imagen = imagen,
+            tinte = 0.45f,
+            velo = 0.10f,
             modifier = Modifier.fillMaxSize()
         )
-        Box(
-            Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        0f to MaterialTheme.colorScheme.background.copy(alpha = 0.25f),
-                        0.55f to MaterialTheme.colorScheme.background.copy(alpha = 0.80f),
-                        1f to MaterialTheme.colorScheme.background
-                    )
-                )
-        )
+        DegradadoHaciaFondo(Modifier.fillMaxSize())
         Column(
             modifier = Modifier
                 .align(Alignment.BottomStart)
@@ -173,12 +165,7 @@ fun FilaTecnica(
             horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             Text(text = numero, style = Dato.copy(fontSize = 12.sp), color = estado.progreso)
-            Image(
-                painter = painterResource(imagen),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(52.dp)
-            )
+            ImagenDuotono(imagen = imagen, modifier = Modifier.size(52.dp))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
                     text = titulo,

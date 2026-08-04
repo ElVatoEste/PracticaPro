@@ -24,7 +24,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.vatodev.practicapro.components.general.Filete
 import com.vatodev.practicapro.navigation.Routes
-import com.vatodev.practicapro.network.BackendGate
 import com.vatodev.practicapro.repository.AuthRepository
 import com.vatodev.practicapro.ui.theme.EtiquetaTracked
 import com.vatodev.practicapro.ui.theme.LocalEstado
@@ -75,10 +74,9 @@ fun BottomNavigationBar(navController: NavController, userViewModel: UserViewMod
                 inactivo = estado.textoSuave,
                 onClick = {
                     scope.launch {
-                        AuthRepository.logout(navController.context, userViewModel)
-                        val destino = if (BackendGate.isEnabled) Routes.LOGIN else Routes.REGISTER
-                        navController.navigate(destino) {
-                            popUpTo(Routes.MAIN) { inclusive = true }
+                        AuthRepository.cerrarSesion(navController.context, userViewModel)
+                        navController.navigate(Routes.LOGIN) {
+                            popUpTo(0) { inclusive = true }
                         }
                     }
                 }

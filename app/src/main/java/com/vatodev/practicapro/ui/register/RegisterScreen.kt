@@ -3,50 +3,66 @@ package com.vatodev.practicapro.ui.register
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vatodev.practicapro.R
+import com.vatodev.practicapro.components.general.BotonPrimario
+import com.vatodev.practicapro.components.general.BotonSecundario
+import com.vatodev.practicapro.components.general.Etiqueta
+import com.vatodev.practicapro.components.general.Filete
 import com.vatodev.practicapro.components.general.NormalTextField
 import com.vatodev.practicapro.components.general.PasswordTextField
-import com.vatodev.practicapro.viewmodel.RegisterViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import com.vatodev.practicapro.ui.theme.LocalEstado
+import com.vatodev.practicapro.viewmodel.RegisterViewModel
+import kotlinx.coroutines.launch
 
-@Preview
-@Composable
-fun PreviewRegisterScreen() {
-    RegisterScreen(
-        onRegisterSuccess = {},
-        context = LocalContext.current
-    )
-}
+private const val URL_PRIVACIDAD = "https://vatodev.xyz/privacy"
 
 @Composable
 fun RegisterScreen(
     onRegisterSuccess: () -> Unit,
-    context: Context,
+    onNavigateToLogin: () -> Unit,
     registerViewModel: RegisterViewModel = viewModel()
 ) {
     val nombre by registerViewModel.nombre
@@ -57,155 +73,161 @@ fun RegisterScreen(
     val isLoading by registerViewModel.isLoading
 
     val focusManager = LocalFocusManager.current
-
-    // Animaciones
-    val logoOffsetY = remember { Animatable(0f) }
-    val logoScale = remember { Animatable(1f) }
-    val inputsAlpha = remember { Animatable(0f) }
-
-    var isPrivacyPolicyAccepted by remember { mutableStateOf(false) }
-
-    // Lanzamos animaciones
-    LaunchedEffect(Unit) {
-        delay(200)
-        logoOffsetY.animateTo(
-            targetValue = -220f,
-            animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
-        )
-        logoScale.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
-        )
-        inputsAlpha.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
-        )
-    }
-
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val localContext = LocalContext.current
+    val estado = LocalEstado.current
 
-    // Función para abrir el enlace en el navegador
-    fun openPrivacyPolicy(context: Context) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://vatodev.xyz/privacy"))
-        context.startActivity(intent)
-    }
+    var aceptaPrivacidad by remember { mutableStateOf(false) }
+
+    val puedeRegistrar = !isLoading &&
+        aceptaPrivacidad &&
+        nombre.isNotBlank() &&
+        email.isNotBlank() &&
+        password.isNotBlank() &&
+        password == confirmPassword
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.background,
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
-            contentAlignment = Alignment.Center
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Logo animado
+            Spacer(Modifier.height(48.dp))
+
+            // El logo institucional es a color y no admite el tinte de marca.
             Image(
-                painter = painterResource(id = R.drawable.logo_fm),
-                contentDescription = "Logo Registro",
+                painter = painterResource(R.drawable.logo_fm),
+                contentDescription = "Universidad Americana, Facultad de Medicina",
                 modifier = Modifier
-                    .offset(y = logoOffsetY.value.dp)
-                    .scale(logoScale.value)
-                    .fillMaxWidth(0.8f)
-                    .aspectRatio(2f, matchHeightConstraintsFirst = false)
+                    .fillMaxWidth(0.62f)
+                    .widthIn(max = 260.dp)
             )
 
-            // Inputs
+            Spacer(Modifier.height(40.dp))
+
             Column(
                 modifier = Modifier
-                    .alpha(inputsAlpha.value)
-                    .padding(top = 150.dp)
-                    .fillMaxWidth(0.8f),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .fillMaxWidth()
+                    .widthIn(max = 420.dp),
+                horizontalAlignment = Alignment.Start
             ) {
-                Text(text = "Registro", style = MaterialTheme.typography.titleLarge)
+                Etiqueta("Crear cuenta")
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = "El registro es local. Tus datos no salen del dispositivo.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = estado.textoSuave
+                )
+
+                Spacer(Modifier.height(24.dp))
 
                 NormalTextField(
                     value = nombre,
-                    onValueChange = { registerViewModel.onNombreChange(it) },
-                    label = { Text("Nombre Completo") },
+                    onValueChange = registerViewModel::onNombreChange,
+                    label = { Text("Nombre completo") },
                     modifier = Modifier.fillMaxWidth(),
                     onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
+                Spacer(Modifier.height(12.dp))
                 NormalTextField(
                     value = email,
-                    onValueChange = { registerViewModel.onEmailChange(it) },
-                    label = { Text("Correo Electrónico") },
+                    onValueChange = registerViewModel::onEmailChange,
+                    label = { Text("Correo electrónico") },
                     modifier = Modifier.fillMaxWidth(),
                     onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
+                Spacer(Modifier.height(12.dp))
                 PasswordTextField(
                     value = password,
-                    onValueChange = { registerViewModel.onPasswordChange(it) },
+                    onValueChange = registerViewModel::onPasswordChange,
                     label = { Text("Contraseña") },
                     modifier = Modifier.fillMaxWidth(),
                     onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
+                Spacer(Modifier.height(12.dp))
                 PasswordTextField(
                     value = confirmPassword,
-                    onValueChange = { registerViewModel.onConfirmPasswordChange(it) },
-                    label = { Text("Confirmar Contraseña") },
+                    onValueChange = registerViewModel::onConfirmPasswordChange,
+                    label = { Text("Confirmar contraseña") },
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Sección con Checkbox y enlace a la Política de Privacidad
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Checkbox(
-                        checked = isPrivacyPolicyAccepted,
-                        onCheckedChange = { isPrivacyPolicyAccepted = it },
-                        colors = CheckboxDefaults.colors(
-                            checkedColor = LocalEstado.current.progreso,
-                            uncheckedColor = Color.Gray
-                        )
-                    )
-
-                    // Texto que incluye el link "Política de Privacidad"
-                    val annotatedLinkString = buildAnnotatedString {
-                        append("Al crear una cuenta, aceptas la ")
-                        withStyle(style = SpanStyle(color = LocalEstado.current.progreso)) {
-                            append("Política de Privacidad")
-                        }
-                    }
-
-                    // ClickableText para abrir el enlace
-                    ClickableText(
-                        text = annotatedLinkString,
-                        onClick = {
-                            // Cuando el usuario hace click en "Política de Privacidad"
-                            openPrivacyPolicy(localContext)
-                        },
-                        modifier = Modifier.padding(start = 4.dp)
+                if (confirmPassword.isNotEmpty() && password != confirmPassword) {
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        text = "Las contraseñas no coinciden.",
+                        style = MaterialTheme.typography.bodyMedium.copy(fontSize = 13.sp),
+                        color = estado.error
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(Modifier.height(20.dp))
 
-                Button(
-                    onClick = {
-                        if (!isLoading) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(
+                        checked = aceptaPrivacidad,
+                        onCheckedChange = { aceptaPrivacidad = it },
+                        colors = CheckboxDefaults.colors(
+                            checkedColor = estado.progreso,
+                            checkmarkColor = MaterialTheme.colorScheme.background,
+                            uncheckedColor = estado.textoSuave
+                        )
+                    )
+                    Spacer(Modifier.size(4.dp))
+                    Text(
+                        text = buildAnnotatedString {
+                            append("Acepto la ")
+                            withStyle(
+                                SpanStyle(
+                                    color = estado.progreso,
+                                    textDecoration = TextDecoration.Underline
+                                )
+                            ) {
+                                append("política de privacidad")
+                            }
+                        },
+                        // Sin color explícito el texto cae a negro y desaparece
+                        // sobre el fondo oscuro.
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+                        modifier = Modifier.clickable { abrirPrivacidad(localContext) }
+                    )
+                }
+
+                Spacer(Modifier.height(24.dp))
+
+                if (isLoading) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(28.dp),
+                            color = estado.progreso
+                        )
+                    }
+                } else {
+                    BotonPrimario(
+                        texto = "Crear cuenta",
+                        habilitado = puedeRegistrar,
+                        onClick = {
                             registerViewModel.doRegister(
-                                context = context,
-                                onRegisterSuccess = { message ->
+                                context = localContext,
+                                onRegisterSuccess = { mensaje ->
                                     scope.launch {
                                         snackbarHostState.showSnackbar(
-                                            message = message,
+                                            message = mensaje,
                                             duration = SnackbarDuration.Short
                                         )
                                         onRegisterSuccess()
@@ -213,31 +235,37 @@ fun RegisterScreen(
                                 }
                             )
                         }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    enabled = !isLoading && isPrivacyPolicyAccepted,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = LocalEstado.current.progreso,
-                        contentColor = Color.White
                     )
-                ) {
-                    if (isLoading) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
-                            color = LocalEstado.current.progreso
-                        )
-                    } else {
-                        Text("Registrarse")
-                    }
                 }
 
-                if (error != null) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = error!!, color = MaterialTheme.colorScheme.error)
+                error?.let {
+                    Spacer(Modifier.height(12.dp))
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = estado.error
+                    )
                 }
+
+                Spacer(Modifier.height(28.dp))
+                Filete()
+                Spacer(Modifier.height(20.dp))
+                Text(
+                    text = "¿Ya tienes una cuenta en este dispositivo?",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = estado.textoSuave,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(Modifier.height(12.dp))
+                BotonSecundario(texto = "Entrar", onClick = onNavigateToLogin)
             }
+
+            Spacer(Modifier.height(40.dp))
         }
     }
+}
+
+private fun abrirPrivacidad(context: Context) {
+    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(URL_PRIVACIDAD)))
 }

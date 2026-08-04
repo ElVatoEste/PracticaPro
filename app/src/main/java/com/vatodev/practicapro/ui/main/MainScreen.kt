@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -41,9 +43,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.vatodev.practicapro.components.general.Etiqueta
 import com.vatodev.practicapro.components.general.Filete
+import com.vatodev.practicapro.components.general.ImagenDuotono
 import com.vatodev.practicapro.components.general.Intentos
 import com.vatodev.practicapro.model.MODULOS
 import com.vatodev.practicapro.model.Modulo
+import com.vatodev.practicapro.rooms.entitys.ProgresoTecnica
 import com.vatodev.practicapro.navigation.Routes
 import com.vatodev.practicapro.network.BackendGate
 import com.vatodev.practicapro.ui.theme.Dato
@@ -73,6 +77,17 @@ fun MainScreen(
         Spacer(Modifier.height(20.dp))
         Encabezado()
 
+        resumen.enCurso?.let { enCurso ->
+            Spacer(Modifier.height(24.dp))
+            TarjetaContinuar(
+                progreso = enCurso,
+                onClick = {
+                    MODULOS.firstOrNull { it.ruta.contains(enCurso.modulo, ignoreCase = true) }
+                        ?.let { navController.navigate(it.ruta) }
+                }
+            )
+        }
+
         Spacer(Modifier.height(26.dp))
         BloqueResumen(
             modulos = resumen.modulos.toString(),
@@ -83,14 +98,19 @@ fun MainScreen(
         Spacer(Modifier.height(26.dp))
         Etiqueta("Calculadoras clínicas")
         Spacer(Modifier.height(12.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.height(IntrinsicSize.Min)
+        ) {
             TarjetaHerramienta(
                 nombre = "IMC",
                 descripcion = "Índice de masa corporal",
                 icono = Icons.Default.Scale,
                 colorIcono = LocalEstado.current.progreso,
                 onClick = { navController.navigate(Routes.IMC) },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
             )
             TarjetaHerramienta(
                 nombre = "PAM",
@@ -98,7 +118,9 @@ fun MainScreen(
                 icono = Icons.Default.MonitorHeart,
                 colorIcono = LocalEstado.current.logro,
                 onClick = { navController.navigate(Routes.PAM) },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
             )
         }
 
@@ -147,6 +169,49 @@ private fun Encabezado() {
     }
 }
 
+/** Retoma la última técnica sin terminar. Es la acción más probable al abrir. */
+@Composable
+private fun TarjetaContinuar(progreso: ProgresoTecnica, onClick: () -> Unit) {
+    val estado = LocalEstado.current
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(estado.progreso)
+            .clickable(onClick = onClick)
+            .padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp)
+    ) {
+        Text(
+            text = "CONTINÚA DONDE LO DEJASTE",
+            style = EtiquetaTracked.copy(fontSize = 12.sp),
+            color = MaterialTheme.colorScheme.background
+        )
+        Text(
+            text = progreso.titulo,
+            style = MaterialTheme.typography.titleLarge.copy(fontSize = 23.sp, lineHeight = 28.sp),
+            color = MaterialTheme.colorScheme.background
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "PASO ${progreso.pasoActual + 1} / ${progreso.totalPasos}",
+                style = Dato.copy(fontSize = 12.sp),
+                color = MaterialTheme.colorScheme.background.copy(alpha = 0.75f)
+            )
+            Icon(
+                Icons.AutoMirrored.Filled.ArrowForward,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.background,
+                modifier = Modifier.size(20.dp)
+            )
+        }
+    }
+}
+
 @Composable
 private fun BloqueResumen(modulos: String, intentos: String, promedio: String) {
     val estado = LocalEstado.current
@@ -189,7 +254,7 @@ private fun TarjetaHerramienta(
             .border(1.dp, estado.filete, RectangleShape)
             .clickable(onClick = onClick)
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -211,8 +276,9 @@ private fun TarjetaHerramienta(
         )
         Text(
             text = descripcion,
-            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.sp),
-            color = estado.textoSuave
+            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.sp, lineHeight = 16.sp),
+            color = estado.textoSuave,
+            modifier = Modifier.weight(1f, fill = false)
         )
     }
 }
@@ -236,10 +302,8 @@ private fun FilaModulo(modulo: Modulo, estado: EstadoModulo?, onClick: () -> Uni
             style = Dato.copy(fontSize = 13.sp),
             color = if (intentos > 0) colores.progreso else colores.textoSuave
         )
-        Image(
-            painter = painterResource(modulo.imagen),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
+        ImagenDuotono(
+            imagen = modulo.imagen,
             modifier = Modifier.size(56.dp)
         )
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {

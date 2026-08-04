@@ -14,17 +14,17 @@ import androidx.navigation.NavController
 import com.vatodev.practicapro.R
 import com.vatodev.practicapro.components.general.BotonSecundario
 import com.vatodev.practicapro.components.general.Filete
-import com.vatodev.practicapro.components.general.MultiStepDialog
 import com.vatodev.practicapro.components.module.FilaTecnica
 import com.vatodev.practicapro.components.module.PantallaModulo
+import com.vatodev.practicapro.components.module.PantallaPasos
 import com.vatodev.practicapro.components.module.SeccionModulo
 import com.vatodev.practicapro.model.MODULOS
 import com.vatodev.practicapro.model.SUBJECT_PROCEDIMIENTOS_VF
 import com.vatodev.practicapro.navigation.Routes
 import com.vatodev.practicapro.repository.ContenidoRepository
+import com.vatodev.practicapro.repository.SesionRepository
 import com.vatodev.practicapro.repository.Tecnica
 import com.vatodev.practicapro.rooms.appDatabase.DatabaseProvider
-import com.vatodev.practicapro.viewmodel.helper.DialogState
 
 private val MODULO = MODULOS.first { it.subjectId == 2 }
 
@@ -43,12 +43,12 @@ fun ProcedScreen(navController: NavController?) {
     var intentos by remember { mutableIntStateOf(0) }
     var intentosVf by remember { mutableIntStateOf(0) }
     var tecnicas by remember { mutableStateOf(emptyList<Tecnica>()) }
-    var dialogo by remember { mutableStateOf(DialogState(false, "", emptyList())) }
+    var abierta by remember { mutableStateOf<Tecnica?>(null) }
 
     LaunchedEffect(Unit) {
         val dao = DatabaseProvider.getDatabase(context).noteDao()
-        intentos = dao.countBySubject(MODULO.subjectId)
-        intentosVf = dao.countBySubject(SUBJECT_PROCEDIMIENTOS_VF)
+        intentos = dao.countBySubject(MODULO.subjectId, SesionRepository.idParaConsultas(context))
+        intentosVf = dao.countBySubject(SUBJECT_PROCEDIMIENTOS_VF, SesionRepository.idParaConsultas(context))
         tecnicas = ContenidoRepository.tecnicas(context, "procedimientos")
     }
 
@@ -86,18 +86,18 @@ fun ProcedScreen(navController: NavController?) {
                     titulo = tecnica.titulo,
                     descripcion = sinopsis,
                     imagen = imagen,
-                    onClick = { dialogo = DialogState(true, tecnica.titulo, tecnica.pasos) }
+                    onClick = { abierta = tecnica }
                 )
             }
             Filete()
         }
     }
 
-    if (dialogo.showDialog) {
-        MultiStepDialog(
-            title = dialogo.title,
-            steps = dialogo.steps,
-            onDismiss = { dialogo = dialogo.copy(showDialog = false) }
+    abierta?.let { tecnica ->
+        PantallaPasos(
+            tecnica = tecnica,
+            modulo = "procedimientos",
+            onDismiss = { abierta = null }
         )
     }
 }

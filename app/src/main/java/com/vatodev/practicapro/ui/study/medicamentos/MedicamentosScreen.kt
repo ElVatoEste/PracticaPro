@@ -11,14 +11,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.vatodev.practicapro.R
 import com.vatodev.practicapro.components.general.Filete
-import com.vatodev.practicapro.components.general.MultiStepDialog
 import com.vatodev.practicapro.components.module.FilaTecnica
 import com.vatodev.practicapro.components.module.PantallaModulo
+import com.vatodev.practicapro.components.module.PantallaPasos
 import com.vatodev.practicapro.components.module.SeccionModulo
 import com.vatodev.practicapro.model.MODULOS
 import com.vatodev.practicapro.repository.ContenidoRepository
 import com.vatodev.practicapro.repository.Tecnica
-import com.vatodev.practicapro.viewmodel.helper.DialogState
 
 private val MODULO = MODULOS.first { it.subjectId == 3 }
 
@@ -34,7 +33,7 @@ private val PRESENTACION = mapOf(
 fun MedicamentosScreen() {
     val context = LocalContext.current
     var tecnicas by remember { mutableStateOf(emptyList<Tecnica>()) }
-    var dialogo by remember { mutableStateOf(DialogState(false, "", emptyList())) }
+    var abierta by remember { mutableStateOf<Tecnica?>(null) }
 
     LaunchedEffect(Unit) {
         tecnicas = ContenidoRepository.tecnicas(context, "medicamentos")
@@ -62,18 +61,18 @@ fun MedicamentosScreen() {
                     titulo = tecnica.titulo,
                     descripcion = sinopsis,
                     imagen = imagen,
-                    onClick = { dialogo = DialogState(true, tecnica.titulo, tecnica.pasos) }
+                    onClick = { abierta = tecnica }
                 )
             }
             Filete()
         }
     }
 
-    if (dialogo.showDialog) {
-        MultiStepDialog(
-            title = dialogo.title,
-            steps = dialogo.steps,
-            onDismiss = { dialogo = dialogo.copy(showDialog = false) }
+    abierta?.let { tecnica ->
+        PantallaPasos(
+            tecnica = tecnica,
+            modulo = "medicamentos",
+            onDismiss = { abierta = null }
         )
     }
 }
