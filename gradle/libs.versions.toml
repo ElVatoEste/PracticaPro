@@ -1,7 +1,8 @@
 [versions]
 agp = "8.13.2"
 converterGson = "2.9.0"
-kotlin = "2.0.0"
+kotlin = "2.4.10"
+ksp = "2.3.11"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -15,7 +16,7 @@ navigationCompose = "2.8.5"
 media3Exoplayer = "1.5.1"
 media3Ui = "1.5.1"
 retrofit = "2.9.0"
-room = "2.6.1"
+room = "2.8.4"
 compose-material-icons = "1.7.6"
 lifecycleProcess = "2.8.7"
 
@@ -53,5 +54,6 @@ androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-p
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version = "2.0.0" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 

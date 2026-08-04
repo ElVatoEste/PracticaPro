@@ -3,8 +3,7 @@
         alias(libs.plugins.kotlin.android)
         alias(libs.plugins.kotlin.compose)
         alias(libs.plugins.kotlinx.serialization)
-        id("org.jetbrains.kotlin.kapt")
-
+        alias(libs.plugins.ksp)
     }
 
     android {
@@ -34,19 +33,22 @@
 
         buildFeatures {
             buildConfig = true
+            compose = true
         }
 
         compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_11
-            targetCompatibility = JavaVersion.VERSION_11
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
         }
+    }
 
-        kotlinOptions {
-            freeCompilerArgs += listOf("-Xincremental")
-            jvmTarget = "11"
-        }
-        buildFeatures {
-            compose = true
+    kotlin {
+        // Unifica el JDK entre terminal e IDE. Sin esto, la terminal compila
+        // con el JDK de JAVA_HOME y Android Studio con su JBR.
+        jvmToolchain(21)
+
+        compilerOptions {
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
         }
     }
 
@@ -77,7 +79,7 @@
         implementation(libs.androidx.room.common)
         implementation(libs.androidx.room.ktx)
         implementation(libs.androidx.lifecycle.process)
-        kapt(libs.androidx.room.compiler)
+        ksp(libs.androidx.room.compiler)
 
         // Kotlinx Serialization
         implementation(libs.kotlinx.serialization.json)
