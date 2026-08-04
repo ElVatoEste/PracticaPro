@@ -82,7 +82,7 @@ fun MainScreen(
             TarjetaContinuar(
                 progreso = enCurso,
                 onClick = {
-                    MODULOS.firstOrNull { it.ruta.contains(enCurso.modulo, ignoreCase = true) }
+                    MODULOS.firstOrNull { it.claveContenido == enCurso.modulo }
                         ?.let { navController.navigate(it.ruta) }
                 }
             )

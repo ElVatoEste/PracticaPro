@@ -37,7 +37,7 @@ fun UrgenciasScreen() {
     var abierta by remember { mutableStateOf<Tecnica?>(null) }
 
     LaunchedEffect(Unit) {
-        tecnicas = ContenidoRepository.tecnicas(context, "urgencias")
+        tecnicas = ContenidoRepository.tecnicas(context, MODULO.claveContenido)
     }
 
     PantallaModulo(
@@ -72,7 +72,7 @@ fun UrgenciasScreen() {
     abierta?.let { tecnica ->
         PantallaPasos(
             tecnica = tecnica,
-            modulo = "urgencias",
+            modulo = MODULO.claveContenido,
             onDismiss = { abierta = null }
         )
     }

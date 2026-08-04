@@ -1,12 +1,12 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 14,
-    "identityHash": "123dbe0cc00ca6a5557275c17cca3aad",
+    "version": 15,
+    "identityHash": "7afe58aec076c9773e726f03cba0d599",
     "entities": [
       {
         "tableName": "user",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `username` TEXT NOT NULL, `email` TEXT NOT NULL, `token` TEXT NOT NULL, `expirationDate` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `username` TEXT NOT NULL, `email` TEXT NOT NULL, `token` TEXT NOT NULL, `expirationDate` INTEGER NOT NULL, `passwordHash` TEXT NOT NULL DEFAULT '', `salt` TEXT NOT NULL DEFAULT '', `creada` INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -37,6 +37,27 @@
             "columnName": "expirationDate",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "passwordHash",
+            "columnName": "passwordHash",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "salt",
+            "columnName": "salt",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "creada",
+            "columnName": "creada",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
           }
         ],
         "primaryKey": {
@@ -44,17 +65,35 @@
           "columnNames": [
             "id"
           ]
-        }
+        },
+        "indices": [
+          {
+            "name": "index_user_email",
+            "unique": true,
+            "columnNames": [
+              "email"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_user_email` ON `${TABLE_NAME}` (`email`)"
+          }
+        ]
       },
       {
         "tableName": "note",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `remoteId` INTEGER, `synced` INTEGER NOT NULL DEFAULT 0, `score` INTEGER NOT NULL, `attempt` INTEGER NOT NULL, `dateMillis` INTEGER NOT NULL DEFAULT 0, `subjectId` INTEGER NOT NULL, `subjectName` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `userId` INTEGER NOT NULL DEFAULT -1, `remoteId` INTEGER, `synced` INTEGER NOT NULL DEFAULT 0, `score` INTEGER NOT NULL, `attempt` INTEGER NOT NULL, `dateMillis` INTEGER NOT NULL DEFAULT 0, `subjectId` INTEGER NOT NULL, `subjectName` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "-1"
           },
           {
             "fieldPath": "remoteId",
@@ -105,7 +144,18 @@
           "columnNames": [
             "id"
           ]
-        }
+        },
+        "indices": [
+          {
+            "name": "index_note_userId",
+            "unique": false,
+            "columnNames": [
+              "userId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_note_userId` ON `${TABLE_NAME}` (`userId`)"
+          }
+        ]
       },
       {
         "tableName": "materia",
@@ -133,12 +183,18 @@
       },
       {
         "tableName": "progreso_tecnica",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`clave` TEXT NOT NULL, `modulo` TEXT NOT NULL, `titulo` TEXT NOT NULL, `pasoActual` INTEGER NOT NULL, `totalPasos` INTEGER NOT NULL, `actualizado` INTEGER NOT NULL, PRIMARY KEY(`clave`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`clave` TEXT NOT NULL, `userId` INTEGER NOT NULL, `modulo` TEXT NOT NULL, `titulo` TEXT NOT NULL, `pasoActual` INTEGER NOT NULL, `totalPasos` INTEGER NOT NULL, `actualizado` INTEGER NOT NULL, PRIMARY KEY(`clave`, `userId`))",
         "fields": [
           {
             "fieldPath": "clave",
             "columnName": "clave",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -175,14 +231,15 @@
         "primaryKey": {
           "autoGenerate": false,
           "columnNames": [
-            "clave"
+            "clave",
+            "userId"
           ]
         }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '123dbe0cc00ca6a5557275c17cca3aad')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7afe58aec076c9773e726f03cba0d599')"
     ]
   }
 }

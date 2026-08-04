@@ -75,6 +75,26 @@ class ContenidoTest {
         }
     }
 
+    /**
+     * El catálogo y el JSON se relacionan por esta clave. Cuando no coincidían,
+     * la tarjeta "continúa donde lo dejaste" no navegaba a ningún sitio.
+     */
+    @Test
+    fun `cada modulo del catalogo apunta a una clave que existe en el contenido`() {
+        MODULOS.forEach { modulo ->
+            assertTrue(
+                "${modulo.nombre} apunta a '${modulo.claveContenido}', que no está en el JSON",
+                modulo.claveContenido in contenido.modulos.keys
+            )
+        }
+    }
+
+    @Test
+    fun `no sobra ningun modulo en el contenido`() {
+        val delCatalogo = MODULOS.map { it.claveContenido }.toSet()
+        assertEquals(delCatalogo, contenido.modulos.keys)
+    }
+
     @Test
     fun `conserva las diecisiete tecnicas migradas desde los Steps kt`() {
         assertEquals(17, tecnicas.size)

@@ -7,6 +7,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.vatodev.practicapro.rooms.appDatabase.AppDatabase
 import com.vatodev.practicapro.rooms.appDatabase.MIGRATION_11_12
 import com.vatodev.practicapro.rooms.appDatabase.MIGRATION_12_13
+import com.vatodev.practicapro.rooms.appDatabase.MIGRATION_13_14
+import com.vatodev.practicapro.rooms.appDatabase.MIGRATION_14_15
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -201,6 +203,109 @@ class MigracionTest {
             assertEquals(7, it.getInt(0))
             assertEquals(1, it.getInt(1))
             assertEquals(1735689600000L, it.getLong(2))
+        }
+    }
+
+    @Test
+    fun migracion13a14CreaElProgresoSinTocarLoExistente() {
+        helper.createDatabase(BD, 13).use { db ->
+            db.execSQL(
+                """INSERT INTO note (id, remoteId, synced, score, attempt, dateMillis, subjectId, subjectName)
+                   VALUES (7, 7, 1, 85, 1, 1735689600000, 1, 'TECNICAS')"""
+            )
+        }
+
+        val db = helper.runMigrationsAndValidate(BD, 14, true, MIGRATION_13_14)
+
+        db.query("SELECT COUNT(*) FROM note").use {
+            it.moveToFirst()
+            assertEquals(1, it.getInt(0))
+        }
+        db.query("SELECT COUNT(*) FROM progreso_tecnica").use {
+            it.moveToFirst()
+            assertEquals(0, it.getInt(0))
+        }
+    }
+
+    /** Lo existente pasa a pertenecer a la cuenta que ya hubiera. */
+    @Test
+    fun migracion14a15AtribuyeNotasYProgresoALaCuentaExistente() {
+        helper.createDatabase(BD, 14).use { db ->
+            db.execSQL(
+                """INSERT INTO user (id, username, email, token, expirationDate)
+                   VALUES (-7, 'Ana', 'ana@example.com', '', 9223372036854775807)"""
+            )
+            db.execSQL(
+                """INSERT INTO note (id, remoteId, synced, score, attempt, dateMillis, subjectId, subjectName)
+                   VALUES (-1, NULL, 0, 85, 1, 1735689600000, 1, 'TECNICAS')"""
+            )
+            db.execSQL(
+                """INSERT INTO progreso_tecnica (clave, modulo, titulo, pasoActual, totalPasos, actualizado)
+                   VALUES ('stepsLavadoClinico', 'asepsia', 'Lavado clínico', 3, 10, 1735689600000)"""
+            )
+        }
+
+        val db = helper.runMigrationsAndValidate(BD, 15, true, MIGRATION_14_15)
+
+        db.query("SELECT userId FROM note WHERE id = -1").use {
+            it.moveToFirst()
+            assertEquals(-7, it.getInt(0))
+        }
+        db.query("SELECT userId, pasoActual FROM progreso_tecnica WHERE clave = 'stepsLavadoClinico'").use {
+            it.moveToFirst()
+            assertEquals(-7, it.getInt(0))
+            assertEquals(3, it.getInt(1))
+        }
+        db.query("SELECT passwordHash, salt FROM user WHERE id = -7").use {
+            it.moveToFirst()
+            assertEquals("", it.getString(0))
+            assertEquals("", it.getString(1))
+        }
+    }
+
+    /**
+     * El recorrido que hará una instalación publicada al actualizar: de la
+     * versión 11 a la actual, sin perder nada.
+     */
+    @Test
+    fun cadenaCompleta11a15ConservaNotasUsuarioYProgreso() {
+        helper.createDatabase(BD, 11).use { db ->
+            db.execSQL(
+                """INSERT INTO user (id, username, email, token, expirationDate)
+                   VALUES (-1, 'Ana', 'ana@example.com', '', 9223372036854775807)"""
+            )
+            db.execSQL(
+                """INSERT INTO note (id, score, attempt, date, subjectId, subjectName)
+                   VALUES (7, 85, 1, '1735689600000', 1, 'TECNICAS')"""
+            )
+            db.execSQL(
+                """INSERT INTO note (id, score, attempt, date, subjectId, subjectName)
+                   VALUES (-1, 60, 2, 'sin fecha', 2, 'PROCEDIMIENTOS')"""
+            )
+        }
+
+        val db = helper.runMigrationsAndValidate(
+            BD, 15, true,
+            MIGRATION_11_12, MIGRATION_12_13, MIGRATION_13_14, MIGRATION_14_15
+        )
+
+        db.query("SELECT username FROM user WHERE id = -1").use {
+            it.moveToFirst()
+            assertEquals("Ana", it.getString(0))
+        }
+        db.query("SELECT id, synced, userId, dateMillis FROM note ORDER BY id").use {
+            assertEquals(2, it.count)
+
+            it.moveToFirst()
+            assertEquals(-1, it.getInt(0))
+            assertEquals(0, it.getInt(1))
+            assertEquals(-1, it.getInt(2))
+
+            it.moveToNext()
+            assertEquals(7, it.getInt(0))
+            assertEquals(1, it.getInt(1))
+            assertEquals(-1, it.getInt(2))
+            assertEquals(1735689600000L, it.getLong(3))
         }
     }
 }

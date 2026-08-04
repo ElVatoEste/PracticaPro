@@ -43,7 +43,7 @@ fun AsepsiaScreen(navController: NavController) {
 
     LaunchedEffect(navController.currentBackStackEntry) {
         intentos = DatabaseProvider.getDatabase(context).noteDao().countBySubject(MODULO.subjectId, SesionRepository.idParaConsultas(context))
-        tecnicas = ContenidoRepository.tecnicas(context, "asepsia")
+        tecnicas = ContenidoRepository.tecnicas(context, MODULO.claveContenido)
     }
 
     PantallaModulo(
@@ -91,7 +91,7 @@ fun AsepsiaScreen(navController: NavController) {
     abierta?.let { tecnica ->
         PantallaPasos(
             tecnica = tecnica,
-            modulo = "asepsia",
+            modulo = MODULO.claveContenido,
             onDismiss = { abierta = null }
         )
     }

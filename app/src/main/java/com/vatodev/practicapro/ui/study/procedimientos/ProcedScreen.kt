@@ -49,7 +49,7 @@ fun ProcedScreen(navController: NavController?) {
         val dao = DatabaseProvider.getDatabase(context).noteDao()
         intentos = dao.countBySubject(MODULO.subjectId, SesionRepository.idParaConsultas(context))
         intentosVf = dao.countBySubject(SUBJECT_PROCEDIMIENTOS_VF, SesionRepository.idParaConsultas(context))
-        tecnicas = ContenidoRepository.tecnicas(context, "procedimientos")
+        tecnicas = ContenidoRepository.tecnicas(context, MODULO.claveContenido)
     }
 
     PantallaModulo(
@@ -96,7 +96,7 @@ fun ProcedScreen(navController: NavController?) {
     abierta?.let { tecnica ->
         PantallaPasos(
             tecnica = tecnica,
-            modulo = "procedimientos",
+            modulo = MODULO.claveContenido,
             onDismiss = { abierta = null }
         )
     }

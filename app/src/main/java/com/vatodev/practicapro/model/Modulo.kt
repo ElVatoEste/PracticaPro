@@ -17,6 +17,8 @@ data class Modulo(
     val nombre: String,
     val descripcion: String,
     val subjectId: Int,
+    /** Clave de este módulo en `assets/procedimientos.json`. */
+    val claveContenido: String,
     val ruta: String,
     @DrawableRes val imagen: Int,
     val maxIntentos: Int = 2
@@ -32,6 +34,7 @@ val MODULOS = listOf(
         nombre = "Asepsia y antisepsia",
         descripcion = "Barreras, lavado de manos y campo estéril.",
         subjectId = 1,
+        claveContenido = "asepsia",
         ruta = Routes.TECNICAS,
         imagen = R.drawable.ic_asepsia
     ),
@@ -40,6 +43,7 @@ val MODULOS = listOf(
         nombre = "Procedimientos",
         descripcion = "Atención al paciente paso a paso.",
         subjectId = 2,
+        claveContenido = "procedimientos",
         ruta = Routes.PROCEDIMIENTOS,
         imagen = R.drawable.ic_procedures
     ),
@@ -48,6 +52,7 @@ val MODULOS = listOf(
         nombre = "Medicamentos",
         descripcion = "Vías, cálculo de dosis y registro.",
         subjectId = 3,
+        claveContenido = "medicamentos",
         ruta = Routes.ADMINISTRACION,
         imagen = R.drawable.ic_medicines
     ),
@@ -56,6 +61,7 @@ val MODULOS = listOf(
         nombre = "Urgencias",
         descripcion = "Manejo inicial de urgencias médicas.",
         subjectId = 4,
+        claveContenido = "urgencias",
         ruta = Routes.URGENCIAS,
         imagen = R.drawable.ic_emergency
     )
