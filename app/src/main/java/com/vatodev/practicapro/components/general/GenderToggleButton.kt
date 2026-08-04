@@ -3,8 +3,7 @@ package com.vatodev.practicapro.components.general
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,20 +20,21 @@ import com.vatodev.practicapro.ui.theme.LocalEstado
 fun GenderToggleButton(
     label: String,
     selected: Boolean,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
     val estado = LocalEstado.current
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .width(110.dp)
-            .height(46.dp)
+        modifier = modifier
+            .heightIn(min = 46.dp)
             .background(if (selected) estado.progreso else MaterialTheme.colorScheme.surface)
             .border(1.dp, if (selected) estado.progreso else estado.filete, RectangleShape)
             .toggleable(value = selected, onValueChange = { onClick() })
     ) {
         Text(
             text = label.uppercase(),
+            maxLines = 1,
             style = EtiquetaTracked.copy(fontSize = 14.sp),
             color = if (selected) {
                 MaterialTheme.colorScheme.onPrimary
