@@ -35,8 +35,8 @@
             applicationId = "com.vatodev.practicapro"
             minSdk = 30
             targetSdk = 36
-            versionCode = 11
-            versionName = "2.2.0"
+            versionCode = 12
+            versionName = "2.2.1"
             buildConfigField("String", "DEVELOPER_NAME", "\"Vato_dev\"")
             buildConfigField("boolean", "BACKEND_ENABLED", "false")
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -56,6 +56,7 @@
         buildTypes {
             release {
                 isMinifyEnabled = true
+                isShrinkResources = true
                 proguardFiles(
                     getDefaultProguardFile("proguard-android-optimize.txt"),
                     "proguard-rules.pro"

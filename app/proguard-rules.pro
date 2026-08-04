@@ -1,70 +1,31 @@
-# Preservar anotaciones necesarias
--keepattributes *Annotation*
+# Room, Compose, Retrofit, OkHttp y Media3 traen sus propias reglas dentro del
+# AAR. Repetirlas aquí como `-keep class ... { *; }` solo apaga la optimización.
 
-# Mantener anotaciones de Retrofit
--keep @retrofit2.http.* class * { *; }
+# kotlinx.serialization busca el serializador por el `Companion` de cada clase
+# anotada. Reglas oficiales de la biblioteca.
+-keepattributes RuntimeVisibleAnnotations,AnnotationDefault
 
-# Mantener anotaciones de Room
--keep @androidx.room.* class * { *; }
-
-# Mantener anotaciones de Gson
-
-# Mantener Retrofit y las interfaces de API
--keep class retrofit2.** { *; }
--keep interface retrofit2.http.* { *; }
-
-# Evitar advertencias de Retrofit
--dontwarn retrofit2.**
--dontwarn okhttp3.**
-
-# Mantener Gson y modelos relacionados
-
-# Preservar modelos de datos JSON
--keep class com.vatodev.practicapro.model.** { *; }
-
-# Mantener clases de Room
--keep class androidx.room.** { *; }
--keep @androidx.room.* class * { *; }
-
-# Mantener bases de datos y DAOs
--keep class * extends androidx.room.RoomDatabase { *; }
--keep @androidx.room.Database class * { *; }
--keep @androidx.room.Entity class * { *; }
--keep @androidx.room.Dao class * { *; }
-
-# Mantener Compose
--keep class androidx.compose.** { *; }
--keep class kotlin.** { *; }
-
-# Evitar advertencias de Compose
--dontwarn androidx.compose.**
-
-# Mantener Kotlin Coroutines
--keepclassmembers class kotlinx.coroutines.** { *; }
--dontwarn kotlinx.coroutines.**
-
-# Mantener Material Design 3
--keep class com.google.android.material.** { *; }
--dontwarn com.google.android.material.**
-
-# Mantener todas las constantes de BuildConfig
--keepclassmembers class **.BuildConfig {
-    public static final *;
+-if @kotlinx.serialization.Serializable class **
+-keepclassmembers class <1> {
+    static <1>$Companion Companion;
 }
 
--keep class com.vatodev.practicapro.model.** { *; }
--keep class com.vatodev.practicapro.entitys.** { *; }
-
-# Mantener clases de Compose
--keep class androidx.compose.** { *; }
--dontwarn androidx.compose.**
-
-# Evitar eliminaciones relacionadas con Kotlin
--keepclassmembers class kotlin.** { *; }
--dontwarn kotlin.**
-
-# Mantener clases con reflexiones
--keepattributes Signature, EnclosingMethod, InnerClasses
--keepclasseswithmembers class * {
-    public <init>(...);
+-if @kotlinx.serialization.Serializable class ** {
+    static **$* *;
 }
+-keepclassmembers class <2>$<3> {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+
+-if @kotlinx.serialization.Serializable class ** {
+    public static ** INSTANCE;
+}
+-keepclassmembers class <1> {
+    public static <1> INSTANCE;
+    kotlinx.serialization.KSerializer serializer(...);
+}
+
+# Proveedores de TLS opcionales que OkHttp resuelve en tiempo de ejecución.
+-dontwarn org.bouncycastle.**
+-dontwarn org.conscrypt.**
+-dontwarn org.openjsse.**
