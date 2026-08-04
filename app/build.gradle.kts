@@ -79,6 +79,11 @@
         arg("room.schemaLocation", "$projectDir/schemas")
     }
 
+    // MigrationTestHelper lee los esquemas desde los assets de androidTest.
+    // Sin esta línea no encuentra ninguno y todas las pruebas de migración
+    // fallan al ejecutarse, aunque compilen.
+    android.sourceSets.getByName("androidTest").assets.srcDir("$projectDir/schemas")
+
     kotlin {
         jvmToolchain(21)
 
