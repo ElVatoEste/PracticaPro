@@ -2,30 +2,33 @@
         alias(libs.plugins.android.application)
         alias(libs.plugins.kotlin.android)
         alias(libs.plugins.kotlin.compose)
+        alias(libs.plugins.kotlinx.serialization)
         id("org.jetbrains.kotlin.kapt")
+
     }
 
     android {
-        namespace = "com.example.practicapro"
-        compileSdk = 34
+        namespace = "com.vatodev.practicapro"
+        compileSdk = 35
 
         defaultConfig {
-            applicationId = "com.example.practicapro"
+            applicationId = "com.vatodev.practicapro"
             minSdk = 30
-            targetSdk = 34
-            versionCode = 1
-            versionName = "1.0"
+            targetSdk = 35
+            versionCode = 9
+            versionName = "Feat: offline always"
             buildConfigField("String", "DEVELOPER_NAME", "\"Vato_dev\"")
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
 
         buildTypes {
             release {
-                isMinifyEnabled = false
+                isMinifyEnabled = true
                 proguardFiles(
                     getDefaultProguardFile("proguard-android-optimize.txt"),
                     "proguard-rules.pro"
                 )
+                signingConfig = signingConfigs.getByName("debug")
             }
         }
 
@@ -39,6 +42,7 @@
         }
 
         kotlinOptions {
+            freeCompilerArgs += listOf("-Xincremental")
             jvmTarget = "11"
         }
         buildFeatures {
@@ -72,8 +76,11 @@
         // Room dependencies
         implementation(libs.androidx.room.common)
         implementation(libs.androidx.room.ktx)
-        implementation(libs.androidx.espresso.core)
+        implementation(libs.androidx.lifecycle.process)
         kapt(libs.androidx.room.compiler)
+
+        // Kotlinx Serialization
+        implementation(libs.kotlinx.serialization.json)
 
         testImplementation(libs.junit)
         androidTestImplementation(libs.androidx.junit)

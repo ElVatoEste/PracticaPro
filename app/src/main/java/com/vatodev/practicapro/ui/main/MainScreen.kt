@@ -1,0 +1,181 @@
+package com.vatodev.practicapro.ui.main
+
+import android.content.Context
+import android.util.Log
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.vatodev.practicapro.R
+import com.vatodev.practicapro.components.module.AnimatedModuleCard
+import com.vatodev.practicapro.components.module.Module
+import com.vatodev.practicapro.network.NetworkObserver
+import com.vatodev.practicapro.repository.NotesRepository
+import com.vatodev.practicapro.viewmodel.NotesViewModel
+import kotlinx.coroutines.delay
+import com.vatodev.practicapro.navigation.Routes
+
+@Composable
+fun MainScreen(navController: NavController) {
+    var isLoaded by remember { mutableStateOf(false) }
+    val scrollState = rememberScrollState()
+    val notesViewModel = NotesViewModel()
+    val context = navController.context
+
+    LaunchedEffect(Unit) {
+        delay(650)
+        isLoaded = true
+
+        val sharedPreferences = context.getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
+        val areNotesLoaded = sharedPreferences.getBoolean("notes_loaded", false)
+
+        // Observar cambios en la conectividad
+        NetworkObserver.isNetworkAvailable.collect { isNetworkAvailable ->
+            if (isNetworkAvailable) {
+                try {
+                    // Primero, procesar las peticiones pendientes
+                    NotesRepository.processPendingRequests(context)
+                    Log.d("MainScreen", "Peticiones pendientes procesadas.")
+
+                    // Luego, sincronizar las notas
+                    if (!areNotesLoaded) {
+                        notesViewModel.loadNotes(context)
+                        sharedPreferences.edit().putBoolean("notes_loaded", true).apply()
+                        Log.d("MainScreen", "Notas cargadas y marcadas como cargadas.")
+                    } else {
+                        Log.d("MainScreen", "Las notas ya se cargaron previamente en esta sesión.")
+                    }
+                } catch (e: Exception) {
+                    Log.e("MainScreen", "Error durante la sincronización o procesamiento de peticiones: ${e.message}", e)
+                }
+            } else {
+                Log.d("MainScreen", "Sin conexión a Internet. No se cargaron las notas ni se procesaron las peticiones pendientes.")
+            }
+        }
+    }
+
+
+    if (!isLoaded) {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = Color.White
+        ) {}
+    } else {
+        // Contenido principal
+        Box(modifier = Modifier.fillMaxSize()) {
+
+            // Logo en la parte superior
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.logo_fm),
+                    contentDescription = "Logo UAM Facultad Medicina",
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+
+            // Contenido principal
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 80.dp)
+                    .padding(horizontal = 8.dp)
+                    .verticalScroll(scrollState),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.weight(2f))
+
+                // Tarjeta animada para la Calculadora
+                AnimatedModuleCard(
+                    module = Module(
+                        name = "Calculadora",
+                        description = "Herramienta para realizar cálculos médicos.",
+                        imageRes = R.drawable.ic_calculator
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                    delayMillis = 100,
+                    onClick = { navController.navigate(Routes.CALCULADORA) }
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Lista de módulos
+                val modules = listOf(
+                    Module(
+                        name = "Técnicas de Asepsia y Antisepsia",
+                        description = "Aprende las técnicas básicas de asepsia.",
+                        imageRes = R.drawable.ic_asepsia
+                    ),
+                    Module(
+                        name = "Procedimientos Básicos",
+                        description = "Guía para atención al paciente.",
+                        imageRes = R.drawable.ic_procedures
+                    ),
+                    Module(
+                        name = "Administración de Medicamentos",
+                        description = "Conoce los aspectos básicos.",
+                        imageRes = R.drawable.ic_medicines
+                    ),
+                    Module(
+                        name = "Urgencias Médicas",
+                        description = "Manejo inicial de urgencias médicas.",
+                        imageRes = R.drawable.ic_emergency
+                    )
+                )
+
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    modules.chunked(2).forEachIndexed { rowIndex, rowModules ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            rowModules.forEachIndexed { moduleIndex, module ->
+                                AnimatedModuleCard(
+                                    module = module,
+                                    modifier = Modifier.weight(1f),
+                                    delayMillis = 200 * (rowIndex * 2 + moduleIndex),
+                                    onClick = {
+                                        when (module.name) {
+                                            "Técnicas de Asepsia y Antisepsia" -> {
+                                                navController.navigate(Routes.TECNICAS)
+                                            }
+                                            "Procedimientos Básicos" -> {
+                                                navController.navigate(Routes.PROCEDIMIENTOS)
+                                            }
+                                            "Administración de Medicamentos" -> {
+                                                navController.navigate(Routes.ADMINISTRACION)
+                                            }
+                                            "Urgencias Médicas" -> {
+                                                navController.navigate(Routes.URGENCIAS)
+                                            }
+                                        }
+                                    }
+                                )
+                            }
+                            if (rowModules.size < 2) {
+                                Spacer(modifier = Modifier.weight(1f))
+                            }
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.weight(1f))
+            }
+        }
+    }
+}
