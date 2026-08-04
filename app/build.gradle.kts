@@ -73,6 +73,8 @@
         //Retrofit
         implementation(libs.retrofit)
         implementation(libs.converter.gson)
+        // El BOM alinea okhttp con la versión que arrastra Retrofit.
+        implementation(platform(libs.okhttp.bom))
         implementation(libs.logging.interceptor)
 
         // Room dependencies
