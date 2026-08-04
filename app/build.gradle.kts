@@ -107,7 +107,7 @@
 
         //Retrofit
         implementation(libs.retrofit)
-        implementation(libs.converter.gson)
+        implementation(libs.converter.kotlinx)
         implementation(platform(libs.okhttp.bom))
         implementation(libs.logging.interceptor)
 

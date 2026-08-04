@@ -6,6 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.vatodev.practicapro.rooms.appDatabase.AppDatabase
 import com.vatodev.practicapro.rooms.appDatabase.MIGRATION_11_12
+import com.vatodev.practicapro.rooms.appDatabase.MIGRATION_12_13
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -119,6 +120,87 @@ class MigracionTest {
         db.query("SELECT username FROM user WHERE id = -1").use {
             it.moveToFirst()
             assertEquals("Ana", it.getString(0))
+        }
+    }
+
+    /** La 12 → 13 recrea `note` porque SQLite en minSdk 30 no admite DROP COLUMN. */
+    @Test
+    fun migracion12a13ConservaLasNotasAlRecrearLaTabla() {
+        helper.createDatabase(BD, 12).use { db ->
+            db.execSQL(
+                """INSERT INTO note (id, remoteId, synced, score, attempt, date, dateMillis, subjectId, subjectName)
+                   VALUES (7, 7, 1, 85, 1, '1735689600000', 1735689600000, 1, 'TECNICAS')"""
+            )
+            db.execSQL(
+                """INSERT INTO note (id, remoteId, synced, score, attempt, date, dateMillis, subjectId, subjectName)
+                   VALUES (-1, NULL, 0, 60, 2, 'sin fecha', 0, 2, 'PROCEDIMIENTOS')"""
+            )
+        }
+
+        val db = helper.runMigrationsAndValidate(BD, 13, true, MIGRATION_12_13)
+
+        db.query("SELECT id, remoteId, synced, score, attempt, dateMillis, subjectName FROM note ORDER BY id").use {
+            assertEquals(2, it.count)
+
+            it.moveToFirst()
+            assertEquals(-1, it.getInt(0))
+            assertTrue(it.isNull(1))
+            assertEquals(0, it.getInt(2))
+            assertEquals(60, it.getInt(3))
+
+            it.moveToNext()
+            assertEquals(7, it.getInt(0))
+            assertEquals(7, it.getInt(1))
+            assertEquals(1, it.getInt(2))
+            assertEquals(1735689600000L, it.getLong(5))
+        }
+    }
+
+    @Test
+    fun migracion12a13RetiraLaColaDePeticiones() {
+        helper.createDatabase(BD, 12).use { db ->
+            db.execSQL(
+                """INSERT INTO pending_requests (endpoint, payload, method, userId, timestamp)
+                   VALUES ('notas', '{}', 'POST', -1, 0)"""
+            )
+        }
+
+        val db = helper.runMigrationsAndValidate(BD, 13, true, MIGRATION_12_13)
+
+        db.query(
+            "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'pending_requests'"
+        ).use {
+            assertEquals(0, it.count)
+        }
+    }
+
+    /** Una instalación en la 11 debe llegar a la 13 sin perder nada. */
+    @Test
+    fun cadenaCompleta11a13ConservaLasNotas() {
+        helper.createDatabase(BD, 11).use { db ->
+            db.execSQL(
+                """INSERT INTO note (id, score, attempt, date, subjectId, subjectName)
+                   VALUES (7, 85, 1, '1735689600000', 1, 'TECNICAS')"""
+            )
+            db.execSQL(
+                """INSERT INTO note (id, score, attempt, date, subjectId, subjectName)
+                   VALUES (-1, 60, 2, 'sin fecha', 2, 'PROCEDIMIENTOS')"""
+            )
+        }
+
+        val db = helper.runMigrationsAndValidate(BD, 13, true, MIGRATION_11_12, MIGRATION_12_13)
+
+        db.query("SELECT id, synced, dateMillis FROM note ORDER BY id").use {
+            assertEquals(2, it.count)
+
+            it.moveToFirst()
+            assertEquals(-1, it.getInt(0))
+            assertEquals(0, it.getInt(1))
+
+            it.moveToNext()
+            assertEquals(7, it.getInt(0))
+            assertEquals(1, it.getInt(1))
+            assertEquals(1735689600000L, it.getLong(2))
         }
     }
 }

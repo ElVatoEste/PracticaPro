@@ -68,12 +68,9 @@ fun NoteCard(note: Note) {
     }
 }
 
-/**
- * `dateMillis` es 0 en las notas migradas desde la versión 11, que solo
- * guardaban la fecha como texto.
- */
+/** `dateMillis` es 0 en las notas migradas que no traían fecha numérica. */
 private fun fecha(note: Note): String = if (note.dateMillis > 0) {
     SimpleDateFormat("dd MMM yyyy", Locale("es")).format(Date(note.dateMillis))
 } else {
-    note.date.take(10)
+    "Sin fecha"
 }

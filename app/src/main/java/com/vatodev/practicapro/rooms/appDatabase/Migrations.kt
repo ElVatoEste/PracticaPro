@@ -21,4 +21,41 @@ val MIGRATION_11_12 = object : Migration(11, 12) {
     }
 }
 
-val ALL_MIGRATIONS = arrayOf(MIGRATION_11_12)
+/**
+ * Retira la columna heredada `note.date` y la tabla `pending_requests`.
+ *
+ * `date` guardaba la fecha como texto sin formato garantizado; `dateMillis` la
+ * sustituye desde la versión 12. La cola de peticiones quedó obsoleta al
+ * llevar cada nota su propio `synced`: reconciliar es ahora
+ * `SELECT * FROM note WHERE synced = 0`, sin una estructura paralela que
+ * mantener en sincronía ni crecer sin techo.
+ *
+ * SQLite en minSdk 30 no admite DROP COLUMN, así que la tabla se recrea.
+ */
+val MIGRATION_12_13 = object : Migration(12, 13) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """CREATE TABLE note_nueva (
+                 id INTEGER NOT NULL,
+                 remoteId INTEGER,
+                 synced INTEGER NOT NULL DEFAULT 0,
+                 score INTEGER NOT NULL,
+                 attempt INTEGER NOT NULL,
+                 dateMillis INTEGER NOT NULL DEFAULT 0,
+                 subjectId INTEGER NOT NULL,
+                 subjectName TEXT NOT NULL,
+                 PRIMARY KEY(id)
+               )"""
+        )
+        db.execSQL(
+            """INSERT INTO note_nueva (id, remoteId, synced, score, attempt, dateMillis, subjectId, subjectName)
+               SELECT id, remoteId, synced, score, attempt, dateMillis, subjectId, subjectName FROM note"""
+        )
+        db.execSQL("DROP TABLE note")
+        db.execSQL("ALTER TABLE note_nueva RENAME TO note")
+
+        db.execSQL("DROP TABLE IF EXISTS pending_requests")
+    }
+}
+
+val ALL_MIGRATIONS = arrayOf(MIGRATION_11_12, MIGRATION_12_13)

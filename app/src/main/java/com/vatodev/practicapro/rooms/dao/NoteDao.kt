@@ -25,6 +25,10 @@ interface NoteDao {
     @Query("SELECT COUNT(*) FROM note WHERE subjectId = :subjectId")
     suspend fun countBySubject(subjectId: Int): Int
 
+    /** Notas que el servidor todavía no ha confirmado. */
+    @Query("SELECT * FROM note WHERE synced = 0")
+    suspend fun getUnsynced(): List<Note>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNote(note: Note)
 

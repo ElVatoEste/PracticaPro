@@ -20,21 +20,9 @@ suspend fun ApiNote.toRoomEntity(context: Context): Note {
         synced = true,
         score = this.score,
         attempt = this.attempt,
-        date = this.date,
+        dateMillis = this.date.toLongOrNull() ?: 0L,
         subjectId = this.subjectId,
         subjectName = materiaName,
     )
 }
 
-fun Note.toApiEntity(): ApiNote {
-    return ApiNote(
-        id = this.id,
-        score = this.score,
-        attempt = this.attempt,
-        date = this.date,
-        subjectId = this.subjectId,
-        subjectName = this.subjectName,
-        userName = null,
-        userEmail = null
-    )
-}

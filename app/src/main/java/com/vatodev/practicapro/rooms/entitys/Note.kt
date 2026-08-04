@@ -14,7 +14,6 @@ data class Note(
     @ColumnInfo(defaultValue = "0") val synced: Boolean = false,
     val score: Int,
     val attempt: Int,
-    val date: String,
     @ColumnInfo(defaultValue = "0") val dateMillis: Long = 0L,
     val subjectId: Int,
     val subjectName: String

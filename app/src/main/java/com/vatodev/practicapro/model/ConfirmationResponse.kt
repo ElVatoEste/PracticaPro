@@ -1,14 +1,16 @@
 package com.vatodev.practicapro.model
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ConfirmationResponse(
-    @SerializedName("message")
+    @SerialName("message")
     val message: String,
 
-    @SerializedName("statusCode")
+    @SerialName("statusCode")
     val statusCode: Int?,
 
-    @SerializedName("success")
+    @SerialName("success")
     val success: Boolean
 )
