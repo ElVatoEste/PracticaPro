@@ -1,6 +1,6 @@
     plugins {
         alias(libs.plugins.android.application)
-        alias(libs.plugins.kotlin.android)
+        // Kotlin va integrado en AGP 9: el plugin kotlin.android sobra.
         alias(libs.plugins.kotlin.compose)
         alias(libs.plugins.kotlinx.serialization)
         alias(libs.plugins.ksp)
@@ -8,7 +8,7 @@
 
     android {
         namespace = "com.vatodev.practicapro"
-        compileSdk = 36
+        compileSdk = 37
 
         defaultConfig {
             applicationId = "com.vatodev.practicapro"
