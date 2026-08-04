@@ -34,7 +34,7 @@ class NotesViewModel : ViewModel() {
             val request = CreateNoteRequest(idMateria = idMateria, puntaje = puntaje)
             NotesRepository.createNote(context, request).fold(
                 onSuccess = {
-                    successMessage.value = "Nota creada exitosamente."
+                    successMessage.value = "Puntuación guardada."
                 },
                 onFailure = { throwable ->
                     errorMessage.value = throwable.message

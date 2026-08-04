@@ -17,3 +17,7 @@
 local.properties
 /app/src/main/res/raw
 
+/.kotlin
+/keystore.properties
+*.jks
+*.keystore

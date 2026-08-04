@@ -1,24 +1,56 @@
+    import java.util.Properties
+
     plugins {
         alias(libs.plugins.android.application)
-        alias(libs.plugins.kotlin.android)
         alias(libs.plugins.kotlin.compose)
         alias(libs.plugins.kotlinx.serialization)
-        id("org.jetbrains.kotlin.kapt")
-
+        alias(libs.plugins.ksp)
     }
+
+    // Credenciales de firma. keystore.properties está en .gitignore; en CI se
+    // usan las variables de entorno. Sin ninguna de las dos, la release sale
+    // sin firmar en lugar de firmada con la clave de debug, que es pública.
+    val keystoreProperties = Properties().apply {
+        val file = rootProject.file("keystore.properties")
+        if (file.exists()) file.inputStream().use { load(it) }
+    }
+
+    fun signingValue(key: String, env: String): String? =
+        (keystoreProperties.getProperty(key) ?: System.getenv(env))?.takeIf { it.isNotBlank() }
+
+    val storeFilePath = signingValue("storeFile", "PRACTICAPRO_STORE_FILE")
+    val storePasswordValue = signingValue("storePassword", "PRACTICAPRO_STORE_PASSWORD")
+    val keyAliasValue = signingValue("keyAlias", "PRACTICAPRO_KEY_ALIAS")
+    val keyPasswordValue = signingValue("keyPassword", "PRACTICAPRO_KEY_PASSWORD")
+
+    val releaseSigningReady =
+        storeFilePath != null && storePasswordValue != null &&
+            keyAliasValue != null && keyPasswordValue != null
 
     android {
         namespace = "com.vatodev.practicapro"
-        compileSdk = 35
+        compileSdk = 37
 
         defaultConfig {
             applicationId = "com.vatodev.practicapro"
             minSdk = 30
-            targetSdk = 35
+            targetSdk = 36
             versionCode = 10
             versionName = "2.1.0"
             buildConfigField("String", "DEVELOPER_NAME", "\"Vato_dev\"")
+            buildConfigField("boolean", "BACKEND_ENABLED", "false")
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        }
+
+        signingConfigs {
+            if (releaseSigningReady) {
+                create("release") {
+                    storeFile = file(storeFilePath!!)
+                    storePassword = storePasswordValue
+                    keyAlias = keyAliasValue
+                    keyPassword = keyPasswordValue
+                }
+            }
         }
 
         buildTypes {
@@ -28,25 +60,30 @@
                     getDefaultProguardFile("proguard-android-optimize.txt"),
                     "proguard-rules.pro"
                 )
-                signingConfig = signingConfigs.getByName("debug")
+                signingConfig = signingConfigs.findByName("release")
             }
         }
 
         buildFeatures {
             buildConfig = true
+            compose = true
         }
 
         compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_11
-            targetCompatibility = JavaVersion.VERSION_11
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
         }
+    }
 
-        kotlinOptions {
-            freeCompilerArgs += listOf("-Xincremental")
-            jvmTarget = "11"
-        }
-        buildFeatures {
-            compose = true
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
+
+    kotlin {
+        jvmToolchain(21)
+
+        compilerOptions {
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
         }
     }
 
@@ -71,13 +108,14 @@
         //Retrofit
         implementation(libs.retrofit)
         implementation(libs.converter.gson)
+        implementation(platform(libs.okhttp.bom))
         implementation(libs.logging.interceptor)
 
         // Room dependencies
         implementation(libs.androidx.room.common)
         implementation(libs.androidx.room.ktx)
         implementation(libs.androidx.lifecycle.process)
-        kapt(libs.androidx.room.compiler)
+        ksp(libs.androidx.room.compiler)
 
         // Kotlinx Serialization
         implementation(libs.kotlinx.serialization.json)

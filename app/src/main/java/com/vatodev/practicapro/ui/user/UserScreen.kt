@@ -20,6 +20,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vatodev.practicapro.components.general.ChangePasswordSection
 import com.vatodev.practicapro.components.general.NoteCard
 import com.vatodev.practicapro.components.modals.SettingsModalContent
+import com.vatodev.practicapro.network.BackendGate
 import com.vatodev.practicapro.rooms.entitys.Note
 import com.vatodev.practicapro.viewmodel.NotesViewModel
 import com.vatodev.practicapro.viewmodel.UserViewModel
@@ -126,13 +127,14 @@ fun UserScreen(
         }
     }
 
-    // Modal de Settings
     if (showSettings) {
         ModalBottomSheet(
             onDismissRequest = { showSettings = false }
         ) {
             SettingsModalContent(onClose = { showSettings = false }) {
-                ChangePasswordSection()
+                if (BackendGate.isEnabled) {
+                    ChangePasswordSection()
+                }
             }
         }
     }

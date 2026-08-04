@@ -20,12 +20,52 @@
 
 El proyecto lleva parado desde finales de 2024.
 
-> **Los números de versión de destino que siguen deben verificarse antes
-> de aplicarlos** — cambian cada pocas semanas. Lo que no cambia es el
-> orden de los pasos y los cambios de ruptura, que es lo que este
-> documento fija. Para consultar lo vigente:
-> `./gradlew dependencyUpdates`, el AGP Upgrade Assistant de Android
-> Studio, o [developer.android.com/jetpack/androidx/versions](https://developer.android.com/jetpack/androidx/versions).
+## Aplicado
+
+| Componente | Antes | Ahora |
+|---|---|---|
+| Gradle | 8.9 | **9.6.1** |
+| AGP | 8.7.3 | **9.3.1** |
+| Kotlin | 2.0.0 | **2.4.10** (integrado en AGP 9) |
+| Procesador de anotaciones | kapt | **KSP 2.3.11** |
+| `compileSdk` | 35 | **37** |
+| `targetSdk` | 35 | **36** |
+| JVM target / toolchain | 11 / — | **17 / 21** |
+| Compose BOM | 2024.12.01 | **2026.06.01** |
+| Room | 2.6.1 | **2.8.4** |
+| Navigation | 2.8.5 | **2.9.8** |
+| core-ktx | 1.15.0 | **1.19.0** |
+| lifecycle | 2.8.7 | **2.11.0** |
+| activity-compose | 1.9.3 | **1.13.0** |
+| media3 | 1.5.1 | **1.10.1** |
+| Retrofit | 2.9.0 | **3.0.0** |
+| OkHttp | 3.x + 4.11.0 mezclados | **5.4.0** vía BOM |
+| kotlinx.serialization | 1.6.3 | **1.11.0** |
+| material-icons | 1.7.6 | 1.7.8 (artefacto congelado) |
+
+Lo que se encontró por el camino:
+
+- **KSP 2.3.11 no funciona con Room 2.6.1**: el procesador falla con
+  `IllegalStateException: unexpected jvm signature V`. Subir Room a 2.8.4
+  no era opcional.
+- **Las versiones actuales de AndroidX exigen AGP 9**: `core 1.19.0`
+  pide `compileSdk 37` y AGP 9.1+. La subida de dependencias arrastró el
+  salto de major.
+- **AGP 9 integra Kotlin**: aplicar además
+  `org.jetbrains.kotlin.android` hace fallar el build con
+  *"no longer required for Kotlin support since AGP 9.0"*.
+- `compileSdk` 37 se descargó sola durante el build.
+- `targetSdk` se queda en 36: `compileSdk` habilita APIs nuevas,
+  `targetSdk` opta por comportamientos nuevos en runtime. Son ajustes
+  independientes.
+
+Pendiente de este documento: el paso 10 (Gson → kotlinx.serialization),
+pospuesto por no ser urgente con el backend caído.
+
+> Los números de arriba son los estables que había al ejecutar el plan.
+> Para consultar lo vigente más adelante: `./gradlew dependencyUpdates`,
+> el AGP Upgrade Assistant de Android Studio, o
+> [developer.android.com/jetpack/androidx/versions](https://developer.android.com/jetpack/androidx/versions).
 
 ---
 

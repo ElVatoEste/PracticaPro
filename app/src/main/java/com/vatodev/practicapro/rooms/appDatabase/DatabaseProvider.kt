@@ -19,7 +19,7 @@ object DatabaseProvider {
                 AppDatabase::class.java,
                 "app_database"
             )
-                .fallbackToDestructiveMigration()
+                .addMigrations(*ALL_MIGRATIONS)
                 .build()
             INSTANCE = instance
             instance

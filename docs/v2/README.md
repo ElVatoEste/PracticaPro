@@ -43,17 +43,33 @@ Un único `BuildConfig.BACKEND_ENABLED` gobierna toda la superficie de
 red. Hoy en `false`. El día que el servidor vuelva, se pone en `true` y
 se verifica — no se reescribe.
 
-## Resumen del plan
+## Estado de ejecución
 
-| Fase | Objetivo | Bloquea a |
+Las seis fases están aplicadas en la rama `feat/plan-v2`. F6 se ejecutó
+primero para no migrar el esquema de Room dos veces.
+
+| Fase | Objetivo | Estado |
 |---|---|---|
-| **F1** | Detener la pérdida de datos | todo |
-| **F2** | Interruptor único de backend | F3, F4 |
-| **F3** | Migraciones de Room reales | F4 |
-| **F4** | Esquema de sincronización (`synced`, `remoteId`) | — |
-| **F5** | Seguridad: logs, firma, token | publicación |
-| **F6** | Toolchain, SDK y dependencias | — |
+| **F6** | Toolchain, SDK y dependencias | ✅ |
+| **F1** | Detener la pérdida de datos | ✅ |
+| **F2** | Interruptor único de backend | ✅ |
+| **F3** | Migraciones de Room reales | ✅ |
+| **F4** | Esquema de sincronización (`synced`, `remoteId`) | ✅ |
+| **F5** | Seguridad: logs, firma, token | ✅ código; falta rellenar `keystore.properties` |
 
-F1 es urgente y no depende de nada. F6 se puede adelantar o retrasar sin
-afectar al resto, pero conviene hacerlo antes de F4 para no migrar el
-esquema dos veces.
+Verificado con `clean` + `:app:assembleDebug` + `:app:assembleRelease`
+(R8 incluido). **No se ha ejecutado la app en un dispositivo**: la
+verificación es de compilación, no de comportamiento. Los criterios de
+aceptación de [plan.md](plan.md) siguen pendientes de comprobar en
+runtime, en particular la migración 11 → 12 sobre una instalación real.
+
+### Pendiente
+
+- Rellenar `keystore.properties` a partir de
+  `keystore.properties.example`. Sin los cuatro valores la release sale
+  **sin firmar**.
+- Ejecutar los criterios de aceptación en dispositivo.
+- Retirar la columna heredada `note.date` y la tabla `pending_requests`
+  en la versión 13 del esquema.
+- Decidir el punto 3 de la fase R: qué pasa con el registro local frente
+  a las cuentas del servidor cuando el backend vuelva.
