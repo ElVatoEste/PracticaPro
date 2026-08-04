@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        ProcessLifecycleOwner.get().lifecycle.addObserver(AppLifecycleObserver(this))
+        ProcessLifecycleOwner.get().lifecycle.addObserver(AppLifecycleObserver())
 
         NetworkObserver.startObserving(this)
 

@@ -42,6 +42,7 @@ fun SplashScreen(navController: NavController, margin: Int = 8) {
         val contexto = navController.context
         val destination = when {
             SesionRepository.usuario(contexto) != null -> Routes.MAIN
+            SesionRepository.adoptarCuentaHeredada(contexto) -> Routes.MAIN
             AuthRepository.hayCuentas(contexto) -> Routes.LOGIN
             else -> Routes.REGISTER
         }

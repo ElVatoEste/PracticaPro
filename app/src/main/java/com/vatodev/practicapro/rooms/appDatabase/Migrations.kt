@@ -4,6 +4,24 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 /**
+ * Hubo builds internas con las columnas de la 15 sobre una base todavía
+ * marcada como 14. Comprobar antes de añadir evita el `duplicate column name`
+ * que dejaría la actualización a medias.
+ */
+private fun SupportSQLiteDatabase.tieneColumna(tabla: String, columna: String): Boolean =
+    query("PRAGMA table_info($tabla)").use { cursor ->
+        val nombre = cursor.getColumnIndexOrThrow("name")
+        while (cursor.moveToNext()) {
+            if (cursor.getString(nombre) == columna) return true
+        }
+        false
+    }
+
+private fun SupportSQLiteDatabase.anadirColumna(tabla: String, columna: String, tipo: String) {
+    if (!tieneColumna(tabla, columna)) execSQL("ALTER TABLE $tabla ADD COLUMN $columna $tipo")
+}
+
+/**
  * Añade el estado de sincronización a `note`.
  *
  * Las filas con id positivo vinieron del servidor, así que se marcan como
@@ -84,16 +102,20 @@ val MIGRATION_13_14 = object : Migration(13, 14) {
  */
 val MIGRATION_14_15 = object : Migration(14, 15) {
     override fun migrate(db: SupportSQLiteDatabase) {
-        db.execSQL("ALTER TABLE user ADD COLUMN passwordHash TEXT NOT NULL DEFAULT ''")
-        db.execSQL("ALTER TABLE user ADD COLUMN salt TEXT NOT NULL DEFAULT ''")
-        db.execSQL("ALTER TABLE user ADD COLUMN creada INTEGER NOT NULL DEFAULT 0")
+        db.anadirColumna("user", "passwordHash", "TEXT NOT NULL DEFAULT ''")
+        db.anadirColumna("user", "salt", "TEXT NOT NULL DEFAULT ''")
+        db.anadirColumna("user", "creada", "INTEGER NOT NULL DEFAULT 0")
         db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_user_email ON user (email)")
 
-        db.execSQL("ALTER TABLE note ADD COLUMN userId INTEGER NOT NULL DEFAULT -1")
-        db.execSQL(
-            "UPDATE note SET userId = COALESCE((SELECT id FROM user ORDER BY id LIMIT 1), -1)"
-        )
+        if (!db.tieneColumna("note", "userId")) {
+            db.execSQL("ALTER TABLE note ADD COLUMN userId INTEGER NOT NULL DEFAULT -1")
+            db.execSQL(
+                "UPDATE note SET userId = COALESCE((SELECT id FROM user ORDER BY id LIMIT 1), -1)"
+            )
+        }
         db.execSQL("CREATE INDEX IF NOT EXISTS index_note_userId ON note (userId)")
+
+        if (db.tieneColumna("progreso_tecnica", "userId")) return
 
         db.execSQL(
             """CREATE TABLE progreso_nuevo (
