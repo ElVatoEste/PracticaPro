@@ -1,138 +1,75 @@
 package com.vatodev.practicapro.ui.study.medicamentos
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.vatodev.practicapro.R
-import com.vatodev.practicapro.components.module.SectionContent
-import com.vatodev.practicapro.components.module.SectionTitle
-import com.vatodev.practicapro.components.module.TechniqueCard
+import com.vatodev.practicapro.components.general.Filete
 import com.vatodev.practicapro.components.general.MultiStepDialog
-import com.vatodev.practicapro.ui.theme.LocalEstado
+import com.vatodev.practicapro.components.module.FilaTecnica
+import com.vatodev.practicapro.components.module.PantallaModulo
+import com.vatodev.practicapro.components.module.SeccionModulo
+import com.vatodev.practicapro.model.MODULOS
+import com.vatodev.practicapro.viewmodel.helper.DialogState
+
+private val MODULO = MODULOS.first { it.subjectId == 3 }
+
+private val VIAS = listOf(
+    Via("Intradérmica", "Ángulo de 15°, sin aspirar. Forma pápula visible.", R.drawable.ic_medicines2, stepsDermica),
+    Via("Subcutánea", "Ángulo de 45° a 90° según el pliegue del paciente.", R.drawable.ic_medicines3, stepsSubcutaneas),
+    Via("Intramuscular", "Ángulo de 90° en el sitio elegido según volumen.", R.drawable.ic_medicines4, stepsMuscular),
+    Via("Intravenosa", "Canalización y verificación de retorno venoso.", R.drawable.ic_medicines5, stepsVenosa)
+)
+
+private data class Via(
+    val titulo: String,
+    val descripcion: String,
+    val imagen: Int,
+    val pasos: List<String>
+)
 
 @Composable
 fun MedicamentosScreen() {
+    var dialogo by remember { mutableStateOf(DialogState(false, "", emptyList())) }
 
-    var showDialog by remember { mutableStateOf(false) }
-    var selectedSteps by remember { mutableStateOf(emptyList<String>()) }
-    var dialogTitle by remember { mutableStateOf("") }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    PantallaModulo(
+        indice = MODULO.indice,
+        titulo = "Administración de medicamentos",
+        entradilla = "Medicamento correcto, dosis correcta, vía correcta, paciente correcto, hora correcta. Los cinco se verifican, no se recuerdan.",
+        imagen = R.drawable.ic_medicines1
     ) {
-        // Título principal
-        Text(
-            text = "Vía de Administración de Medicamentos",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            color = LocalEstado.current.progreso
-        )
-
-        // Subtítulo
-        Text(
-            text = "Conoce las prácticas esenciales para la administración segura y efectiva de medicamentos.",
-            fontSize = 16.sp,
-            textAlign = TextAlign.Center,
-            color = Color.Gray
-        )
-
-        // Imagen representativa
-        Image(
-            painter = painterResource(id = R.drawable.ic_medicines1),
-            contentDescription = "Vía de Administración de Medicamentos",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .clip(RoundedCornerShape(16.dp))
-        )
-
-        // Sección de conceptos clave
-        SectionTitle("Conceptos Clave")
-        SectionContent(
-            "La administración de medicamentos implica garantizar que los pacientes reciban el tratamiento adecuado, en la dosis correcta y por la vía apropiada."
-        )
-
-        // Técnicas específicas
-        SectionTitle("Técnicas Básicas")
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            TechniqueCard(
-                title = "Inyecciones Intradérmicas",
-                description = "Conoce los pasos para administrar inyecciones intradérmicas asegurando la dosis correcta y el medicamento adecuado.",
-                imageRes = R.drawable.ic_medicines2,
-                onClick = {
-                    dialogTitle = "Inyecciones Intradérmicas"
-                    selectedSteps = stepsDermica
-                    showDialog = true
-                }
-            )
-            TechniqueCard(
-                title = "Inyecciones Subcutáneas",
-                description = "Aprende cómo realizar inyecciones subcutáneas de forma segura y efectiva, minimizando riesgos.",
-                imageRes = R.drawable.ic_medicines3,
-                onClick = {
-                    dialogTitle = "Inyecciones Subcutáneas"
-                    selectedSteps = stepsSubcutaneas
-                    showDialog = true
-                }
-            )
-            TechniqueCard(
-                title = "Inyección Intramuscular",
-                description = "Domina la técnica de administración intramuscular, garantizando seguridad y precisión.",
-                imageRes = R.drawable.ic_medicines4,
-                onClick = {
-                    dialogTitle = "Inyección Intramuscular"
-                    selectedSteps = stepsMuscular
-                    showDialog = true
-                }
-            )
-            TechniqueCard(
-                title = "Vía Intravenosa",
-                description = "Paso a paso para colocar una vía intravenosa correctamente, asegurando una aplicación eficaz.",
-                imageRes = R.drawable.ic_medicines5,
-                onClick = {
-                    dialogTitle = "Vía Intravenosa"
-                    selectedSteps = stepsVenosa
-                    showDialog = true
-                }
+        SeccionModulo("Conceptos clave") {
+            Text(
+                text = "La vía determina la velocidad de absorción y el margen de corrección. " +
+                    "Una vez administrado por vía intravenosa, no hay vuelta atrás.",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
-        Spacer(modifier = Modifier.weight(1f))
+
+        SeccionModulo("Vías de administración") {
+            VIAS.forEachIndexed { indice, via ->
+                FilaTecnica(
+                    numero = "0${indice + 1}",
+                    titulo = via.titulo,
+                    descripcion = via.descripcion,
+                    imagen = via.imagen,
+                    onClick = { dialogo = DialogState(true, via.titulo, via.pasos) }
+                )
+            }
+            Filete()
+        }
     }
-    if (showDialog) {
+
+    if (dialogo.showDialog) {
         MultiStepDialog(
-            title = dialogTitle,
-            steps = selectedSteps,
-            onDismiss = { showDialog = false }
+            title = dialogo.title,
+            steps = dialogo.steps,
+            onDismiss = { dialogo = dialogo.copy(showDialog = false) }
         )
     }
 }

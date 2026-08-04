@@ -1,23 +1,32 @@
 package com.vatodev.practicapro.ui.study.asepsia.quiz
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.vatodev.practicapro.components.quizes.*
+import com.vatodev.practicapro.components.quizes.EstadoOpcion
+import com.vatodev.practicapro.components.quizes.Feedback
+import com.vatodev.practicapro.components.quizes.FinalSummary
+import com.vatodev.practicapro.components.quizes.InstructionsDialog
+import com.vatodev.practicapro.components.quizes.OpcionQuiz
+import com.vatodev.practicapro.components.quizes.PantallaQuiz
+import com.vatodev.practicapro.model.MODULOS
 import com.vatodev.practicapro.viewmodel.NotesViewModel
 import com.vatodev.practicapro.viewmodel.QuizViewModel
 import kotlinx.coroutines.delay
 
+private val SUBJECT_ID = MODULOS.first { it.ruta == "tecnicas" }.subjectId
 
 @Composable
 fun QuizScreen(
@@ -26,10 +35,8 @@ fun QuizScreen(
     quizViewModel: QuizViewModel = viewModel(),
     notesViewModel: NotesViewModel = viewModel()
 ) {
-    // Obtener el contexto desde LocalContext
     val context = LocalContext.current
 
-    // Estados del ViewModel
     val currentQuestion by quizViewModel.currentQuestion
     val score by quizViewModel.score
     val selectedAnswer by quizViewModel.selectedAnswer
@@ -39,32 +46,25 @@ fun QuizScreen(
     val timeLeft by quizViewModel.timeLeft
     val maxTime = quizViewModel.maxTime
 
-    // Estado para controlar si se ha enviado la nota
-    var hasSentNote by remember { mutableStateOf(false) }
+    var notaGuardada by remember { mutableStateOf(false) }
 
     if (showFinalSummary) {
-        if (!hasSentNote) {
-            notesViewModel.addNote(context ,idMateria = 1, puntaje = score)
-            hasSentNote = true
+        if (!notaGuardada) {
+            notesViewModel.addNote(context, idMateria = SUBJECT_ID, puntaje = score)
+            notaGuardada = true
         }
-
-        FinalSummary(
-            score = score,
-            navController = navController
-        )
+        FinalSummary(score = score, navController = navController)
         return
     }
 
-    // Mostrar instrucciones antes de iniciar
     if (showInstructions) {
         InstructionsDialog(
-            onStartClick = { quizViewModel.startQuiz(1) },
+            onStartClick = { quizViewModel.startQuiz(SUBJECT_ID) },
             onDismiss = onDismiss
         )
         return
     }
 
-    // Manejo de tiempo
     LaunchedEffect(currentQuestion, showFeedback) {
         quizViewModel.resetTime()
         while (timeLeft > 0 && !showFeedback) {
@@ -73,77 +73,54 @@ fun QuizScreen(
         }
     }
 
-    // Contenido del Quiz
-    val currentQ = quizViewModel.questions[currentQuestion]
+    val pregunta = quizViewModel.questions[currentQuestion]
+    val correcta = pregunta.options[pregunta.correctIndex]
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    PantallaQuiz(
+        preguntaActual = currentQuestion,
+        totalPreguntas = quizViewModel.questions.size,
+        tiempoRestante = timeLeft,
+        tiempoMaximo = maxTime,
+        enunciado = pregunta.text,
+        onCerrar = onDismiss
     ) {
-        // Barra de progreso
-        ProgressBar(
-            currentStep = currentQuestion + 1,
-            totalSteps = quizViewModel.questions.size
-        )
-
-        // Barra de tiempo
-        AnimatedTimeBar(timeLeft = timeLeft, maxTime = maxTime)
-
-        // Título
-        Text(
-            text = "Evaluación Rápida",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        // Pregunta actual
-        Text(
-            text = "Pregunta ${currentQuestion + 1} de ${quizViewModel.questions.size}",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            text = currentQ.text,
-            fontSize = 16.sp,
-            textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        // Opciones de respuesta
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            currentQ.options.forEach { answer ->
-                Button(
-                    onClick = { quizViewModel.selectAnswer(answer) },
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = selectedAnswer.isEmpty(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = when {
-                            selectedAnswer == answer -> MaterialTheme.colorScheme.secondary
-                            selectedAnswer.isNotEmpty() -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
-                            else -> MaterialTheme.colorScheme.primary
-                        }
-                    )
-                ) {
-                    Text(answer)
-                }
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            pregunta.options.forEachIndexed { indice, opcion ->
+                OpcionQuiz(
+                    letra = ('A' + indice).toString(),
+                    texto = opcion,
+                    estadoOpcion = estadoDe(opcion, correcta, selectedAnswer, showFeedback),
+                    habilitada = selectedAnswer.isEmpty(),
+                    onClick = { quizViewModel.selectAnswer(opcion) }
+                )
             }
         }
 
-        // Feedback
         if (showFeedback) {
-            val correctAnswer = currentQ.options[currentQ.correctIndex]
-
+            Spacer(Modifier.height(20.dp))
             Feedback(
-                isCorrect = selectedAnswer == correctAnswer,
+                isCorrect = selectedAnswer == correcta,
                 explanation = quizViewModel.explanations[currentQuestion],
                 timeBonus = quizViewModel.pointsAwarded,
                 onNext = { quizViewModel.onDismissFeedback() }
             )
         }
     }
+}
+
+/**
+ * Antes de responder, todas las opciones son neutras. Tras responder se marca
+ * la correcta siempre, y la elegida como incorrecta si no coincide.
+ */
+internal fun estadoDe(
+    opcion: String,
+    correcta: String,
+    elegida: String,
+    mostrarResultado: Boolean
+): EstadoOpcion = when {
+    !mostrarResultado && opcion == elegida -> EstadoOpcion.ELEGIDA
+    !mostrarResultado -> EstadoOpcion.NEUTRA
+    opcion == correcta -> EstadoOpcion.CORRECTA
+    opcion == elegida -> EstadoOpcion.INCORRECTA
+    else -> EstadoOpcion.NEUTRA
 }

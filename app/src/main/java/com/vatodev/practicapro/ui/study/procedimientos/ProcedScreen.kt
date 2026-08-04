@@ -1,196 +1,106 @@
 package com.vatodev.practicapro.ui.study.procedimientos
 
-import android.util.Log
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.vatodev.practicapro.R
-import com.vatodev.practicapro.components.general.ActionButton
-import com.vatodev.practicapro.components.module.SectionContent
-import com.vatodev.practicapro.components.module.SectionTitle
-import com.vatodev.practicapro.components.module.TechniqueCard
+import com.vatodev.practicapro.components.general.BotonSecundario
+import com.vatodev.practicapro.components.general.Filete
 import com.vatodev.practicapro.components.general.MultiStepDialog
+import com.vatodev.practicapro.components.module.FilaTecnica
+import com.vatodev.practicapro.components.module.PantallaModulo
+import com.vatodev.practicapro.components.module.SeccionModulo
+import com.vatodev.practicapro.model.MODULOS
 import com.vatodev.practicapro.navigation.Routes
 import com.vatodev.practicapro.rooms.appDatabase.DatabaseProvider
-import com.vatodev.practicapro.ui.theme.LocalEstado
+import com.vatodev.practicapro.viewmodel.helper.DialogState
+
+private val MODULO = MODULOS.first { it.subjectId == 2 }
+
+/** Segunda evaluación del módulo, en formato verdadero/falso. */
+private const val SUBJECT_VERDADERO_FALSO = 5
+
+private val SIGNOS = listOf(
+    Signo("Talla", "Medición de la estatura con el paciente descalzo y erguido.", R.drawable.ic_procedures2, stepsTalla),
+    Signo("Peso", "Medición del peso corporal en condiciones comparables.", R.drawable.ic_procedures3, stepsPeso),
+    Signo("Frecuencia cardíaca", "Palpación del pulso durante un minuto completo.", R.drawable.ic_procedures4, stepsFrecuenciaCardiaca),
+    Signo("Frecuencia respiratoria", "Conteo de ciclos sin que el paciente lo advierta.", R.drawable.ic_procedures5, stepsFrecuenciaRespiratoria),
+    Signo("Presión arterial", "Registro con manguito del tamaño adecuado.", R.drawable.ic_procedures6, stepsPresionArterial)
+)
+
+private data class Signo(
+    val titulo: String,
+    val descripcion: String,
+    val imagen: Int,
+    val pasos: List<String>
+)
 
 @Composable
 fun ProcedScreen(navController: NavController?) {
-
     val context = LocalContext.current
+    var intentos by remember { mutableIntStateOf(0) }
+    var intentosVf by remember { mutableIntStateOf(0) }
+    var dialogo by remember { mutableStateOf(DialogState(false, "", emptyList())) }
 
-    // Estados para los botones
-    var isButton1Enabled by remember { mutableStateOf(false) }
-    var isButton2Enabled by remember { mutableStateOf(false) }
-
-    var showDialog by remember { mutableStateOf(false) }
-    var selectedSteps by remember { mutableStateOf(emptyList<String>()) }
-    var dialogTitle by remember { mutableStateOf("") }
-
-    // Validar estado de los botones cada vez que se entra a la pantalla
     LaunchedEffect(Unit) {
-        val database = DatabaseProvider.getDatabase(context)
-        val noteDao = database.noteDao()
-
-        isButton1Enabled = !noteDao.hasReachedMaxAttempts(2) // Para subjectId 2
-        isButton2Enabled = !noteDao.hasReachedMaxAttempts(5) // Para subjectId 5
-
-        Log.d("ProcedScreen", "Estado de botón 1: $isButton1Enabled")
-        Log.d("ProcedScreen", "Estado de botón 2: $isButton2Enabled")
+        val dao = DatabaseProvider.getDatabase(context).noteDao()
+        intentos = dao.countBySubject(MODULO.subjectId)
+        intentosVf = dao.countBySubject(SUBJECT_VERDADERO_FALSO)
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    PantallaModulo(
+        indice = MODULO.indice,
+        titulo = "Procedimientos de enfermería",
+        entradilla = "Los procedimientos básicos sostienen la seguridad del paciente y reducen el riesgo durante la atención.",
+        imagen = R.drawable.ic_procedures1,
+        intentosUsados = intentos,
+        maxIntentos = MODULO.maxIntentos,
+        evaluacionHabilitada = intentos < MODULO.maxIntentos,
+        onEvaluar = { navController?.navigate(Routes.QUIZ_PROCEDIMIENTOS) },
+        accionSecundaria = {
+            BotonSecundario(
+                texto = if (intentosVf < MODULO.maxIntentos) "Evaluación verdadero/falso" else "Sin intentos",
+                habilitado = intentosVf < MODULO.maxIntentos,
+                onClick = { navController?.navigate(Routes.QUIZ_PROC_TF) }
+            )
+        }
     ) {
-        // Título principal
-        Text(
-            text = "Procedimientos Básicos",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            color = LocalEstado.current.progreso
-        )
-
-        // Subtítulo
-        Text(
-            text = "Aprende los procedimientos fundamentales para el cuidado del paciente.",
-            fontSize = 16.sp,
-            textAlign = TextAlign.Center,
-            color = Color.Gray
-        )
-
-        // Imagen representativa
-        Image(
-            painter = painterResource(id = R.drawable.ic_procedures1), // Cambiar por una imagen específica
-            contentDescription = "Imagen de Procedimientos Básicos",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .padding(8.dp)
-                .clip(RoundedCornerShape(16.dp))
-        )
-
-        // Sección de conceptos clave
-        SectionTitle("Importancia de los Procedimientos Básicos")
-        SectionContent(
-            "Los procedimientos básicos son esenciales para garantizar la seguridad y el bienestar del paciente, así como para reducir riesgos durante la atención médica."
-        )
-
-        // Listado de procedimientos básicos
-        SectionTitle("Toma de signos vitales")
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            TechniqueCard(
-                title = "Talla",
-                description = "Procedimiento para medir la estatura del paciente.",
-                imageRes = R.drawable.ic_procedures2, // Cambiar por una imagen representativa
-                onClick = {
-                    dialogTitle = "Talla"
-                    selectedSteps = stepsTalla
-                    showDialog = true
-                }
+        SeccionModulo("Por qué importan") {
+            Text(
+                text = "Un signo vital mal tomado desplaza toda la valoración que viene detrás. " +
+                    "La técnica no es un trámite: es el dato.",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface
             )
-
-            TechniqueCard(
-                title = "Peso",
-                description = "Procedimiento para medir el peso corporal.",
-                imageRes = R.drawable.ic_procedures3,
-                onClick = {
-                    dialogTitle = "Peso"
-                    selectedSteps = stepsPeso
-                    showDialog = true
-                }
-            )
-
-            TechniqueCard(
-                title = "Frecuencia Cardíaca",
-                description = "Aprende cómo medir la frecuencia cardíaca correctamente.",
-                imageRes = R.drawable.ic_procedures4,
-                onClick = {
-                    dialogTitle = "Frecuencia Cardíaca"
-                    selectedSteps = stepsFrecuenciaCardiaca
-                    showDialog = true
-                }
-            )
-
-            TechniqueCard(
-                title = "Frecuencia Respiratoria",
-                description = "Aprende cómo medir la frecuencia respiratoria de manera adecuada.",
-                imageRes = R.drawable.ic_procedures5,
-                onClick = {
-                    dialogTitle = "Frecuencia Respiratoria"
-                    selectedSteps = stepsFrecuenciaRespiratoria
-                    showDialog = true
-                }
-            )
-
-            TechniqueCard(
-                title = "Presión Arterial",
-                description = "Aprende cómo medir la presión arterial de manera correcta.",
-                imageRes = R.drawable.ic_procedures6,
-                onClick = {
-                    dialogTitle = "Presión Arterial"
-                    selectedSteps = stepsPresionArterial
-                    showDialog = true
-                }
-            )
-
         }
 
-        ActionButton(
-            text = "Realizar Evaluación",
-            onClick = { navController?.navigate(Routes.QUIZ_PROCEDIMIENTOS) },
-            enabled = isButton1Enabled
-        )
-
-        // Botón 2: Evaluación para `subjectId = 5`
-        ActionButton(
-            text = "Realizar Evaluación 2",
-            onClick = { navController?.navigate(Routes.QUIZ_PROC_TF) },
-            enabled = isButton2Enabled
-        )
-
-        // Espacio adicional al final para desplazamiento cómodo
-        Spacer(modifier = Modifier.weight(1f))
+        SeccionModulo("Toma de signos vitales") {
+            SIGNOS.forEachIndexed { indice, signo ->
+                FilaTecnica(
+                    numero = "0${indice + 1}",
+                    titulo = signo.titulo,
+                    descripcion = signo.descripcion,
+                    imagen = signo.imagen,
+                    onClick = { dialogo = DialogState(true, signo.titulo, signo.pasos) }
+                )
+            }
+            Filete()
+        }
     }
 
-    if (showDialog) {
+    if (dialogo.showDialog) {
         MultiStepDialog(
-            title = dialogTitle,
-            steps = selectedSteps,
-            onDismiss = { showDialog = false }
+            title = dialogo.title,
+            steps = dialogo.steps,
+            onDismiss = { dialogo = dialogo.copy(showDialog = false) }
         )
     }
 }
-

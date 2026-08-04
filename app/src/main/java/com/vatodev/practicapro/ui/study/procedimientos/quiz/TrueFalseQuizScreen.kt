@@ -1,25 +1,32 @@
 package com.vatodev.practicapro.ui.study.procedimientos.quiz
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.vatodev.practicapro.components.quizes.AnimatedTimeBar
 import com.vatodev.practicapro.components.quizes.Feedback
 import com.vatodev.practicapro.components.quizes.FinalSummary
 import com.vatodev.practicapro.components.quizes.InstructionsDialog
-import com.vatodev.practicapro.components.quizes.ProgressBar
+import com.vatodev.practicapro.components.quizes.OpcionQuiz
+import com.vatodev.practicapro.components.quizes.PantallaQuiz
+import com.vatodev.practicapro.ui.study.asepsia.quiz.estadoDe
 import com.vatodev.practicapro.viewmodel.NotesViewModel
 import com.vatodev.practicapro.viewmodel.TrueFalseQuizViewModel
 import kotlinx.coroutines.delay
+
+/** Segunda evaluación de procedimientos, en formato verdadero/falso. */
+private const val SUBJECT_ID = 5
 
 @Composable
 fun TrueFalseQuizScreen(
@@ -27,111 +34,75 @@ fun TrueFalseQuizScreen(
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
-    val tfQuizViewModel: TrueFalseQuizViewModel = viewModel()
+    val quizViewModel: TrueFalseQuizViewModel = viewModel()
     val notesViewModel: NotesViewModel = viewModel()
 
-    val currentQuestion by tfQuizViewModel.currentQuestion
-    val score by tfQuizViewModel.score
-    val selectedAnswer by tfQuizViewModel.selectedAnswer
-    val showFeedback by tfQuizViewModel.showFeedback
-    val showFinalSummary by tfQuizViewModel.showFinalSummary
-    val showInstructions by tfQuizViewModel.showInstructions
-    val timeLeft by tfQuizViewModel.timeLeft
-    val maxTime = tfQuizViewModel.maxTime
+    val currentQuestion by quizViewModel.currentQuestion
+    val score by quizViewModel.score
+    val selectedAnswer by quizViewModel.selectedAnswer
+    val showFeedback by quizViewModel.showFeedback
+    val showFinalSummary by quizViewModel.showFinalSummary
+    val showInstructions by quizViewModel.showInstructions
+    val timeLeft by quizViewModel.timeLeft
+    val maxTime = quizViewModel.maxTime
 
-    var hasSentNote by remember { mutableStateOf(false) }
+    var notaGuardada by remember { mutableStateOf(false) }
 
     if (showFinalSummary) {
-        if (!hasSentNote) {
-            notesViewModel.addNote(context, idMateria = 5, puntaje = score)
-            hasSentNote = true
+        if (!notaGuardada) {
+            notesViewModel.addNote(context, idMateria = SUBJECT_ID, puntaje = score)
+            notaGuardada = true
         }
-        FinalSummary(
-            score = score,
-            navController = navController
-        )
+        FinalSummary(score = score, navController = navController)
         return
     }
 
     if (showInstructions) {
         InstructionsDialog(
-            onStartClick = { tfQuizViewModel.startQuiz() },
+            onStartClick = { quizViewModel.startQuiz() },
             onDismiss = onDismiss
         )
         return
     }
 
     LaunchedEffect(currentQuestion, showFeedback) {
-        tfQuizViewModel.resetTime()
+        quizViewModel.resetTime()
         while (timeLeft > 0 && !showFeedback) {
-            tfQuizViewModel.reduceTime(0.1f)
+            quizViewModel.reduceTime(0.1f)
             delay(100L)
         }
     }
 
-    val currentQ = tfQuizViewModel.questions[currentQuestion]
+    val pregunta = quizViewModel.questions[currentQuestion]
+    val correcta = pregunta.options[pregunta.correctIndex]
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    PantallaQuiz(
+        preguntaActual = currentQuestion,
+        totalPreguntas = quizViewModel.questions.size,
+        tiempoRestante = timeLeft,
+        tiempoMaximo = maxTime,
+        enunciado = pregunta.text,
+        onCerrar = onDismiss
     ) {
-        ProgressBar(
-            currentStep = currentQuestion + 1,
-            totalSteps = tfQuizViewModel.questions.size
-        )
-
-        AnimatedTimeBar(timeLeft = timeLeft, maxTime = maxTime)
-
-        Text(
-            text = "Evaluación Rápida",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Text(
-            text = "Pregunta ${currentQuestion + 1} de ${tfQuizViewModel.questions.size}",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
-
-        Text(
-            text = currentQ.text,
-            fontSize = 16.sp,
-            textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            currentQ.options.forEach { answer ->
-                Button(
-                    onClick = { tfQuizViewModel.selectAnswer(answer) },
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = selectedAnswer.isEmpty(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = when {
-                            selectedAnswer == answer -> MaterialTheme.colorScheme.secondary
-                            selectedAnswer.isNotEmpty() -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
-                            else -> MaterialTheme.colorScheme.primary
-                        }
-                    )
-                ) {
-                    Text(answer)
-                }
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            pregunta.options.forEachIndexed { indice, opcion ->
+                OpcionQuiz(
+                    letra = if (indice == 0) "V" else "F",
+                    texto = opcion,
+                    estadoOpcion = estadoDe(opcion, correcta, selectedAnswer, showFeedback),
+                    habilitada = selectedAnswer.isEmpty(),
+                    onClick = { quizViewModel.selectAnswer(opcion) }
+                )
             }
         }
 
         if (showFeedback) {
-            val correctAnswer = currentQ.options[currentQ.correctIndex]
+            Spacer(Modifier.height(20.dp))
             Feedback(
-                isCorrect = selectedAnswer == correctAnswer,
-                explanation = tfQuizViewModel.explanations[currentQuestion],
-                timeBonus = tfQuizViewModel.pointsAwarded,
-                onNext = { tfQuizViewModel.onDismissFeedback() }
+                isCorrect = selectedAnswer == correcta,
+                explanation = quizViewModel.explanations[currentQuestion],
+                timeBonus = quizViewModel.pointsAwarded,
+                onNext = { quizViewModel.onDismissFeedback() }
             )
         }
     }

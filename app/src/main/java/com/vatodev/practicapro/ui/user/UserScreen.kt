@@ -1,27 +1,49 @@
 package com.vatodev.practicapro.ui.user
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vatodev.practicapro.components.general.ChangePasswordSection
+import com.vatodev.practicapro.components.general.Etiqueta
+import com.vatodev.practicapro.components.general.Filete
 import com.vatodev.practicapro.components.general.NoteCard
+import com.vatodev.practicapro.components.general.Resumen
 import com.vatodev.practicapro.components.modals.SettingsModalContent
 import com.vatodev.practicapro.network.BackendGate
-import com.vatodev.practicapro.rooms.entitys.Note
+import com.vatodev.practicapro.ui.theme.LocalEstado
 import com.vatodev.practicapro.viewmodel.NotesViewModel
 import com.vatodev.practicapro.viewmodel.UserViewModel
 
@@ -32,106 +54,105 @@ fun UserScreen(
     notesViewModel: NotesViewModel = viewModel()
 ) {
     val context = LocalContext.current
+    var mostrarAjustes by remember { mutableStateOf(false) }
+    val estado = LocalEstado.current
 
-    // Controla la visibilidad del modal de "Settings"
-    var showSettings by remember { mutableStateOf(false) }
-
-    // Cargamos la información al iniciar la pantalla
     LaunchedEffect(Unit) {
         userViewModel.loadUserProfileFromRoom(context)
         userViewModel.loadTokenFromRoom(context)
         notesViewModel.loadNotes(context)
     }
 
-    // Observamos el perfil y las notas
-    val profile = userViewModel.userProfile.value
-    val notes = notesViewModel.note.value
+    val perfil = userViewModel.userProfile.value
+    val notas = notesViewModel.note.value
 
-    // Scaffold con la barra superior y contenido
-    Scaffold(
-        topBar = {
-            // Barra superior centrada (Material3)
-            CenterAlignedTopAppBar(
-                title = { Text("Perfil de Usuario") },
-                actions = {
-                    IconButton(onClick = { showSettings = true }) {
-                        Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = "Settings"
-                        )
-                    }
-                }
-            )
-        }
-    ) { innerPadding ->
-        // Contenido principal
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 20.dp)
+    ) {
+        Spacer(Modifier.height(20.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            // Avatar circular (ejemplo con icono)
+            Etiqueta("Perfil")
+            IconButton(onClick = { mostrarAjustes = true }) {
+                Icon(Icons.Default.Settings, "Ajustes", tint = estado.textoSuave)
+            }
+        }
+
+        Spacer(Modifier.height(18.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
                 modifier = Modifier
-                    .size(90.dp)
+                    .size(64.dp)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                    .background(estado.elevado),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Default.Person,
-                    contentDescription = "User Avatar",
-                    tint = Color.Gray,
-                    modifier = Modifier.size(50.dp)
+                    Icons.Default.Person,
+                    contentDescription = null,
+                    tint = estado.textoSuave,
+                    modifier = Modifier.size(30.dp)
                 )
             }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            // Nombre y correo
-            if (profile != null) {
+            Spacer(Modifier.size(16.dp))
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
-                    text = profile.nombre,
-                    style = MaterialTheme.typography.titleLarge
+                    text = perfil?.nombre ?: "Sin perfil",
+                    style = MaterialTheme.typography.titleLarge.copy(fontSize = 22.sp),
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = profile.email,
+                    text = perfil?.email ?: "Registro local",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = estado.textoSuave
                 )
-            } else {
-                Text("Información del usuario no disponible")
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Título de secciones (Notas)
-            Text(text = "Notas del usuario", style = MaterialTheme.typography.titleMedium)
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Lista de notas
-            if (notes.isNotEmpty()) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentPadding = PaddingValues(bottom = 16.dp)
-                ) {
-                    items(notes) { note ->
-                        NoteCard(note = note)
-                    }
-                }
-            } else {
-                Text("No hay notas")
             }
         }
+
+        Spacer(Modifier.height(26.dp))
+        Resumen(
+            listOf(
+                "Evaluaciones" to notas.size.toString(),
+                "Promedio" to (notas.map { it.score }.average()
+                    .takeIf { !it.isNaN() }?.toInt()?.toString() ?: "—"),
+                "Mejor" to (notas.maxOfOrNull { it.score }?.toString() ?: "—")
+            )
+        )
+
+        Spacer(Modifier.height(28.dp))
+        Etiqueta("Historial")
+        Spacer(Modifier.height(12.dp))
+
+        if (notas.isEmpty()) {
+            Filete()
+            Spacer(Modifier.height(16.dp))
+            Text(
+                text = "Aún no has completado ninguna evaluación.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = estado.textoSuave
+            )
+            Spacer(Modifier.height(16.dp))
+            Filete()
+        } else {
+            notas.sortedByDescending { it.dateMillis }.forEach { NoteCard(it) }
+            Filete()
+        }
+
+        Spacer(Modifier.height(28.dp))
     }
 
-    if (showSettings) {
+    if (mostrarAjustes) {
         ModalBottomSheet(
-            onDismissRequest = { showSettings = false }
+            onDismissRequest = { mostrarAjustes = false },
+            containerColor = MaterialTheme.colorScheme.surface
         ) {
-            SettingsModalContent(onClose = { showSettings = false }) {
+            SettingsModalContent(onClose = { mostrarAjustes = false }) {
                 if (BackendGate.isEnabled) {
                     ChangePasswordSection()
                 }
