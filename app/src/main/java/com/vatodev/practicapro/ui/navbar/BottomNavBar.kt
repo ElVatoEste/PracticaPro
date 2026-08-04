@@ -38,16 +38,7 @@ fun BottomNavigationBar(navController: NavController, userViewModel: UserViewMod
     val scope = rememberCoroutineScope()
     val estado = LocalEstado.current
 
-    val excludedRoutes = setOf(
-        Routes.LOGIN,
-        Routes.SPLASH,
-        Routes.REGISTER,
-        Routes.QUIZ_PROCEDIMIENTOS,
-        Routes.QUIZ_PROC_TF,
-        Routes.QUIZ_SCREEN
-    )
-
-    if (currentRoute in excludedRoutes) return
+    if (currentRoute in Routes.SIN_BARRA) return
 
     Column {
         Filete()

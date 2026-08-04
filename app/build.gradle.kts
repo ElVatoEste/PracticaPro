@@ -121,6 +121,7 @@
         implementation(libs.kotlinx.serialization.json)
 
         testImplementation(libs.junit)
+        androidTestImplementation(libs.androidx.room.testing)
         androidTestImplementation(libs.androidx.junit)
         androidTestImplementation(libs.androidx.espresso.core)
         androidTestImplementation(platform(libs.androidx.compose.bom))

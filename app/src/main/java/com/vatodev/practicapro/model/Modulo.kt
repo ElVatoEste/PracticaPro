@@ -3,6 +3,7 @@ package com.vatodev.practicapro.model
 import androidx.annotation.DrawableRes
 import com.vatodev.practicapro.R
 import com.vatodev.practicapro.navigation.Routes
+import com.vatodev.practicapro.rooms.entitys.Materia
 
 /**
  * Un módulo de estudio.
@@ -59,3 +60,13 @@ val MODULOS = listOf(
         imagen = R.drawable.ic_emergency
     )
 )
+
+/** Segunda evaluación de procedimientos, en formato verdadero/falso. */
+const val SUBJECT_PROCEDIMIENTOS_VF = 5
+
+/**
+ * Catálogo de la tabla `materia`. Deriva de [MODULOS] para que un módulo
+ * nuevo no exija recordar sembrar su materia.
+ */
+val MATERIAS: List<Materia> = MODULOS.map { Materia(it.subjectId, it.nombre.uppercase()) } +
+    Materia(SUBJECT_PROCEDIMIENTOS_VF, "PROCEDIMIENTOS2")

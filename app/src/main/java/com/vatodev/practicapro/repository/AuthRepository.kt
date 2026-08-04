@@ -63,15 +63,19 @@ object AuthRepository {
         }
     }
 
-    private fun buildLocalUser(nombre: String, email: String): User {
-        val generatedId = (System.currentTimeMillis() % Int.MAX_VALUE).toInt()
-        return User(
-            id = generatedId,
-            username = nombre,
-            email = email,
-            token = "",
-            expirationDate = Long.MAX_VALUE
-        )
-    }
+    /**
+     * Id negativo fijo, con la misma convención que las notas locales: los
+     * ids del servidor son positivos. Derivarlo de currentTimeMillis daba una
+     * clave primaria distinta en cada registro y sin significado alguno.
+     */
+    private fun buildLocalUser(nombre: String, email: String) = User(
+        id = ID_USUARIO_LOCAL,
+        username = nombre,
+        email = email,
+        token = "",
+        expirationDate = Long.MAX_VALUE
+    )
+
+    private const val ID_USUARIO_LOCAL = -1
 }
 

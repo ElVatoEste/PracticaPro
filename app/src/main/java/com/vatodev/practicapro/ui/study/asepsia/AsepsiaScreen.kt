@@ -1,7 +1,5 @@
 package com.vatodev.practicapro.ui.study.asepsia
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -11,9 +9,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.vatodev.practicapro.R
 import com.vatodev.practicapro.components.general.Filete
@@ -24,29 +20,30 @@ import com.vatodev.practicapro.components.module.PantallaModulo
 import com.vatodev.practicapro.components.module.SeccionModulo
 import com.vatodev.practicapro.model.MODULOS
 import com.vatodev.practicapro.navigation.Routes
+import com.vatodev.practicapro.repository.ContenidoRepository
+import com.vatodev.practicapro.repository.Tecnica
 import com.vatodev.practicapro.rooms.appDatabase.DatabaseProvider
 import com.vatodev.practicapro.viewmodel.helper.DialogState
 
 private val MODULO = MODULOS.first { it.subjectId == 1 }
 
-private val TECNICAS = listOf(
-    Triple("Lavado de manos clínico", R.drawable.ic_asepsia3, stepsLavadoClinico) to
-        "Elimina la flora transitoria antes y después del contacto con el paciente.",
-    Triple("Lavado de manos quirúrgico", R.drawable.ic_asepsia2, stepsLavadoQuirurgico) to
-        "Reduce al máximo la flora residente antes de un procedimiento invasivo.",
-    Triple("Uso de guantes", R.drawable.ic_asepsia4, stepsUsoGuantes) to
-        "Colocación estéril sin contaminar la superficie externa."
+/** Imagen y sinopsis de cada técnica; el título y los pasos vienen del JSON. */
+private val PRESENTACION = mapOf(
+    "stepsLavadoClinico" to (R.drawable.ic_asepsia3 to "Elimina la flora transitoria antes y después del contacto con el paciente."),
+    "stepsLavadoQuirurgico" to (R.drawable.ic_asepsia2 to "Reduce al máximo la flora residente antes de un procedimiento invasivo."),
+    "stepsUsoGuantes" to (R.drawable.ic_asepsia4 to "Colocación estéril sin contaminar la superficie externa.")
 )
 
 @Composable
 fun AsepsiaScreen(navController: NavController) {
     val context = LocalContext.current
     var intentos by remember { mutableIntStateOf(0) }
+    var tecnicas by remember { mutableStateOf(emptyList<Tecnica>()) }
     var dialogo by remember { mutableStateOf(DialogState(false, "", emptyList())) }
 
     LaunchedEffect(navController.currentBackStackEntry) {
-        val dao = DatabaseProvider.getDatabase(context).noteDao()
-        intentos = dao.countBySubject(MODULO.subjectId)
+        intentos = DatabaseProvider.getDatabase(context).noteDao().countBySubject(MODULO.subjectId)
+        tecnicas = ContenidoRepository.tecnicas(context, "asepsia")
     }
 
     PantallaModulo(
@@ -77,20 +74,18 @@ fun AsepsiaScreen(navController: NavController) {
         }
 
         SeccionModulo("Procedimientos antisépticos") {
-            TECNICAS.forEachIndexed { indice, (tecnica, descripcion) ->
-                val (titulo, imagen, pasos) = tecnica
+            tecnicas.forEachIndexed { indice, tecnica ->
+                val (imagen, sinopsis) = PRESENTACION[tecnica.clave] ?: return@forEachIndexed
                 FilaTecnica(
-                    numero = "0${indice + 1}",
-                    titulo = titulo,
-                    descripcion = descripcion,
+                    numero = "%02d".format(indice + 1),
+                    titulo = tecnica.titulo,
+                    descripcion = sinopsis,
                     imagen = imagen,
-                    onClick = { dialogo = DialogState(true, titulo, pasos) }
+                    onClick = { dialogo = DialogState(true, tecnica.titulo, tecnica.pasos) }
                 )
             }
             Filete()
         }
-
-        Spacer(Modifier.height(0.dp))
     }
 
     if (dialogo.showDialog) {

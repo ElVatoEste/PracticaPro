@@ -46,11 +46,8 @@ class MainActivity : ComponentActivity() {
 
         NetworkObserver.startObserving(this)
 
-        // Cargar materias solo una vez
-        DatabaseProvider.loadInitialMaterias(this)
-
-        // 🔄 Cargar el token desde Room y actualizar el ApiClient
         lifecycleScope.launch {
+            DatabaseProvider.loadInitialMaterias(applicationContext)
             userViewModel.loadTokenFromRoom(applicationContext)
         }
 
@@ -67,7 +64,7 @@ class MainActivity : ComponentActivity() {
                     snackbarHost = { SnackbarHost(snackbarHostState) },
                     bottomBar = {
                         val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-                        if (currentRoute != Routes.SPLASH && currentRoute != Routes.REGISTER) {
+                        if (currentRoute !in Routes.SIN_BARRA) {
                             BottomNavigationBar(navController, userViewModel)
                         }
                     }

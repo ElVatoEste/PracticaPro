@@ -4,10 +4,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
@@ -19,28 +19,22 @@ import com.vatodev.practicapro.components.module.FilaTecnica
 import com.vatodev.practicapro.components.module.PantallaModulo
 import com.vatodev.practicapro.components.module.SeccionModulo
 import com.vatodev.practicapro.model.MODULOS
+import com.vatodev.practicapro.model.SUBJECT_PROCEDIMIENTOS_VF
 import com.vatodev.practicapro.navigation.Routes
+import com.vatodev.practicapro.repository.ContenidoRepository
+import com.vatodev.practicapro.repository.Tecnica
 import com.vatodev.practicapro.rooms.appDatabase.DatabaseProvider
 import com.vatodev.practicapro.viewmodel.helper.DialogState
 
 private val MODULO = MODULOS.first { it.subjectId == 2 }
 
-/** Segunda evaluación del módulo, en formato verdadero/falso. */
-private const val SUBJECT_VERDADERO_FALSO = 5
-
-private val SIGNOS = listOf(
-    Signo("Talla", "Medición de la estatura con el paciente descalzo y erguido.", R.drawable.ic_procedures2, stepsTalla),
-    Signo("Peso", "Medición del peso corporal en condiciones comparables.", R.drawable.ic_procedures3, stepsPeso),
-    Signo("Frecuencia cardíaca", "Palpación del pulso durante un minuto completo.", R.drawable.ic_procedures4, stepsFrecuenciaCardiaca),
-    Signo("Frecuencia respiratoria", "Conteo de ciclos sin que el paciente lo advierta.", R.drawable.ic_procedures5, stepsFrecuenciaRespiratoria),
-    Signo("Presión arterial", "Registro con manguito del tamaño adecuado.", R.drawable.ic_procedures6, stepsPresionArterial)
-)
-
-private data class Signo(
-    val titulo: String,
-    val descripcion: String,
-    val imagen: Int,
-    val pasos: List<String>
+/** Imagen y sinopsis de cada técnica; el título y los pasos vienen del JSON. */
+private val PRESENTACION = mapOf(
+    "stepsTalla" to (R.drawable.ic_procedures2 to "Medición de la estatura con el paciente descalzo y erguido."),
+    "stepsPeso" to (R.drawable.ic_procedures3 to "Medición del peso corporal en condiciones comparables."),
+    "stepsFrecuenciaCardiaca" to (R.drawable.ic_procedures4 to "Palpación del pulso durante un minuto completo."),
+    "stepsFrecuenciaRespiratoria" to (R.drawable.ic_procedures5 to "Conteo de ciclos sin que el paciente lo advierta."),
+    "stepsPresionArterial" to (R.drawable.ic_procedures6 to "Registro con manguito del tamaño adecuado.")
 )
 
 @Composable
@@ -48,12 +42,14 @@ fun ProcedScreen(navController: NavController?) {
     val context = LocalContext.current
     var intentos by remember { mutableIntStateOf(0) }
     var intentosVf by remember { mutableIntStateOf(0) }
+    var tecnicas by remember { mutableStateOf(emptyList<Tecnica>()) }
     var dialogo by remember { mutableStateOf(DialogState(false, "", emptyList())) }
 
     LaunchedEffect(Unit) {
         val dao = DatabaseProvider.getDatabase(context).noteDao()
         intentos = dao.countBySubject(MODULO.subjectId)
-        intentosVf = dao.countBySubject(SUBJECT_VERDADERO_FALSO)
+        intentosVf = dao.countBySubject(SUBJECT_PROCEDIMIENTOS_VF)
+        tecnicas = ContenidoRepository.tecnicas(context, "procedimientos")
     }
 
     PantallaModulo(
@@ -83,13 +79,14 @@ fun ProcedScreen(navController: NavController?) {
         }
 
         SeccionModulo("Toma de signos vitales") {
-            SIGNOS.forEachIndexed { indice, signo ->
+            tecnicas.forEachIndexed { indice, tecnica ->
+                val (imagen, sinopsis) = PRESENTACION[tecnica.clave] ?: return@forEachIndexed
                 FilaTecnica(
-                    numero = "0${indice + 1}",
-                    titulo = signo.titulo,
-                    descripcion = signo.descripcion,
-                    imagen = signo.imagen,
-                    onClick = { dialogo = DialogState(true, signo.titulo, signo.pasos) }
+                    numero = "%02d".format(indice + 1),
+                    titulo = tecnica.titulo,
+                    descripcion = sinopsis,
+                    imagen = imagen,
+                    onClick = { dialogo = DialogState(true, tecnica.titulo, tecnica.pasos) }
                 )
             }
             Filete()

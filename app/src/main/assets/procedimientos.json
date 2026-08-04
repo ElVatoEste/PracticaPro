@@ -1,0 +1,327 @@
+{
+  "version": 1,
+  "modulos": {
+    "asepsia": [
+      {
+        "clave": "stepsLavadoClinico",
+        "titulo": "Lavado de manos clínico",
+        "pasos": [
+          "Retire las joyas y suba las mangas arriba del codo.",
+          "Moje sus manos y antebrazos completamente.",
+          "Enjabonar manos, muñecas y antebrazos.",
+          "Frotar las manos, muñecas y antebrazos friccionando especialmente en los espacios interdigitales y las uñas.",
+          "Limpie las uñas y frote las yemas de los dedos con la palma de la mano contraria.",
+          "Frote vigorosamente durante 40 a 60 segundos.",
+          "Enjuague con abundante agua.",
+          "Seque las manos y antebrazo con toalla desechable.",
+          "Cierre la llave utilizando la toalla de papel con la que se secó (en caso de no contar con la grifería recomendada).",
+          "Deseche la toalla en el recipiente de desecho común."
+        ]
+      },
+      {
+        "clave": "stepsLavadoQuirurgico",
+        "titulo": "Lavado de manos quirúrgico",
+        "pasos": [
+          "Quítese las joyas de las manos y muñecas y moje completamente sus manos y antebrazos.",
+          "Utilice de tres a cinco mililitros de jabón antiséptico para cada mano o use dos aplicaciones del dispensador de jabón.",
+          "Proceda con un movimiento circular a frotarse iniciando en la punta de los dedos de una mano y lave haciendo espuma entre los dedos.",
+          "Enjuague cada brazo separadamente empezando con la punta de los dedos.",
+          "Repita el proceso en la otra mano y el otro antebrazo.",
+          "Enjuague las manos y los brazos pasándolas por el agua en una sola dirección.",
+          "Frotar con una solución alcohólica como mínimo durante 1,5 minutos.",
+          "Diríjase a la sala de operaciones, sosteniendo las manos por encima de los codos."
+        ]
+      },
+      {
+        "clave": "stepsUsoGuantes",
+        "titulo": "Uso de guantes",
+        "pasos": [
+          "Realizar higiene de manos.",
+          "Abrir el envoltorio externo sobre un campo estéril, con técnica aséptica.",
+          "Abrir envoltura interna, manipulando sólo los extremos.",
+          "Observar que las palmas de las manos de los guantes miren hacia arriba con los pulgares hacia fuera y los puños doblados.",
+          "Enguantar mano derecha.",
+          "Tomar la parte del puño doblado hacia fuera del guante derecho con los dedos de la mano izquierda.",
+          "Levantar el guante de la mesa, introducir la mano derecha con la palma hacia arriba orientada hacia la palma del guante.",
+          "Dejar el puño del guante dado vuelta hasta colocar el otro guante.",
+          "Enguantar la mano izquierda.",
+          "Tomar el guante con la mano enguantada por debajo del puño doblado hacia fuera.",
+          "Mantener la palma hacia arriba, deslizar la mano izquierda dentro del guante.",
+          "Dar vuelta el puño de ambos guantes sin tocar la piel."
+        ]
+      }
+    ],
+    "medicamentos": [
+      {
+        "clave": "stepsDermica",
+        "titulo": "Inyección intradérmica",
+        "pasos": [
+          "Siga los principios de administración de medicamentos.",
+          "Reúna los materiales, lávese las manos y póngase guantes.",
+          "Para una inyección ventral del antebrazo, siente al paciente con el antebrazo ventral expuesto y acostado sobre una superficie dura. Prepare el sitio (a 10 cm del pliegue antecubital) con una gasa o mota de algodón con alcohol comenzando en el centro de la zona y continúe moviéndose hacia afuera con un movimiento circular. Deje secar.",
+          "Sostenga el antebrazo del paciente, estirando con suavidad la piel con el pulgar. Inserte la aguja, biselada, en un ángulo de 15° en las capas superiores de la piel.",
+          "Inyecte lentamente. Verá una pequeña roncha o ampolla que se forma en la inyección, lo que indica una colocación intradérmica adecuada. Nota: Si no aparece una roncha o ampolla en la inyección de un antígeno, retire la aguja e inténtelo de nuevo en otro lugar (al menos a 5 cm de la primera inyección).",
+          "6 Retire la aguja en el mismo ángulo de 15°.",
+          "La roncha o ampolla debe desaparecer de forma gradual. No frote el sitio.",
+          "Elimine los materiales de forma adecuada.",
+          "Documente el procedimiento."
+        ]
+      },
+      {
+        "clave": "stepsSubcutaneas",
+        "titulo": "Inyección subcutánea",
+        "pasos": [
+          "Siga los principios de administración de medicamentos.",
+          "Reúna los materiales, lávese las manos y póngase guantes.",
+          "Prepare el sitio con una gasa o mota de algodón con alcohol comenzando en el centro de la zona y continúe moviéndose hacia afuera con un movimiento circular. Deje secar.",
+          "Con el pulgar y el índice de su mano no dominante, junte la piel, separando con suavidad el tejido subcutáneo de la musculatura.",
+          "Inserte la aguja, biselada, en un ángulo de 45° en la capa subcutánea",
+          "Inyecte el fármaco lentamente.",
+          "Retire la aguja y aplique presión con una gasa cuadrada o mota de algodón seca.",
+          "Elimine de forma adecuada los materiales.",
+          "Documente el procedimiento."
+        ]
+      },
+      {
+        "clave": "stepsMuscular",
+        "titulo": "Inyección intramuscular",
+        "pasos": [
+          "Siga los principios de administración de medicamentos.",
+          "Reúna los materiales, lávese las manos y póngase guantes.",
+          "Prepare el sitio con una gasa con alcohol comenzando en el centro de la zona y continúe moviéndose hacia afuera con un movimiento circular. Deje secar.",
+          "Asegúrese de que el paciente esté relajado, porque un músculo contraído aumenta el dolor. Con el pulgar y el índice de su mano no dominante, estire con suavidad la piel, presionando ligeramente hacia abajo, lo que reduce el tejido subcutáneo en la zona.",
+          "Inserte la aguja con un empuje rápido, en un ángulo de 90° en el músculo",
+          "Retire la aguja y aplique presión con una gasa cuadrada o algodón.",
+          "Elimine los materiales de forma adecuada.",
+          "Documente el procedimiento."
+        ]
+      },
+      {
+        "clave": "stepsVenosa",
+        "titulo": "Vía intravenosa",
+        "pasos": [
+          "Póngase guantes y protección para los ojos.",
+          "Aplique el torniquete por encima del codo en la extremidad superior para garantizar un llenado adecuado de la vena. Haga esto en ambos brazos con el fin de identificar la vena más adecuada para la colocación del catéter i.v. Por lo general, se elige la vena más grande, más recta y periférica que puede acomodar el tamaño del catéter que se va a insertar.",
+          "Suelte el torniquete, verifique dos veces y asegure todos los materiales necesarios, encienda la bomba de infusión, lave el tubo con fluidos y asegúrese de que el tubo no tenga burbujas de aire atrapadas.",
+          "Aplique el torniquete de manera ajustada y bien proximal al sitio elegido (utilice menos presión para los muy mayores y jóvenes porque la piel es más delgada y fácil de dañar)",
+          "Permita que la vena se distienda para ayudar a la colocación de la bránula",
+          "Limpie el sitio con un limpiador aséptico aprobado. La zona se debe limpiar con movimientos de ida y vuelta durante un mínimo de 30 s y luego se deja secar.",
+          "Con la mano no dominante, sostenga con firmeza la mano del paciente y utilice el pulgar a fin de retraer con suavidad la piel distal al sitio de inserción hacia los dedos. Esto asegurará la vena para reducir la posibilidad de que esta se mueva y mantener la piel tensa.",
+          "Perfore la vena con entrada directa o indirecta. Advierta al paciente del inminente «pinchazo».",
+          "Entrada directa (un paso, utilizado para venas más grandes): sostenga el conjunto sobre la aguja a 15 a 20° sobre el sitio y entre en la vena directamente.  Entrada indirecta (dos pasos, utilizados para venas más pequeñas): sostenga el conjunto de 15 a 20° por encima del sitio y 20° lateral a la vena, inserte la bránula en la piel y luego avance hacia la vena. Cuando se perfora la vena, debe aparecer sangre en la cámara de destello. Una vez que se ve el destello, baje el conjunto de la aguja hasta que se encuentre casi paralelo a la piel y pase el catéter de manera apropiada dependiendo del tipo de dispositivo, ya sea el estándar sobre la aguja o el de autoprotección.",
+          "Aplique una presión suave sobre la vena justo proximal al lugar de inserción para asegurar el catéter con la mano no dominante y suelte el torniquete.",
+          "Para sistemas no cerrados, asegure el conector al catéter e inicie la administración de fluidos por vía intravenosa. Para sistemas cerrados, lave con solución salina como fluido o lavado dirigido. Inspeccione el sitio en busca de permeabilidad. El dolor o la tumefacción importante indican que el catéter no se colocó con éxito y se debe retirar.",
+          "Si el fluido circula con facilidad, asegure el catéter con Tegaderm u otro apósito no oclusivo para que se pueda observar el sitio en busca de signos de permeabilidad e infección. Aplíquelo de forma segura. Pegue con cinta adhesiva el tubo al brazo y minimice el contacto del adhesivo con la piel."
+        ]
+      }
+    ],
+    "procedimientos": [
+      {
+        "clave": "stepsTalla",
+        "titulo": "Talla",
+        "pasos": [
+          "Informe al paciente las actividades que se van a realizar para que esté enterado y sea más fácil medirlo.",
+          "Indique al sujeto que se quite el calzado, gorras, adornos y se suelte el cabello. Si es necesario ayúdele.",
+          "Coloque a la persona debajo del tallímetro de espalda a él con la mirada al frente, sobre una línea imaginaria vertical que divida su cuerpo en dos hemisferios.",
+          "Verifique que los pies estén en posición correcta.",
+          "Asegúrese que la cabeza, espalda, pantorrillas, talones y glúteos estén en contacto con la pared y sus brazos caigan naturalmente a lo largo del cuerpo.",
+          "Acomode la cabeza en posición recta coloque la palma de la mano izquierda abierta sobre el mentón del sujeto, y suavemente cierre sus dedos.",
+          "Trace una línea imaginaria (Plano de Frankfort) que va del orificio del oído a la base de la órbita del ojo. Esta línea debe ser paralela a la base del tallímetro y formar un ángulo recto con respecto la pared.",
+          "Si la marca del tallímetro se encuentra entre un centímetro y otro, anote el valor que esté más próximo; si está a la mitad, se tomará el del centímetro anterior.",
+          "Baje el tallímetro y tome cuidadosamente la lectura en centímetros. Regístrelo."
+        ]
+      },
+      {
+        "clave": "stepsPeso",
+        "titulo": "Peso",
+        "pasos": [
+          "La medición se realizará con la menor ropa posible y sin zapatos.",
+          "Se pide al sujeto que suba a la báscula colocando los pies paralelos en el centro, de frente al examinador.",
+          "Debe estar erguido, con la vista hacia el frente, sin moverse y con los brazos que caigan naturalmente a los lados.",
+          "Lectura:\\n",
+          "A. Si se emplea báscula de piso, se toma la lectura cuando el indicador de la báscula se encuentra completamente fijo.\\n",
+          "B. Si se usa báscula de plataforma, cuando la aguja central se encuentre en medio de los 2 márgenes y sin moverse, proceda a tomar la lectura.\\n",
+          "C. En caso de emplear báscula electrónica, se tomará la lectura del número que se encuentre parpadeando."
+        ]
+      },
+      {
+        "clave": "stepsFrecuenciaCardiaca",
+        "titulo": "Frecuencia cardíaca",
+        "pasos": [
+          "Informar al paciente y/o al cuidador principal del procedimiento a realizar y solicitarle su colaboración,",
+          "a ser posible, recalcando su utilidad, usando un lenguaje comprensible y resolviendo sus dudas y temores.",
+          "En el caso de pacientes pediátricos explicarles el procedimiento a los padres.",
+          "Realizar higiene de manos.",
+          "Ayudar al enfermo a adoptar una posición cómoda que permita el acceso a la zona elegida.",
+          "Elegir el lugar de la medición: muñeca, antebrazo, lado lateral del cuello.",
+          "Si se va a medir en la arteria radial, colocar la extremidad semiflexionada con la palma de la mano hacia arriba.",
+          "Apoyar la yema de los dedos índice, corazón y anular de la mano dominante en el punto seleccionado y localizar el latido arterial.",
+          "El uso del pulgar está contraindicado porque tiene pulso propio que puede confundirse con el del paciente.",
+          "Contar durante 30 segundos, multiplicando el resultado por 2. Si el pulso es irregular se cuenta durante un minuto completo y/o tomar pulso apical.",
+          "Valorar el ritmo (regular o irregular) y amplitud (fuerte o débil).",
+          "Registrar el valor."
+        ]
+      },
+      {
+        "clave": "stepsFrecuenciaRespiratoria",
+        "titulo": "Frecuencia respiratoria",
+        "pasos": [
+          "Comprobar la identidad del paciente. Respetar la intimidad del enfermo y guardar confidencialidad de sus datos.",
+          "No es conveniente informarlo de que se le va a medir la frecuencia respiratoria, ya que podría cambiar involuntariamente el ritmo;",
+          "es conveniente medirla al mismo tiempo que otros signos vitales (pulso).",
+          "Realizar higiene de manos.",
+          "Colocar al paciente en una posición adecuada, sentado o acostado en posición de semi-fowler, que permita la contabilización de la frecuencia respiratoria.",
+          "El mal alineamiento corporal impide la correcta expansión torácica y disminuye la ventilación, e influye, por tanto, en la frecuencia y en el volumen respiratorio.",
+          "Medir la frecuencia respiratoria:\\n",
+          "A. Observar los movimientos respiratorios, contar las elevaciones (inspiraciones) del tórax y/o abdomen durante 1 minuto.\\n",
+          "B. Colocar una mano en el tórax del paciente de manera que se puedan percibir los movimientos respiratorios. Contar las inspiraciones durante 1 minuto.\\n",
+          "C. Auscultación: colocar el estetoscopio en el tórax y contar el número de inspiraciones durante 1 minuto.\\n",
+          "D. Niños pequeños: cuantificar los movimientos de ascenso y descenso del abdomen (respiración diafragmática).",
+          "Observar el ritmo (regular o irregular), profundidad y volumen (superficial o profundo) y características de la respiración,",
+          "también la coloración de piel y uñas y uso de músculos accesorios.",
+          "Realizar higiene de manos, según procedimiento.",
+          "Registre el valor."
+        ]
+      },
+      {
+        "clave": "stepsPresionArterial",
+        "titulo": "Presión arterial",
+        "pasos": [
+          "Compruebe que el nivel de mercurio del esfigmomanómetro es 0 o, en caso de un dispositivo aneroide o híbrido, que la aguja se encuentra dentro de la ventana de calibración.",
+          "Palpe la arteria humeral y coloque el manguito de forma que la línea media de la bomba se encuentre encima de la pulsación arterial. El manguito debe estar aproximadamente a nivel horizontal al corazón.",
+          "Coloque el manguito alrededor del brazo desnudo del paciente y asegúrelo firmemente. El margen inferior del manguito debería estar a unos 2 cm por encima del pliegue antecubital, lugar donde se coloca la campana del estetoscopio.",
+          "Coloque el manómetro a nivel de los ojos para asegurar una lectura precisa. Asegúrese de que los tubos conectados al manguito no estén obstruidos.",
+          "Infle el manguito rápidamente hasta 70 mmHg, luego aumente en incrementos de 10 mmHg mientras palpa el pulso radial. Observe el nivel de presión donde desaparece el pulso.",
+          "Coloque los auriculares del estetoscopio en los oídos con una ligera inclinación hacia adelante para un ajuste correcto.",
+          "Posicione la campana del estetoscopio ligeramente por encima de la arteria humeral, justo medial al pliegue antecubital.",
+          "Infle el manguito con rapidez y constancia hasta 20-30 mmHg por encima del nivel donde el pulso desapareció. Luego desinfle lentamente (a 2 mmHg por segundo) mientras escucha los sonidos de Korotkov.",
+          "Información para retroalimentación:\\n",
+          "- Fase I: La aparición de sonidos claros repetitivos, como de golpeteo, que corresponde con la aparición del pulso palpable.\\n",
+          "- Fase II: Sonidos más suaves y prolongados.\\n",
+          "- Fase III: El sonido se hace más intenso y abrupto.\\n",
+          "- Fase IV: Sonidos amortiguados y suaves.\\n",
+          "- Fase V: Los sonidos desaparecen por completo y se registra como el último sonido audible.",
+          "Registre la presión sistólica y diastólica inmediatamente, redondeando hacia arriba al valor más cercano a 2 mmHg. También registre el brazo medido, la posición del paciente, y el tamaño del manguito utilizado."
+        ]
+      }
+    ],
+    "urgencias": [
+      {
+        "clave": "stepsGlucosa",
+        "titulo": "Glucosa capilar",
+        "pasos": [
+          "Comprobar la identidad del paciente. Respetar la intimidad del enfermo y guardar confidencialidad de sus datos.",
+          "Informar al paciente y/o el cuidador principal del procedimiento que se va a realizar y solicitarle su colaboración, a ser posible, recalcar su utilidad, usar un lenguaje comprensible y resolver sus dudas y temores.",
+          "Comprobar que las condiciones del paciente se corresponden con el tipo de determinación indicada: basal, preprandial o posprandial.",
+          "Colocar al paciente confortablemente.",
+          "Verificar la limpieza y el funcionamiento correcto del glucómetro, la fecha de caducidad de las tiras reactivas y que estas se correspondan con el modelo del glucómetro a utilizar.",
+          "Higiene de manos.",
+          "Colocar los guantes.",
+          "Seleccionar la zona de punción (evitar las zonas rojizas, deformadas o con cicatrices) zona lateral de la yema de los dedos o lóbulo de la oreja. En lactantes y en neonatos la zona de elección es el talón calentado previamente.",
+          "Asegurarse de que la zona de punción esté limpia y seca.",
+          "Cargar el sistema automático de punción.",
+          "Colocar la tira reactiva en el medidor.",
+          "Favorecer el flujo sanguíneo en la zona seleccionada, dando un ligero masaje desde la base hasta la punta del dedo.",
+          "Puncionar con una trayectoria recta la zona elegida. El dispositivo de punción y el lateral del dedo formarán un ángulo de 90º.",
+          "Desechar la primera gota y cuando tenga una gota suficiente, colocarla sobre el área reactiva de la tira (la absorción es por capilaridad).",
+          "Presionar con una gasa o mota de algodón la zona de punción.",
+          "Esperar el tiempo fijado por cada medidor para obtener el resultado.",
+          "Retirar la tira reactiva y apagar el medidor si es preciso.",
+          "Desechar el material y limpiar el glucómetro siguiendo las recomendaciones del fabricante.",
+          "Retirar y desechar los guantes.",
+          "Higiene de manos.",
+          "Registrar el resultado"
+        ]
+      },
+      {
+        "clave": "stepsFoleyMas",
+        "titulo": "Sonda Foley masculina",
+        "pasos": [
+          "Obtenga una sonda Robinson o Foley adecuada para el procedimiento o fin asegurándose de que se encuentra estéril (el envoltorio debe encontrarse intacto).",
+          "Siga técnicas asépticas y las precauciones estándar de lavado de manos y póngase unos guantes estériles.",
+          "Abra el kit de manera estéril.",
+          "Prepare al paciente tapándole con paños estériles (se encuentran en el kit o maleta de procedimientos) y exponiendo el área genital, asegurándose de que se mantiene la privacidad y la comodidad del paciente.",
+          "Abra la sonda, si no se encuentra en el kit, y colóquela sobre un paño estéril siguiendo técnica estéril.",
+          "Incluso aunque exista un paquete de lubricante estéril en el kit, es mejor obtener una jeringa estéril de 15 a 20 ml y colocarla sobre el paño estéril.",
+          "Una vez que el operador se ha puesto los guantes, se necesita un ayudante para que aplique lubricante en la jeringa. El lubricante hidrosoluble puede ser sustituido por gel anestésico estéril (gel de lidocaína, no pomada).",
+          "Abra la solución estéril y empape las torundas de algodón con ella.",
+          "Informe al paciente de que le va a sujetar el pene y de que va a limpiarlo con la solución estéril. Aplíquela sobre la cabeza del pene asegurándose de limpiar el orificio meatal en primer lugar y extiéndala hacia el glande con las torundas de algodón empapadas en solución estéril (utilice la mano no dominante para sostener el pene). Utilice todas las torundas de algodón.",
+          "Si el paciente no está circuncidado, hay que retirar el prepucio antes de comenzar la limpieza y el proceso de inserción del catéter.",
+          "Una vez limpio el pene, no lo suelte; colóquelo con un ángulo de 90° respecto al abdomen e instile lubricante o agente anestésico en la uretra. Suavemente ocluya la uretra de manera que el lubricante o el agente anestésico no vuelva a salirse de esta. Si se está utilizando gel anestésico, espere durante aproximadamente 1 min antes de proceder, de forma que el gel anestésico tenga tiempo de hacer efecto.",
+          "Coloque el recipiente para la orina cerca de las piernas del paciente o entre las piernas del paciente según sea lo adecuado.",
+          "Sujete la sonda con su mano dominante aproximadamente a tres cuartos de distancia hacia la punta del catéter. Informe al paciente de que va a insertar la sonda. Suavemente comience a introducir la sonda a través del meato uretral y continúe la introducción sin detenerse. Cuando alcance el esfínter, sentirá una pequeña resistencia. Pida al paciente que realice una inspiración profunda la cual puede ayudar a relajarle en cierto modo, pero continúe insertando el catéter, aplicando una presión suave si es necesario.",
+          "Una vez atravesado el esfínter, continúe avanzando el catéter hasta casi el mango de este. Debe empezar a fluir la orina, aunque puede tardar algún tiempo para que el lubricante, el cual puede haberse introducido en el catéter una vez se ha pasado este a la vejiga, se «funda». Coloque el extremo del catéter en el recipiente para orina y vacíe la vejiga.",
+          "Obtenga una muestra en este momento, si es necesario. Una vez vaciada la vejiga, retire la sonda con un movimiento continuo, asegurándose de pinzar el extremo distal de forma que la columna de orina que queda en el catéter no se vierta sobre el paciente. Asegúrese de medir la cantidad de orina obtenida y regístrela.",
+          "Si se trata de la colocación de una sonda Foley, una vez el catéter se encuentre en la vejiga y haya comenzado a fluir la orina, coja la jeringa prellenada (con agua destilada) e infle el globo de la sonda Foley. Asegúrese de que la sonda Foley está insertada casi hasta el manubrio.",
+          "Una vez inflado el globo, saque la sonda Foley suavemente hasta que se detenga. La sonda Foley se encuentra ahora en la posición adecuada.",
+          "Conecte la bolsa de drenaje si todavía no está en su posición.",
+          "Fije la sonda Foley al abdomen. \\n",
+          "PRECAUCIÓN: La fijación de la sonda Foley es un paso importante. El pene debe estar apuntando hacia el ombligo y el catéter cubierto con cinta inmediatamente por debajo del manubrio."
+        ]
+      },
+      {
+        "clave": "stepsFoleyFem",
+        "titulo": "Sonda Foley femenina",
+        "pasos": [
+          "Obtenga una sonda Foley adecuada para el procedimiento o fin asegurándose de que se encuentra estéril (el envoltorio debe encontrarse intacto).",
+          "Consiga el sistema de cateterización o los suministros adecuados.",
+          "Siga técnicas asépticas y las precauciones estándar de lavado de manos y póngase unos guantes estériles.",
+          "Abra el kit de manera estéril.",
+          "Prepare a la paciente tapándola con paños estériles (se encuentran en el kit o maleta estéril) y exponiendo el área genital, asegurándose de que se mantienen la privacidad y la comodidad de la paciente.",
+          "Abra la sonda, si no se encuentra en el kit, y colóquela sobre un paño estéril siguiendo técnica estéril. En lugar de introducir lubricante en la uretra femenina, lubrique bien el catéter, aproximadamente en un tercio de la distancia desde la punta del catéter hacia arriba.",
+          "Abra la solución estéril y empape las torundas de algodón con ella.",
+          "Informe a la paciente de que le va a limpiar la apertura uretral con la solución estéril una vez separados los labios mayores y los labios menores. Con la mano no dominante, abra los labios de la paciente. Limpie la apertura uretral con las torundas de algodón siguiendo una dirección de anterior a posterior. Si la apertura uretral se encuentra en o dentro de la apertura vaginal, también se debe limpiar la apertura vaginal.",
+          "Coloque el recipiente para la orina entre las piernas de la paciente.",
+          "Sostenga el catéter con la mano dominante asegurándose de que se encuentra bien lubricado y suavemente inserte la punta del catéter en la apertura uretral hasta que comience a fluir orina o aproximadamente se haya insertado un tercio del catéter en la vejiga. Una vez vaciada la vejiga (y obtenidas las muestras), retire el catéter siguiendo un movimiento continuo, asegurándose de pinzar el extremo distal del catéter de forma que la columna de orina que quede en su interior no se vierta sobre la paciente.",
+          "Si se trata de la colocación de una sonda Foley, una vez el catéter se encuentre en la vejiga y haya comenzado a fluir la orina, coja la jeringa prellenada (con agua destilada) e infle el globo de la sonda Foley.",
+          "Asegúrese de que la sonda Foley está introducida al menos en un tercio de su longitud en la vejiga. Una vez inflado el globo, saque la sonda Foley suavemente hasta que se detenga. La sonda está ahora en la posición adecuada.",
+          "Conecte la bolsa de drenaje si aún no lo había hecho. \\n",
+          "Precaución: La fijación de la sonda Foley es un paso importante. Fije la sonda Foley a la parte interna del muslo. Deje cierta laxitud de forma que no quede tensa y tire contra el cuello vesical. Fíjela con cinta inmediatamente por debajo del manubrio.\\n"
+        ]
+      },
+      {
+        "clave": "stepsSonda",
+        "titulo": "Sonda nasogástrica",
+        "pasos": [
+          "Asegúrese de que el paciente esté sentado en un ángulo de 45° o más.",
+          "Asegúrese de que todos los materiales y el personal necesarios estén disponibles antes de comenzar el procedimiento.",
+          "Lávese las manos y utilice el equipo de protección.",
+          "Coloque una sábana protectora sobre el pecho y el abdomen del paciente.",
+          "Compruebe la permeabilidad nasal y examine cada conducto nasal. Elija el orificio nasal más permeable y apropiado para la colocación de la sonda.",
+          "Utilizando la sonda que se va a insertar, mida desde la punta de la nariz hasta el lóbulo de la oreja y desde el lóbulo de la oreja hasta el xifoides para determinar la longitud de la introducción.",
+          "Cuente las marcas en la sonda y señale la longitud de introducción medida.",
+          "Lubrique los primeros 5 a 7,5 cm de la sonda con lubricante en gel de lidocaína.",
+          "Antes de introducir la sonda, asegúrese de que la abertura biselada o el lado de la sonda esté colocado hacia el tabique nasal para evitar traumatismos en el cornete.",
+          "Haga que el paciente flexione el cuello hacia adelante, llevando la barbilla hacia el pecho.",
+          "De forma lenta y con suavidad, comience a introducir la sonda en la fosa nasal hacia atrás en un ángulo de 90° con respecto al eje largo de la cabeza.",
+          "Haga que el paciente comience a tomar pequeños sorbos de agua a través de una pajita y trague mientras avanza con suavidad la sonda.",
+          "Si se encuentra resistencia, retire la sonda ligeramente e intente colocarla de nuevo. Si la resistencia persiste, pruebe con la otra fosa nasal.",
+          "Si la sonda avanza sin resistencia, continúe haciendo que el paciente trague mientras inserta con suavidad la sonda hasta alcanzar la marca medida.",
+          "Haga que el paciente comience a levantar con lentitud el mentón del pecho a medida que pasa la sonda, ya que esto ayuda a facilitar su paso.",
+          "Si el paciente comienza a tener arcadas, haga una pausa y deje que respire profundamente hasta que las arcadas se detengan, luego continúe.",
+          "Si la sonda se curva hacia arriba en la faringe posterior y causa náuseas, retire con suavidad la sonda hasta que se desenrosque y vuelva a avanzar mientras el paciente traga.",
+          "Asegúrese de que el paciente tome sorbos de agua y trague mientras avanza con suavidad la sonda de nuevo.",
+          "Compruebe la posición de la sonda.",
+          "Asegúrese de que la sonda está introducida la distancia medida o calculada.",
+          "Inyecte alrededor de 10 ml de aire a través de la sonda mientras ausculta sobre el cuadrante superior izquierdo del abdomen para escuchar la 'corriente de aire'.",
+          "Coloque un esparadrapo en el lugar de la sonda para garantizar el mantenimiento de la colocación correcta.",
+          "Utilice tintura de benjuí para facilitar la adherencia de la cinta o el apósito, o emplee un soporte de sonda NG prefabricado.",
+          "Coloque un esparadrapo adicional para evitar torsión o presión sobre las narinas mientras la sonda permanece en su lugar."
+        ]
+      },
+      {
+        "clave": "stepsNaso",
+        "titulo": "Retiro de nasogástrica",
+        "pasos": [
+          "Una vez que se ha determinado que se debe retirar la sonda NG, prepare al paciente respondiendo sus dudas y explicando el proceso.",
+          "Si la sonda está conectada a la aspiración, apague la aspiración y separe la sonda NG de la sonda de aspirado. Introduzca la tapa en el extremo, si está disponible.",
+          "Coloque una toalla o almohadilla sobre el pecho del paciente y póngalo en posición semifowler. Lave la sonda con 25 a 30 ml de solución salina normal para eliminar el contenido gástrico.",
+          "Retire el esparadrapo de la nariz utilizado para anclar la sonda NG, así como cualquier grapa o aguja de fijación en la bata del paciente.",
+          "Pince, apriete o tape la sonda NG.",
+          "Indique al paciente que respire profundamente y, con movimientos continuos, retire la sonda con suavidad. Una vez retirada, deséchela correctamente en un contenedor adecuado.",
+          "Ofrezca al paciente la oportunidad de realizar cuidados bucales o limpiarse, para mayor comodidad."
+        ]
+      }
+    ]
+  }
+}

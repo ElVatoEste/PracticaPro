@@ -41,6 +41,15 @@ object Routes {
     const val IMC = "imc"
     const val PAM = "pam"
     const val USER = "user"
+
+    /**
+     * Rutas que ocupan toda la pantalla: sin barra inferior. Antes esta lista
+     * estaba duplicada en MainActivity y en BottomNavBar.
+     */
+    val SIN_BARRA = setOf(
+        SPLASH, LOGIN, REGISTER,
+        QUIZ_SCREEN, QUIZ_PROCEDIMIENTOS, QUIZ_PROC_TF
+    )
 }
 
 @Composable
