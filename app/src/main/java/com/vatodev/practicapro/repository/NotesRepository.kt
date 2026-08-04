@@ -98,11 +98,14 @@ object NotesRepository {
         val noteDao = database.noteDao()
         val materia = database.materiaDao().getMateriaById(request.idMateria)
 
+        val now = System.currentTimeMillis()
+
         return Note(
             id = minOf(noteDao.minId() ?: 0, 0) - 1,
             score = request.puntaje,
             attempt = noteDao.countBySubject(request.idMateria) + 1,
-            date = System.currentTimeMillis().toString(),
+            date = now.toString(),
+            dateMillis = now,
             subjectId = request.idMateria,
             subjectName = materia?.name ?: "Desconocido"
         )
