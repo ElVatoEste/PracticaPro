@@ -8,12 +8,12 @@
 
     android {
         namespace = "com.vatodev.practicapro"
-        compileSdk = 35
+        compileSdk = 36
 
         defaultConfig {
             applicationId = "com.vatodev.practicapro"
             minSdk = 30
-            targetSdk = 35
+            targetSdk = 36
             versionCode = 10
             versionName = "2.1.0"
             buildConfigField("String", "DEVELOPER_NAME", "\"Vato_dev\"")
