@@ -35,8 +35,8 @@
             applicationId = "com.vatodev.practicapro"
             minSdk = 30
             targetSdk = 36
-            versionCode = 10
-            versionName = "2.1.0"
+            versionCode = 11
+            versionName = "2.2.0"
             buildConfigField("String", "DEVELOPER_NAME", "\"Vato_dev\"")
             buildConfigField("boolean", "BACKEND_ENABLED", "false")
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
