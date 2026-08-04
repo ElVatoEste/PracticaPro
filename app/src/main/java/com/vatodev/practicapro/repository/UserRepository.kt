@@ -6,6 +6,7 @@ import com.vatodev.practicapro.model.UserProfileResponse
 import com.vatodev.practicapro.network.ApiClient
 import com.vatodev.practicapro.network.BackendGate
 import com.vatodev.practicapro.service.UserService
+import kotlinx.serialization.json.Json
 
 object UserRepository {
 
@@ -33,13 +34,9 @@ object UserRepository {
         }.recoverCatching { throwable ->
             if (throwable is retrofit2.HttpException) {
                 val errorBody = throwable.response()?.errorBody()?.string()
-                val gson = com.google.gson.Gson()
-                errorBody?.let {
-                    try {
-                        gson.fromJson(it, MessageResponse::class.java)
-                    } catch (e: Exception) {
-                        MessageResponse(null, "Error al cambiar la contraseña", "Bad Request")
-                    }
+                errorBody?.let { cuerpo ->
+                    runCatching { Json { ignoreUnknownKeys = true }.decodeFromString<MessageResponse>(cuerpo) }
+                        .getOrElse { MessageResponse(null, "Error al cambiar la contraseña", "Bad Request") }
                 } ?: MessageResponse(null, "Error al cambiar la contraseña", "Bad Request")
             } else {
                 throw Exception("Error al cambiar la contraseña: ${throwable.message}")

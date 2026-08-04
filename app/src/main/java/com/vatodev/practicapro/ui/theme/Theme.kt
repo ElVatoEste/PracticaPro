@@ -1,57 +1,85 @@
 package com.vatodev.practicapro.ui.theme
 
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+/**
+ * Colores de estado, fuera del ColorScheme de Material porque no son
+ * primary/secondary intercambiables: cada uno significa una cosa.
+ *
+ * [progreso] avance y acierto · [logro] puntuación y racha · [error] fallo.
+ */
+data class ColoresDeEstado(
+    val progreso: Color,
+    val logro: Color,
+    val error: Color,
+    val filete: Color,
+    val elevado: Color,
+    val textoSuave: Color
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+val LocalEstado = staticCompositionLocalOf {
+    ColoresDeEstado(Verde, MoradoClaro, Coral, FileteOscuro, ElevadoOscuro, TextoSuaveOscuro)
+}
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+private val EsquemaOscuro = darkColorScheme(
+    primary = Verde,
+    onPrimary = FondoOscuro,
+    secondary = MoradoClaro,
+    onSecondary = FondoOscuro,
+    background = FondoOscuro,
+    onBackground = TextoOscuro,
+    surface = FondoOscuro,
+    onSurface = TextoOscuro,
+    surfaceVariant = ElevadoOscuro,
+    onSurfaceVariant = TextoSuaveOscuro,
+    outline = FileteOscuro,
+    error = Coral,
+    onError = FondoOscuro
+)
+
+private val EsquemaClaro = lightColorScheme(
+    primary = VerdeTexto,
     onPrimary = Color.White,
+    secondary = Morado,
     onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    background = FondoClaro,
+    onBackground = TextoClaro,
+    surface = FondoClaro,
+    onSurface = TextoClaro,
+    surfaceVariant = ElevadoClaro,
+    onSurfaceVariant = TextoSuaveClaro,
+    outline = FileteClaro,
+    error = Coral,
+    onError = Color.White
 )
 
+/**
+ * Sin dynamicColor: la identidad no puede depender del fondo de pantalla, y
+ * los colores de estado deben significar lo mismo en todos los dispositivos.
+ */
 @Composable
 fun PracticaproTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    val estado = if (darkTheme) {
+        ColoresDeEstado(Verde, MoradoClaro, Coral, FileteOscuro, ElevadoOscuro, TextoSuaveOscuro)
+    } else {
+        ColoresDeEstado(VerdeTexto, Morado, Coral, FileteClaro, ElevadoClaro, TextoSuaveClaro)
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
+    CompositionLocalProvider(LocalEstado provides estado) {
+        MaterialTheme(
+            colorScheme = if (darkTheme) EsquemaOscuro else EsquemaClaro,
+            typography = Typography,
+            content = content
+        )
+    }
 }

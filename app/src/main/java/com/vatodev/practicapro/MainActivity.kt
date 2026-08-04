@@ -27,6 +27,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.vatodev.practicapro.network.AppLifecycleObserver
 import com.vatodev.practicapro.rooms.appDatabase.DatabaseProvider
+import com.vatodev.practicapro.ui.theme.PracticaproTheme
 import com.vatodev.practicapro.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
@@ -45,35 +46,35 @@ class MainActivity : ComponentActivity() {
 
         NetworkObserver.startObserving(this)
 
-        // Cargar materias solo una vez
-        DatabaseProvider.loadInitialMaterias(this)
-
-        // 🔄 Cargar el token desde Room y actualizar el ApiClient
         lifecycleScope.launch {
+            DatabaseProvider.loadInitialMaterias(applicationContext)
             userViewModel.loadTokenFromRoom(applicationContext)
         }
 
         setContent {
-            val snackbarHostState = remember { SnackbarHostState() }
-            val navController = rememberNavController()
+            PracticaproTheme {
+                val snackbarHostState = remember { SnackbarHostState() }
+                val navController = rememberNavController()
 
-            Scaffold(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .windowInsetsPadding(WindowInsets.systemBars),
-                snackbarHost = { SnackbarHost(snackbarHostState) },
-                bottomBar = {
-                    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-                    if (currentRoute != Routes.SPLASH && currentRoute != Routes.REGISTER) {
-                        BottomNavigationBar(navController, userViewModel)
+                Scaffold(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .windowInsetsPadding(WindowInsets.systemBars),
+                    containerColor = MaterialTheme.colorScheme.background,
+                    snackbarHost = { SnackbarHost(snackbarHostState) },
+                    bottomBar = {
+                        val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+                        if (currentRoute !in Routes.SIN_BARRA) {
+                            BottomNavigationBar(navController, userViewModel)
+                        }
                     }
+                ) { innerPadding ->
+                    ConnectivityIndicator(snackbarHostState = snackbarHostState)
+                    AppContent(
+                        modifier = Modifier.padding(innerPadding),
+                        navController = navController
+                    )
                 }
-            ) { innerPadding ->
-                ConnectivityIndicator(snackbarHostState = snackbarHostState)
-                AppContent(
-                    modifier = Modifier.padding(innerPadding),
-                    navController = navController
-                )
             }
         }
 

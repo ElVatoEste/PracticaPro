@@ -1,6 +1,5 @@
 [versions]
 agp = "9.3.1"
-converterGson = "3.0.0"
 kotlin = "2.4.10"
 ksp = "2.3.11"
 coreKtx = "1.19.0"
@@ -24,10 +23,11 @@ lifecycleProcess = "2.11.0"
 androidx-room-common = { module = "androidx.room:room-common", version.ref = "room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 androidx-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "compose-material-icons" }
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "compose-material-icons" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+converter-kotlinx = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

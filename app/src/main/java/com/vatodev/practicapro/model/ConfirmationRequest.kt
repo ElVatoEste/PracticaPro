@@ -1,11 +1,13 @@
 package com.vatodev.practicapro.model
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ConfirmationRequest(
-    @SerializedName("email")
+    @SerialName("email")
     val email: String,
 
-    @SerializedName("code")
+    @SerialName("code")
     val code: String
 )

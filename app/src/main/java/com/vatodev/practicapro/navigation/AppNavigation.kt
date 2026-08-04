@@ -12,7 +12,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.vatodev.practicapro.ui.splash.SplashScreen
 import com.vatodev.practicapro.ui.main.MainScreen
-import com.vatodev.practicapro.ui.calculadora.CalculadoraScreen
 import com.vatodev.practicapro.ui.calculadora.ImcScreen
 import com.vatodev.practicapro.ui.calculadora.PamScreen
 import com.vatodev.practicapro.network.BackendGate
@@ -30,7 +29,6 @@ import com.vatodev.practicapro.ui.user.UserScreen
 object Routes {
     const val SPLASH = "splash"
     const val MAIN = "main"
-    const val CALCULADORA = "calculadora"
     const val TECNICAS = "tecnicas"
     const val QUIZ_SCREEN = "quiz_screen"
     const val PROCEDIMIENTOS = "procedimientos"
@@ -43,6 +41,15 @@ object Routes {
     const val IMC = "imc"
     const val PAM = "pam"
     const val USER = "user"
+
+    /**
+     * Rutas que ocupan toda la pantalla: sin barra inferior. Antes esta lista
+     * estaba duplicada en MainActivity y en BottomNavBar.
+     */
+    val SIN_BARRA = setOf(
+        SPLASH, LOGIN, REGISTER,
+        QUIZ_SCREEN, QUIZ_PROCEDIMIENTOS, QUIZ_PROC_TF
+    )
 }
 
 @Composable
@@ -96,9 +103,6 @@ fun AppNavigation(navController: NavHostController) {
             MainScreen(navController)
         }
 
-        composable(Routes.CALCULADORA) {
-            CalculadoraScreen(navController)
-        }
 
         composable(Routes.IMC) {
             ImcScreen(navController)

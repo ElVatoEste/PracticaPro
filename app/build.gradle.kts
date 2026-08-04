@@ -107,7 +107,7 @@
 
         //Retrofit
         implementation(libs.retrofit)
-        implementation(libs.converter.gson)
+        implementation(libs.converter.kotlinx)
         implementation(platform(libs.okhttp.bom))
         implementation(libs.logging.interceptor)
 
@@ -121,6 +121,7 @@
         implementation(libs.kotlinx.serialization.json)
 
         testImplementation(libs.junit)
+        androidTestImplementation(libs.androidx.room.testing)
         androidTestImplementation(libs.androidx.junit)
         androidTestImplementation(libs.androidx.espresso.core)
         androidTestImplementation(platform(libs.androidx.compose.bom))

@@ -6,13 +6,17 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.util.concurrent.TimeUnit
 
 object ApiClient {
     private const val BASE_URL = "https://practica-pro-back.vercel.app/"
     private const val LOCAL_URL = "http://192.168.0.7:3000/"
     private const val IS_LOCAL = false
+
+    private val json = Json { ignoreUnknownKeys = true }
 
     private var token: String? = null
 
@@ -53,6 +57,6 @@ object ApiClient {
     val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .build()
 }

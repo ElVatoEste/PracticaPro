@@ -1,139 +1,98 @@
 package com.vatodev.practicapro.ui.study.asepsia
 
-import android.util.Log
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.vatodev.practicapro.R
-import com.vatodev.practicapro.components.general.ActionButton
-import com.vatodev.practicapro.components.general.VideoPlayerScreen
-import com.vatodev.practicapro.components.module.SectionContent
-import com.vatodev.practicapro.components.module.SectionTitle
+import com.vatodev.practicapro.components.general.Filete
 import com.vatodev.practicapro.components.general.MultiStepDialog
+import com.vatodev.practicapro.components.general.VideoPlayerScreen
+import com.vatodev.practicapro.components.module.FilaTecnica
+import com.vatodev.practicapro.components.module.PantallaModulo
+import com.vatodev.practicapro.components.module.SeccionModulo
+import com.vatodev.practicapro.model.MODULOS
+import com.vatodev.practicapro.navigation.Routes
+import com.vatodev.practicapro.repository.ContenidoRepository
+import com.vatodev.practicapro.repository.Tecnica
 import com.vatodev.practicapro.rooms.appDatabase.DatabaseProvider
 import com.vatodev.practicapro.viewmodel.helper.DialogState
 
+private val MODULO = MODULOS.first { it.subjectId == 1 }
+
+/** Imagen y sinopsis de cada técnica; el título y los pasos vienen del JSON. */
+private val PRESENTACION = mapOf(
+    "stepsLavadoClinico" to (R.drawable.ic_asepsia3 to "Elimina la flora transitoria antes y después del contacto con el paciente."),
+    "stepsLavadoQuirurgico" to (R.drawable.ic_asepsia2 to "Reduce al máximo la flora residente antes de un procedimiento invasivo."),
+    "stepsUsoGuantes" to (R.drawable.ic_asepsia4 to "Colocación estéril sin contaminar la superficie externa.")
+)
+
 @Composable
 fun AsepsiaScreen(navController: NavController) {
-
     val context = LocalContext.current
-    var isButtonEnabled by remember { mutableStateOf(false) }
+    var intentos by remember { mutableIntStateOf(0) }
+    var tecnicas by remember { mutableStateOf(emptyList<Tecnica>()) }
+    var dialogo by remember { mutableStateOf(DialogState(false, "", emptyList())) }
 
-    // Estado del diálogo agrupado en un solo objeto
-    var dialogState by remember {
-        mutableStateOf(
-            DialogState(
-                showDialog = false,
-                title = "",
-                steps = emptyList()
-            )
-        )
+    LaunchedEffect(navController.currentBackStackEntry) {
+        intentos = DatabaseProvider.getDatabase(context).noteDao().countBySubject(MODULO.subjectId)
+        tecnicas = ContenidoRepository.tecnicas(context, "asepsia")
     }
 
-    LaunchedEffect(key1 = navController.currentBackStackEntry) {
-        val database = DatabaseProvider.getDatabase(context)
-        val noteDao = database.noteDao()
-        isButtonEnabled = !noteDao.hasReachedMaxAttempts(1)
-        Log.d("AsepsiaScreen", "Estado del botón: $isButtonEnabled")
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    PantallaModulo(
+        indice = MODULO.indice,
+        titulo = "Asepsia y antisepsia",
+        entradilla = "Barreras, lavado de manos y campo estéril. Tres técnicas que sostienen todo lo demás.",
+        imagen = R.drawable.ic_asepcia1,
+        intentosUsados = intentos,
+        maxIntentos = MODULO.maxIntentos,
+        evaluacionHabilitada = intentos < MODULO.maxIntentos,
+        onEvaluar = { navController.navigate(Routes.QUIZ_SCREEN) }
     ) {
-        // Título principal
-        Text(
-            text = "Técnicas de Asepsia y Antisepsia",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            color = Color(0xFF7DBB00)
-        )
-
-        // Subtítulo
-        Text(
-            text = "Explora conceptos clave y técnicas fundamentales para prevenir infecciones.",
-            fontSize = 16.sp,
-            textAlign = TextAlign.Center,
-            color = Color.Black
-        )
-
-        // Imagen representativa
-        Image(
-            painter = painterResource(id = R.drawable.ic_asepsia2),
-            contentDescription = "Imagen de Asepsia",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .padding(8.dp)
-                .clip(RoundedCornerShape(16.dp))
-        )
-        // Sección de conceptos clave
-        SectionTitle("Conceptos Básicos")
-        SectionContent(
-            "La asepsia incluye prácticas para prevenir la introducción de microorganismos en áreas críticas. Esto es fundamental en el entorno médico para proteger a los pacientes y al personal de salud."
-        )
-
-        // Reproductor de video
-        SectionTitle("Video Lavado de manos clínico")
-        VideoPlayerScreen(
-            videoAspectRatio = 1f,
-            videoUri = "android.resource://${LocalContext.current.packageName}/${R.raw.videotutorial}"
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        // Sección de técnicas
-        SectionTitle("Procedimientos Antisepticos")
-        TechniqueCardList { title, steps ->
-            dialogState = dialogState.copy(
-                showDialog = true,
-                title = title,
-                steps = steps
+        SeccionModulo("Conceptos básicos") {
+            Text(
+                text = "La asepsia agrupa las prácticas que impiden la introducción de " +
+                    "microorganismos en áreas críticas. Sostiene la seguridad del paciente y " +
+                    "la del personal.",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
 
-        ActionButton(
-            text = "Realizar Evaluación",
-            onClick = { navController.navigate("quiz_screen") },
-            enabled = isButtonEnabled
-        )
+        SeccionModulo("Demostración") {
+            VideoPlayerScreen(
+                videoAspectRatio = 16f / 9f,
+                videoUri = "android.resource://${context.packageName}/${R.raw.videotutorial}"
+            )
+        }
 
-        Spacer(modifier = Modifier.weight(1f))
+        SeccionModulo("Procedimientos antisépticos") {
+            tecnicas.forEachIndexed { indice, tecnica ->
+                val (imagen, sinopsis) = PRESENTACION[tecnica.clave] ?: return@forEachIndexed
+                FilaTecnica(
+                    numero = "%02d".format(indice + 1),
+                    titulo = tecnica.titulo,
+                    descripcion = sinopsis,
+                    imagen = imagen,
+                    onClick = { dialogo = DialogState(true, tecnica.titulo, tecnica.pasos) }
+                )
+            }
+            Filete()
+        }
     }
 
-    // Diálogo para mostrar pasos
-    if (dialogState.showDialog) {
+    if (dialogo.showDialog) {
         MultiStepDialog(
-            title = dialogState.title,
-            steps = dialogState.steps,
-            onDismiss = {
-                dialogState = dialogState.copy(showDialog = false)
-            }
+            title = dialogo.title,
+            steps = dialogo.steps,
+            onDismiss = { dialogo = dialogo.copy(showDialog = false) }
         )
     }
 }
-
-
-

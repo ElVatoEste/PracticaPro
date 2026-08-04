@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -25,12 +25,10 @@ import com.vatodev.practicapro.R
 
 @Composable
 fun SplashScreen(navController: NavController, margin: Int = 8) {
-    // Animaciones para opacidad y escala
     val scale = remember { Animatable(0f) }
     val alpha = remember { Animatable(0f) }
 
     LaunchedEffect(Unit) {
-        // Animaciones de SplashScreen
         scale.animateTo(
             targetValue = 1f,
             animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
@@ -58,7 +56,7 @@ fun SplashScreen(navController: NavController, margin: Int = 8) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White), // Fondo blanco
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
         Image(

@@ -1,18 +1,21 @@
 package com.vatodev.practicapro.components.general
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
+import com.vatodev.practicapro.ui.theme.EtiquetaTracked
+import com.vatodev.practicapro.ui.theme.LocalEstado
 
 @Composable
 fun GenderToggleButton(
@@ -20,40 +23,24 @@ fun GenderToggleButton(
     selected: Boolean,
     onClick: () -> Unit
 ) {
-    Surface(
-        color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
-        shape = RoundedCornerShape(16.dp),
+    val estado = LocalEstado.current
+    Box(
+        contentAlignment = Alignment.Center,
         modifier = Modifier
-            .padding(4.dp)
-            .toggleable(
-                value = selected,
-                onValueChange = { onClick() }
-            )
-            .width(100.dp)
-            .height(40.dp)
+            .width(110.dp)
+            .height(46.dp)
+            .background(if (selected) estado.progreso else MaterialTheme.colorScheme.surface)
+            .border(1.dp, if (selected) estado.progreso else estado.filete, RectangleShape)
+            .toggleable(value = selected, onValueChange = { onClick() })
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Text(
-                text = label,
-                textAlign = TextAlign.Center,
-                color = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp)
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GenderToggleButtonPreview() {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.padding(16.dp)
-    ) {
-        GenderToggleButton(label = "Hombre", selected = true, onClick = {})
-        GenderToggleButton(label = "Mujer", selected = false, onClick = {})
+        Text(
+            text = label.uppercase(),
+            style = EtiquetaTracked.copy(fontSize = 14.sp),
+            color = if (selected) {
+                MaterialTheme.colorScheme.onPrimary
+            } else {
+                MaterialTheme.colorScheme.onSurface
+            }
+        )
     }
 }

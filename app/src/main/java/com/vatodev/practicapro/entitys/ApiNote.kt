@@ -1,29 +1,31 @@
 package com.vatodev.practicapro.entitys
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ApiNote(
-    @SerializedName("id")
+    @SerialName("id")
     val id: Int,
 
-    @SerializedName("puntaje")
+    @SerialName("puntaje")
     val score: Int,
 
-    @SerializedName("intento")
+    @SerialName("intento")
     val attempt: Int,
 
-    @SerializedName("fecha")
+    @SerialName("fecha")
     val date: String,
 
-    @SerializedName("id_materia")
+    @SerialName("id_materia")
     val subjectId: Int, // ID de la materia
 
-    @SerializedName("nombre_materia")
+    @SerialName("nombre_materia")
     val subjectName: String, // Nombre de la materia
 
-    @SerializedName("nombre_usuario")
+    @SerialName("nombre_usuario")
     val userName: String?, // Nombre del usuario
 
-    @SerializedName("email_usuario")
+    @SerialName("email_usuario")
     val userEmail: String? // Email del usuario
 )
