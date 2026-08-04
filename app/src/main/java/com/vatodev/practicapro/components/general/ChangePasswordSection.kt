@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vatodev.practicapro.viewmodel.ChangePasswordViewModel
+import com.vatodev.practicapro.ui.theme.LocalEstado
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,7 +32,7 @@ fun ChangePasswordSection(viewModel: ChangePasswordViewModel = viewModel()) {
     Button(
         onClick = { showChangePasswordDialog = true },
         modifier = Modifier.fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7DBB00))
+        colors = ButtonDefaults.buttonColors(containerColor = LocalEstado.current.progreso)
     ) {
         Icon(
             imageVector = Icons.Default.Lock,
@@ -67,7 +68,7 @@ fun ChangePasswordSection(viewModel: ChangePasswordViewModel = viewModel()) {
                 if (viewModel.errorMessage.isNotEmpty()) {
                     Text(
                         text = viewModel.errorMessage,
-                        color = Color(0xFFC62828),
+                        color = LocalEstado.current.error,
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -75,7 +76,7 @@ fun ChangePasswordSection(viewModel: ChangePasswordViewModel = viewModel()) {
                     // Validación local para que las contraseñas coincidan
                     Text(
                         text = "Las contraseñas nuevas no coinciden",
-                        color = Color(0xFFC62828),
+                        color = LocalEstado.current.error,
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -83,7 +84,7 @@ fun ChangePasswordSection(viewModel: ChangePasswordViewModel = viewModel()) {
                 if (successMsg.isNotEmpty()) {
                     Text(
                         text = successMsg,
-                        color = Color(0xFF2E7D32),
+                        color = LocalEstado.current.progreso,
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -124,7 +125,7 @@ fun ChangePasswordSection(viewModel: ChangePasswordViewModel = viewModel()) {
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7DBB00))
+                    colors = ButtonDefaults.buttonColors(containerColor = LocalEstado.current.progreso)
                 ) {
                     Text("Enviar")
                 }

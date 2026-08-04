@@ -1,10 +1,12 @@
 package com.vatodev.practicapro.model
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class PasswordRequest(
-    @SerializedName("oldPassword")
+    @SerialName("oldPassword")
     val currentPassword: String,
-    @SerializedName("newPassword")
+    @SerialName("newPassword")
     val newPassword: String
 )

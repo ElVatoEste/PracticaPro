@@ -28,50 +28,35 @@ class RegisterViewModel : ViewModel() {
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> get() = _isLoading
 
-    private val _showRegisterModal = mutableStateOf(false)
-    val showRegisterModal: State<Boolean> get() = _showRegisterModal
 
-    // Actualizar campos
     fun onNombreChange(value: String) { _nombre.value = value }
     fun onEmailChange(value: String) { _email.value = value }
     fun onPasswordChange(value: String) { _password.value = value }
     fun onConfirmPasswordChange(value: String) { _confirmPassword.value = value }
 
-    // Cerrar modal sin registrar
-    fun onCancelRegister() {
-        _showRegisterModal.value = false
-        _error.value = null
-    }
 
-    // Ejecutar el registro real
-    fun doRegister(
-        context: Context,
-        onRegisterSuccess: (String) -> Unit
-    ) {
+    fun doRegister(context: Context, onRegisterSuccess: (String) -> Unit) {
         viewModelScope.launch {
             if (_password.value != _confirmPassword.value) {
-                _error.value = "Las contraseñas no coinciden"
+                _error.value = "Las contraseñas no coinciden."
                 return@launch
             }
 
             _isLoading.value = true
-            val result = AuthRepository.register(
+            val resultado = AuthRepository.registrar(
                 context = context,
-                _nombre.value,
-                _email.value,
-                _password.value
+                nombre = _nombre.value,
+                email = _email.value,
+                password = _password.value
             )
             _isLoading.value = false
 
-            result.fold(
-                onSuccess = { message ->
-                    _showRegisterModal.value = false
+            resultado.fold(
+                onSuccess = { usuario ->
                     _error.value = null
-                    onRegisterSuccess(message)
+                    onRegisterSuccess("Cuenta de ${usuario.username} creada.")
                 },
-                onFailure = {
-                    _error.value = "Error: ${it.localizedMessage}"
-                }
+                onFailure = { _error.value = it.message ?: "No se pudo crear la cuenta." }
             )
         }
     }

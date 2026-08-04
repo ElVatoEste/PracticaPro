@@ -8,7 +8,6 @@
 -keep @androidx.room.* class * { *; }
 
 # Mantener anotaciones de Gson
--keep class com.google.gson.annotations.** { *; }
 
 # Mantener Retrofit y las interfaces de API
 -keep class retrofit2.** { *; }
@@ -19,8 +18,6 @@
 -dontwarn okhttp3.**
 
 # Mantener Gson y modelos relacionados
--keep class com.google.gson.** { *; }
--keep class com.google.gson.annotations.** { *; }
 
 # Preservar modelos de datos JSON
 -keep class com.vatodev.practicapro.model.** { *; }

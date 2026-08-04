@@ -1,102 +1,142 @@
 package com.vatodev.practicapro.ui.calculadora
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.vatodev.practicapro.components.general.ActionButton
+import com.vatodev.practicapro.components.general.BotonPrimario
+import com.vatodev.practicapro.components.general.CampoMedida
+import com.vatodev.practicapro.components.general.Escala
+import com.vatodev.practicapro.components.general.Etiqueta
+import com.vatodev.practicapro.components.general.FilaDato
+import com.vatodev.practicapro.components.general.Filete
+import com.vatodev.practicapro.components.general.Tramo
+import com.vatodev.practicapro.ui.theme.LocalEstado
 import com.vatodev.practicapro.viewmodel.PamViewModel
 
 @Composable
-fun PamScreen(navController: NavController, viewModel: PamViewModel = viewModel()) {
-    var systolicPressure by remember { mutableStateOf("") }
-    var diastolicPressure by remember { mutableStateOf("") }
+fun PamScreen(
+    navController: NavController,
+    viewModel: PamViewModel = viewModel()
+) {
+    var sistolica by remember { mutableStateOf("") }
+    var diastolica by remember { mutableStateOf("") }
 
-    val pamResult by viewModel.pamResult.collectAsState()
-    val classification by viewModel.classification.collectAsState()
+    val resultado by viewModel.resultado
+    val estado = LocalEstado.current
+
+    val sis = sistolica.toDoubleOrNull()
+    val dia = diastolica.toDoubleOrNull()
+    val ordenInvertido = sis != null && dia != null && dia >= sis
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 20.dp)
     ) {
-        // Título
-        Text(
-            text = "Calculadora de Presión Arterial Media (PAM)",
-            style = MaterialTheme.typography.titleMedium
-        )
+        Spacer(Modifier.height(20.dp))
+        CabeceraCalculadora("Presión arterial media") { navController.popBackStack() }
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Campo de entrada para la Presión Sistólica
-        OutlinedTextField(
-            value = systolicPressure,
-            onValueChange = { systolicPressure = it.filter { char -> char.isDigit() || char == '.' } },
-            label = { Text("Presión Arterial Sistólica (mmHg)") },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done
-            ),
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        // Campo de entrada para la Presión Diastólica
-        OutlinedTextField(
-            value = diastolicPressure,
-            onValueChange = { diastolicPressure = it.filter { char -> char.isDigit() || char == '.' } },
-            label = { Text("Presión Arterial Diastólica (mmHg)") },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done
-            ),
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        // Botón para calcular la PAM
-        ActionButton(
-            onClick = {
-                val psValue = systolicPressure.toDoubleOrNull()
-                val pdValue = diastolicPressure.toDoubleOrNull()
-
-                if (psValue != null && pdValue != null) {
-                    viewModel.calculatePam(psValue, pdValue)
-                }
-            },
-            text = "Calcular PAM"
-        )
-
-        // Botón para regresar
-        ActionButton(
-            onClick = { navController.popBackStack() },
-            text = "Regresar"
-        )
-
-        // Mostrar el resultado
-        pamResult?.let { pam ->
-            Text(
-                text = "PAM: ${String.format("%.2f", pam)} mmHg",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(top = 16.dp)
+        Spacer(Modifier.height(22.dp))
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.height(IntrinsicSize.Min)
+        ) {
+            CampoMedida(
+                etiqueta = "Sistólica",
+                valor = sistolica,
+                unidad = "mmHg",
+                marcador = "120",
+                onChange = { sistolica = it.filter(Char::isDigit) },
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+            )
+            CampoMedida(
+                etiqueta = "Diastólica",
+                valor = diastolica,
+                unidad = "mmHg",
+                marcador = "80",
+                imeAction = ImeAction.Done,
+                onChange = { diastolica = it.filter(Char::isDigit) },
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
             )
         }
 
-        // Mostrar la clasificación
-        classification?.let { result ->
-            Text(
-                text = "Clasificación: $result",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(top = 8.dp)
-            )
+        if (ordenInvertido) {
+            Spacer(Modifier.height(12.dp))
+            Etiqueta("La diastólica debe ser menor que la sistólica", color = estado.error)
         }
+
+        Spacer(Modifier.height(20.dp))
+        BotonPrimario(
+            texto = "Calcular",
+            habilitado = sis != null && dia != null && !ordenInvertido,
+            onClick = { viewModel.calcular(sis!!, dia!!) }
+        )
+
+        resultado?.let { r ->
+            Spacer(Modifier.height(32.dp))
+            Etiqueta("Resultado")
+            Spacer(Modifier.height(14.dp))
+
+            Escala(
+                valor = r.pam.toFloat(),
+                unidad = "mmHg",
+                tramos = r.bandas.map { banda ->
+                    Tramo(
+                        etiqueta = banda.etiqueta,
+                        hasta = if (banda.hasta == Double.MAX_VALUE) 130f else banda.hasta.toFloat(),
+                        color = when (banda.etiqueta) {
+                            "Normal" -> estado.progreso
+                            "Hipoperfusión", "Alta" -> estado.error
+                            else -> estado.logro
+                        }
+                    )
+                },
+                minimo = 40f,
+                maximo = 130f
+            )
+
+            Spacer(Modifier.height(26.dp))
+            Filete()
+            FilaDato("Rango normal", "70 – 100 mmHg")
+            Filete()
+            FilaDato("Presión de pulso", "%.0f mmHg".format(r.sistolica - r.diastolica))
+            Filete()
+            FilaDato(
+                etiqueta = "Fórmula",
+                valor = "(2 × %.0f + %.0f) ÷ 3".format(r.diastolica, r.sistolica),
+                colorValor = estado.textoSuave
+            )
+            Filete()
+
+            if (r.pam < 60) {
+                Spacer(Modifier.height(16.dp))
+                Etiqueta("Por debajo del umbral de perfusión de órganos", color = estado.error)
+            }
+        }
+
+        Spacer(Modifier.height(32.dp))
     }
 }

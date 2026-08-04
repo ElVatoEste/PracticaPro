@@ -1,34 +1,48 @@
 package com.vatodev.practicapro.viewmodel
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
+
+data class ResultadoPam(
+    val pam: Double,
+    val clasificacion: String,
+    val bandas: List<Banda>,
+    val sistolica: Double,
+    val diastolica: Double
+)
 
 class PamViewModel : ViewModel() {
 
-    private val _pamResult = MutableStateFlow<Double?>(null)
-    val pamResult: StateFlow<Double?> get() = _pamResult
+    private val _resultado = mutableStateOf<ResultadoPam?>(null)
+    val resultado: State<ResultadoPam?> = _resultado
 
-    private val _classification = MutableStateFlow<String?>(null)
-    val classification: StateFlow<String?> get() = _classification
+    /**
+     * PAM = (2 · diastólica + sistólica) / 3.
+     *
+     * El umbral inferior de 60 mmHg es el de perfusión de órganos: por debajo
+     * deja de garantizarse y por eso la banda se marca como crítica.
+     */
+    fun calcular(sistolica: Double, diastolica: Double) {
+        if (sistolica <= 0 || diastolica <= 0 || diastolica >= sistolica) return
 
-    // Función para calcular la Presión Arterial Media (PAM)
-    fun calculatePam(ps: Double, pd: Double) {
-        viewModelScope.launch {
-            val pam = (2 * pd + ps) / 3
-            _pamResult.value = pam
-            _classification.value = getPamClassification(pam)
-        }
+        val pam = (2 * diastolica + sistolica) / 3
+        _resultado.value = ResultadoPam(
+            pam = pam,
+            clasificacion = BANDAS.firstOrNull { pam < it.hasta }?.etiqueta ?: BANDAS.last().etiqueta,
+            bandas = BANDAS,
+            sistolica = sistolica,
+            diastolica = diastolica
+        )
     }
 
-    // Clasificación de la PAM según el valor
-    private fun getPamClassification(pam: Double): String {
-        return when {
-            pam < 70 -> "Presión Arterial Baja"
-            pam in 70.0..110.0 -> "Presión Arterial Normal"
-            else -> "Presión Arterial Alta"
-        }
+    companion object {
+        val BANDAS = listOf(
+            Banda("Hipoperfusión", 60.0),
+            Banda("Baja", 70.0),
+            Banda("Normal", 100.0),
+            Banda("Elevada", 110.0),
+            Banda("Alta", Double.MAX_VALUE)
+        )
     }
 }

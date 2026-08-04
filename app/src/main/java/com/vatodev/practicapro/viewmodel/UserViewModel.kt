@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.vatodev.practicapro.model.UserProfileResponse
 import com.vatodev.practicapro.network.ApiClient
-import com.vatodev.practicapro.rooms.appDatabase.DatabaseProvider
+import com.vatodev.practicapro.repository.SesionRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -27,10 +27,7 @@ class UserViewModel : ViewModel() {
     }
 
     suspend fun loadUserProfileFromRoom(context: Context) {
-        val userDao = DatabaseProvider.getDatabase(context).userDao()
-        val userEntity = withContext(Dispatchers.IO) {
-            userDao.getUser()
-        }
+        val userEntity = SesionRepository.usuario(context)
         userEntity?.let { user ->
             // Actualizamos el token
             updateToken(user.token)
@@ -43,10 +40,7 @@ class UserViewModel : ViewModel() {
         }
     }
     suspend fun loadTokenFromRoom(context: Context) {
-            val userDao = DatabaseProvider.getDatabase(context).userDao()
-            val user = withContext(Dispatchers.IO) {
-                userDao.getUser()
-            }
+            val user = SesionRepository.usuario(context)
             user?.token?.let { updateToken(it) }
         }
 }

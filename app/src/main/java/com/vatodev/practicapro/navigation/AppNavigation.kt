@@ -12,9 +12,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.vatodev.practicapro.ui.splash.SplashScreen
 import com.vatodev.practicapro.ui.main.MainScreen
-import com.vatodev.practicapro.ui.calculadora.CalculadoraScreen
 import com.vatodev.practicapro.ui.calculadora.ImcScreen
 import com.vatodev.practicapro.ui.calculadora.PamScreen
+import com.vatodev.practicapro.ui.login.LoginScreen
 import com.vatodev.practicapro.ui.register.RegisterScreen
 import com.vatodev.practicapro.ui.study.asepsia.AsepsiaScreen
 import com.vatodev.practicapro.ui.study.asepsia.quiz.QuizScreen
@@ -28,7 +28,6 @@ import com.vatodev.practicapro.ui.user.UserScreen
 object Routes {
     const val SPLASH = "splash"
     const val MAIN = "main"
-    const val CALCULADORA = "calculadora"
     const val TECNICAS = "tecnicas"
     const val QUIZ_SCREEN = "quiz_screen"
     const val PROCEDIMIENTOS = "procedimientos"
@@ -36,10 +35,20 @@ object Routes {
     const val QUIZ_PROC_TF = "quiz_proc_tf"
     const val ADMINISTRACION = "administracion"
     const val URGENCIAS = "urgencias"
+    const val LOGIN = "login"
     const val REGISTER = "register"
     const val IMC = "imc"
     const val PAM = "pam"
     const val USER = "user"
+
+    /**
+     * Rutas que ocupan toda la pantalla: sin barra inferior. Antes esta lista
+     * estaba duplicada en MainActivity y en BottomNavBar.
+     */
+    val SIN_BARRA = setOf(
+        SPLASH, LOGIN, REGISTER,
+        QUIZ_SCREEN, QUIZ_PROCEDIMIENTOS, QUIZ_PROC_TF
+    )
 }
 
 @Composable
@@ -53,6 +62,21 @@ fun AppNavigation(navController: NavHostController) {
         }
 
         composable(
+            Routes.LOGIN,
+            enterTransition = { slideInVertically() + fadeIn() },
+            exitTransition = { slideOutVertically() + fadeOut() }
+        ) {
+            LoginScreen(
+                onLoginSuccess = {
+                    navController.navigate(Routes.MAIN) {
+                        popUpTo(Routes.LOGIN) { inclusive = true }
+                    }
+                },
+                onNavigateToRegister = { navController.navigate(Routes.REGISTER) }
+            )
+        }
+
+        composable(
             Routes.REGISTER,
             enterTransition = { slideInVertically() + fadeIn() },
             exitTransition = { slideOutVertically() + fadeOut() }
@@ -60,14 +84,13 @@ fun AppNavigation(navController: NavHostController) {
             RegisterScreen(
                 onRegisterSuccess = {
                     navController.navigate(Routes.MAIN) {
-                        popUpTo(Routes.REGISTER) { inclusive = true }
+                        popUpTo(0) { inclusive = true }
                     }
                 },
-                context = navController.context
+                onNavigateToLogin = { navController.navigate(Routes.LOGIN) }
             )
         }
 
-        // Main Screen
         composable(
             Routes.MAIN,
             enterTransition = { slideInHorizontally() + fadeIn() },
@@ -76,9 +99,6 @@ fun AppNavigation(navController: NavHostController) {
             MainScreen(navController)
         }
 
-        composable(Routes.CALCULADORA) {
-            CalculadoraScreen(navController)
-        }
 
         composable(Routes.IMC) {
             ImcScreen(navController)
