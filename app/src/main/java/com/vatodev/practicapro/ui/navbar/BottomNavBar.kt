@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.vatodev.practicapro.navigation.Routes
+import com.vatodev.practicapro.network.BackendGate
 import com.vatodev.practicapro.repository.AuthRepository
 import com.vatodev.practicapro.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
@@ -30,6 +31,7 @@ fun BottomNavigationBar(navController: NavController, userViewModel: UserViewMod
     val scope = rememberCoroutineScope()
 
     val excludedRoutes = setOf(
+        Routes.LOGIN,
         Routes.SPLASH,
         Routes.REGISTER,
         Routes.QUIZ_PROCEDIMIENTOS,
@@ -119,7 +121,9 @@ fun BottomNavigationBar(navController: NavController, userViewModel: UserViewMod
                     onClick = {
                         scope.launch {
                             AuthRepository.logout(navController.context, userViewModel)
-                            navController.navigate(Routes.REGISTER) {
+                            val destination =
+                                if (BackendGate.isEnabled) Routes.LOGIN else Routes.REGISTER
+                            navController.navigate(destination) {
                                 popUpTo(Routes.MAIN) { inclusive = true }
                             }
                         }

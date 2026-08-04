@@ -1,9 +1,31 @@
+    import java.util.Properties
+
     plugins {
         alias(libs.plugins.android.application)
         alias(libs.plugins.kotlin.compose)
         alias(libs.plugins.kotlinx.serialization)
         alias(libs.plugins.ksp)
     }
+
+    // Credenciales de firma. keystore.properties está en .gitignore; en CI se
+    // usan las variables de entorno. Sin ninguna de las dos, la release sale
+    // sin firmar en lugar de firmada con la clave de debug, que es pública.
+    val keystoreProperties = Properties().apply {
+        val file = rootProject.file("keystore.properties")
+        if (file.exists()) file.inputStream().use { load(it) }
+    }
+
+    fun signingValue(key: String, env: String): String? =
+        (keystoreProperties.getProperty(key) ?: System.getenv(env))?.takeIf { it.isNotBlank() }
+
+    val storeFilePath = signingValue("storeFile", "PRACTICAPRO_STORE_FILE")
+    val storePasswordValue = signingValue("storePassword", "PRACTICAPRO_STORE_PASSWORD")
+    val keyAliasValue = signingValue("keyAlias", "PRACTICAPRO_KEY_ALIAS")
+    val keyPasswordValue = signingValue("keyPassword", "PRACTICAPRO_KEY_PASSWORD")
+
+    val releaseSigningReady =
+        storeFilePath != null && storePasswordValue != null &&
+            keyAliasValue != null && keyPasswordValue != null
 
     android {
         namespace = "com.vatodev.practicapro"
@@ -20,6 +42,17 @@
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
 
+        signingConfigs {
+            if (releaseSigningReady) {
+                create("release") {
+                    storeFile = file(storeFilePath!!)
+                    storePassword = storePasswordValue
+                    keyAlias = keyAliasValue
+                    keyPassword = keyPasswordValue
+                }
+            }
+        }
+
         buildTypes {
             release {
                 isMinifyEnabled = true
@@ -27,7 +60,7 @@
                     getDefaultProguardFile("proguard-android-optimize.txt"),
                     "proguard-rules.pro"
                 )
-                signingConfig = signingConfigs.getByName("debug")
+                signingConfig = signingConfigs.findByName("release")
             }
         }
 

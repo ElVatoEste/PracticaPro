@@ -17,6 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.vatodev.practicapro.navigation.Routes
+import com.vatodev.practicapro.network.BackendGate
 import com.vatodev.practicapro.rooms.appDatabase.DatabaseProvider
 import kotlinx.coroutines.delay
 import com.vatodev.practicapro.R
@@ -39,18 +41,20 @@ fun SplashScreen(navController: NavController, margin: Int = 8) {
         )
         delay(1000)
 
-        // Verificar el estado del usuario
         val userDao = DatabaseProvider.getDatabase(navController.context).userDao()
         val user = userDao.getUser()
         val isLoggedIn = user != null && user.expirationDate > System.currentTimeMillis()
 
-        // Redirigir según el estado del usuario
-        navController.navigate(if (isLoggedIn) "main" else "register") {
-            popUpTo("splash") { inclusive = true }
+        val destination = when {
+            isLoggedIn -> Routes.MAIN
+            BackendGate.isEnabled -> Routes.LOGIN
+            else -> Routes.REGISTER
+        }
+        navController.navigate(destination) {
+            popUpTo(Routes.SPLASH) { inclusive = true }
         }
     }
 
-    // Contenido visual del Splash
     Box(
         modifier = Modifier
             .fillMaxSize()
