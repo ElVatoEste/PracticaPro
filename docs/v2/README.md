@@ -1,5 +1,8 @@
 # PracticaPro — v2: offline-first con backend latente
 
+> **Desactualizado en lo que toca a la interfaz.** El rediseño y el saneamiento posteriores están en [`../v3/`](../v3/README.md).
+
+
 ## Contexto
 
 El backend (`practica-pro-back.vercel.app`) **está caído** y no hay fecha

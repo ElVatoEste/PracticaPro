@@ -1,5 +1,8 @@
 # PracticaPro — Documentación v1
 
+> **Desactualizado en lo que toca a la interfaz.** El rediseño y el saneamiento posteriores están en [`../v3/`](../v3/README.md).
+
+
 Aplicación Android nativa de estudio para enfermería: módulos teóricos,
 quizzes con puntuación persistida y calculadoras clínicas (IMC, PAM).
 
