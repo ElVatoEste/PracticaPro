@@ -2,4 +2,6 @@
 <resources>
     <!-- Debe coincidir con FondoClaro de ui/theme/Color.kt -->
     <color name="fondo">#FBFAFD</color>
+    <!-- Debe coincidir con FondoOscuro de ui/theme/Color.kt -->
+    <color name="ic_launcher_background">#121019</color>
 </resources>
