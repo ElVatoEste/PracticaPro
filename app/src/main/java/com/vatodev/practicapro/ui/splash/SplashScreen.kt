@@ -45,7 +45,7 @@ fun SplashScreen(navController: NavController, margin: Int = 8) {
         val isLoggedIn = user != null && user.expirationDate > System.currentTimeMillis()
 
         // Redirigir según el estado del usuario
-        navController.navigate(if (isLoggedIn) "main" else "login") {
+        navController.navigate(if (isLoggedIn) "main" else "register") {
             popUpTo("splash") { inclusive = true }
         }
     }

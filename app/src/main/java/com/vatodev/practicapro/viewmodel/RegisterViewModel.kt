@@ -1,5 +1,6 @@
 package com.vatodev.practicapro.viewmodel
 
+import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
@@ -44,6 +45,7 @@ class RegisterViewModel : ViewModel() {
 
     // Ejecutar el registro real
     fun doRegister(
+        context: Context,
         onRegisterSuccess: (String) -> Unit
     ) {
         viewModelScope.launch {
@@ -54,6 +56,7 @@ class RegisterViewModel : ViewModel() {
 
             _isLoading.value = true
             val result = AuthRepository.register(
+                context = context,
                 _nombre.value,
                 _email.value,
                 _password.value

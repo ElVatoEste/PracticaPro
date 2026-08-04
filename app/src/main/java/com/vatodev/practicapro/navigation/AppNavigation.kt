@@ -7,7 +7,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,7 +15,6 @@ import com.vatodev.practicapro.ui.main.MainScreen
 import com.vatodev.practicapro.ui.calculadora.CalculadoraScreen
 import com.vatodev.practicapro.ui.calculadora.ImcScreen
 import com.vatodev.practicapro.ui.calculadora.PamScreen
-import com.vatodev.practicapro.ui.login.LoginScreen
 import com.vatodev.practicapro.ui.register.RegisterScreen
 import com.vatodev.practicapro.ui.study.asepsia.AsepsiaScreen
 import com.vatodev.practicapro.ui.study.asepsia.quiz.QuizScreen
@@ -38,7 +36,6 @@ object Routes {
     const val QUIZ_PROC_TF = "quiz_proc_tf"
     const val ADMINISTRACION = "administracion"
     const val URGENCIAS = "urgencias"
-    const val LOGIN = "login"
     const val REGISTER = "register"
     const val IMC = "imc"
     const val PAM = "pam"
@@ -55,26 +52,6 @@ fun AppNavigation(navController: NavHostController) {
             SplashScreen(navController)
         }
 
-        // Login Screen
-        composable(
-            Routes.LOGIN,
-            enterTransition = { slideInVertically() + fadeIn() },
-            exitTransition = { slideOutVertically() + fadeOut() }
-        ) {
-            LoginScreen(
-                onLoginSuccess = {
-                    navController.navigate(Routes.MAIN) {
-                        popUpTo(Routes.LOGIN) { inclusive = true }
-                    }
-                },
-                context = LocalContext.current,
-                onNavigateToRegister = {
-                    navController.navigate(Routes.REGISTER)
-                }
-            )
-        }
-
-        // Register Screen
         composable(
             Routes.REGISTER,
             enterTransition = { slideInVertically() + fadeIn() },
@@ -82,14 +59,11 @@ fun AppNavigation(navController: NavHostController) {
         ) {
             RegisterScreen(
                 onRegisterSuccess = {
-                    navController.navigate(Routes.LOGIN) {
+                    navController.navigate(Routes.MAIN) {
                         popUpTo(Routes.REGISTER) { inclusive = true }
                     }
                 },
-                context = LocalContext.current,
-                onNavigateToLogin = {
-                    navController.navigate(Routes.LOGIN)
-                }
+                context = navController.context
             )
         }
 

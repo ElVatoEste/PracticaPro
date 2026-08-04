@@ -1,8 +1,6 @@
 package com.vatodev.practicapro
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -66,7 +64,7 @@ class MainActivity : ComponentActivity() {
                 snackbarHost = { SnackbarHost(snackbarHostState) },
                 bottomBar = {
                     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-                    if (currentRoute != Routes.LOGIN && currentRoute != Routes.SPLASH && currentRoute != Routes.REGISTER) {
+                    if (currentRoute != Routes.SPLASH && currentRoute != Routes.REGISTER) {
                         BottomNavigationBar(navController, userViewModel)
                     }
                 }

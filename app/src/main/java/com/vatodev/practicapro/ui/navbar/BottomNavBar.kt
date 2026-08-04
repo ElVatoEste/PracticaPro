@@ -1,6 +1,5 @@
 package com.vatodev.practicapro.ui.navbar
 
-import android.util.Log
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -31,7 +30,6 @@ fun BottomNavigationBar(navController: NavController, userViewModel: UserViewMod
     val scope = rememberCoroutineScope()
 
     val excludedRoutes = setOf(
-        Routes.LOGIN,
         Routes.SPLASH,
         Routes.REGISTER,
         Routes.QUIZ_PROCEDIMIENTOS,
@@ -121,7 +119,7 @@ fun BottomNavigationBar(navController: NavController, userViewModel: UserViewMod
                     onClick = {
                         scope.launch {
                             AuthRepository.logout(navController.context, userViewModel)
-                            navController.navigate(Routes.LOGIN) {
+                            navController.navigate(Routes.REGISTER) {
                                 popUpTo(Routes.MAIN) { inclusive = true }
                             }
                         }

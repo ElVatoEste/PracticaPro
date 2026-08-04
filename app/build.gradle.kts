@@ -15,8 +15,8 @@
             applicationId = "com.vatodev.practicapro"
             minSdk = 30
             targetSdk = 35
-            versionCode = 7
-            versionName = "Feat: User profile"
+            versionCode = 9
+            versionName = "Feat: offline always"
             buildConfigField("String", "DEVELOPER_NAME", "\"Vato_dev\"")
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }

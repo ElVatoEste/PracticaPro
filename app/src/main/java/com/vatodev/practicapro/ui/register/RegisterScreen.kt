@@ -29,10 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vatodev.practicapro.R
 import com.vatodev.practicapro.components.general.NormalTextField
 import com.vatodev.practicapro.components.general.PasswordTextField
-import com.vatodev.practicapro.components.modals.VerificationCodeModal
-import com.vatodev.practicapro.network.NetworkObserver
 import com.vatodev.practicapro.viewmodel.RegisterViewModel
-import com.vatodev.practicapro.viewmodel.VerificationViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -41,7 +38,6 @@ import kotlinx.coroutines.launch
 fun PreviewRegisterScreen() {
     RegisterScreen(
         onRegisterSuccess = {},
-        onNavigateToLogin = {},
         context = LocalContext.current
     )
 }
@@ -49,10 +45,8 @@ fun PreviewRegisterScreen() {
 @Composable
 fun RegisterScreen(
     onRegisterSuccess: () -> Unit,
-    onNavigateToLogin: () -> Unit,
     context: Context,
-    registerViewModel: RegisterViewModel = viewModel(),
-    verificationViewModel: VerificationViewModel = viewModel()
+    registerViewModel: RegisterViewModel = viewModel()
 ) {
     val nombre by registerViewModel.nombre
     val email by registerViewModel.email
@@ -68,10 +62,6 @@ fun RegisterScreen(
     val logoScale = remember { Animatable(1f) }
     val inputsAlpha = remember { Animatable(0f) }
 
-    // Mostrar el modal de verificación de código
-    val showVerificationModal = remember { mutableStateOf(false) }
-
-    // Variable que controla si el usuario acepta la política de privacidad
     var isPrivacyPolicyAccepted by remember { mutableStateOf(false) }
 
     // Lanzamos animaciones
@@ -91,8 +81,6 @@ fun RegisterScreen(
         )
     }
 
-    // Observadores y helpers
-    val isNetworkAvailable by NetworkObserver.isNetworkAvailable.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val localContext = LocalContext.current
@@ -211,29 +199,18 @@ fun RegisterScreen(
                 Button(
                     onClick = {
                         if (!isLoading) {
-                            scope.launch {
-                                if (!isNetworkAvailable) {
-                                    snackbarHostState.showSnackbar(
-                                        "Sin conexión a Internet. Verifica tu conexión.",
-                                        duration = SnackbarDuration.Short
-                                    )
-                                } else {
-                                    registerViewModel.doRegister(
-                                        onRegisterSuccess = { message ->
-                                            scope.launch {
-                                                val snackbarResult = snackbarHostState.showSnackbar(
-                                                    message = message,
-                                                    duration = SnackbarDuration.Short
-                                                )
-                                                if (snackbarResult == SnackbarResult.Dismissed ||
-                                                    snackbarResult == SnackbarResult.ActionPerformed) {
-                                                    showVerificationModal.value = true
-                                                }
-                                            }
-                                        }
-                                    )
+                            registerViewModel.doRegister(
+                                context = context,
+                                onRegisterSuccess = { message ->
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(
+                                            message = message,
+                                            duration = SnackbarDuration.Short
+                                        )
+                                        onRegisterSuccess()
+                                    }
                                 }
-                            }
+                            )
                         }
                     },
                     modifier = Modifier
@@ -254,13 +231,6 @@ fun RegisterScreen(
                         Text("Registrarse")
                     }
                 }
-                TextButton(onClick = onNavigateToLogin) {
-                    Text(
-                        text = "¿Ya tienes cuenta? Logeate aquí",
-                        color = Color(0xFF7DBB00),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
 
                 if (error != null) {
                     Spacer(modifier = Modifier.height(8.dp))
@@ -268,19 +238,5 @@ fun RegisterScreen(
                 }
             }
         }
-    }
-
-    if (showVerificationModal.value) {
-        VerificationCodeModal(
-            isVisible = showVerificationModal.value,
-            onDismiss = { showVerificationModal.value = false },
-            viewModel = verificationViewModel,
-            email = email,
-            context = context,
-            onConfirmSuccess = {
-                showVerificationModal.value = false
-                onRegisterSuccess()
-            }
-        )
     }
 }
