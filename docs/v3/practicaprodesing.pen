@@ -1,0 +1,2931 @@
+{
+  "version": "2.15",
+  "children": [
+    {
+      "type": "frame",
+      "id": "w7IAv",
+      "x": 0,
+      "y": 0,
+      "name": "Escala",
+      "reusable": true,
+      "width": 352,
+      "layout": "vertical",
+      "gap": 10,
+      "children": [
+        {
+          "type": "frame",
+          "id": "fDsyC",
+          "name": "Lectura",
+          "width": "fill_container",
+          "gap": 8,
+          "alignItems": "end",
+          "children": [
+            {
+              "type": "text",
+              "id": "U1VQrB",
+              "name": "Valor",
+              "fill": "$ink",
+              "content": "23.4",
+              "lineHeight": 1,
+              "fontFamily": "$font-data",
+              "fontSize": 44,
+              "fontWeight": "500",
+              "letterSpacing": -1.5
+            },
+            {
+              "type": "text",
+              "id": "LW4hz",
+              "name": "Unidad",
+              "fill": "$ink-soft",
+              "content": "kg/m²",
+              "fontFamily": "$font-data",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "i906S",
+              "name": "Espaciador",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "text",
+              "id": "eAUyF",
+              "name": "Categoria",
+              "fill": "$signal",
+              "content": "NORMAL",
+              "fontFamily": "$font-label",
+              "fontSize": 15,
+              "fontWeight": "600",
+              "letterSpacing": 1.6
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "n4MPWG",
+          "name": "Pista",
+          "width": "fill_container",
+          "height": 10,
+          "gap": 2,
+          "children": [
+            {
+              "type": "frame",
+              "id": "qOPDk",
+              "name": "Seg Bajo",
+              "width": "fill_container",
+              "height": "fill_container",
+              "fill": "$rule"
+            },
+            {
+              "type": "frame",
+              "id": "c41p0",
+              "name": "Seg Normal",
+              "width": "fill_container",
+              "height": "fill_container",
+              "fill": "$signal"
+            },
+            {
+              "type": "frame",
+              "id": "OYrpD",
+              "name": "Seg Sobrepeso",
+              "width": "fill_container",
+              "height": "fill_container",
+              "fill": "$caution"
+            },
+            {
+              "type": "frame",
+              "id": "w6JxW",
+              "name": "Seg Obesidad",
+              "width": "fill_container",
+              "height": "fill_container",
+              "fill": "$critical"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Chh4c",
+          "name": "Marca",
+          "width": "fill_container",
+          "height": 14,
+          "children": [
+            {
+              "type": "frame",
+              "id": "Ovb6u",
+              "name": "Antes",
+              "width": 150,
+              "height": 1
+            },
+            {
+              "type": "frame",
+              "id": "cd66H",
+              "name": "Aguja",
+              "width": 2,
+              "height": "fill_container",
+              "fill": "$ink"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "LorOi",
+          "name": "Ejes",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "children": [
+            {
+              "type": "text",
+              "id": "k44GK4",
+              "name": "Eje 18.5",
+              "fill": "$ink-soft",
+              "content": "18.5",
+              "fontFamily": "$font-data",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "TJlTq",
+              "name": "Eje 25.0",
+              "fill": "$ink-soft",
+              "content": "25.0",
+              "fontFamily": "$font-data",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "ZXEMd",
+              "name": "Eje 30.0",
+              "fill": "$ink-soft",
+              "content": "30.0",
+              "fontFamily": "$font-data",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "pdRnw",
+      "x": 412,
+      "y": 0,
+      "name": "FilaModulo",
+      "reusable": true,
+      "width": 352,
+      "gap": 16,
+      "padding": [
+        16,
+        0
+      ],
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "icnPr",
+          "name": "Foto",
+          "clip": true,
+          "width": 64,
+          "height": 64,
+          "fill": "$field"
+        },
+        {
+          "type": "frame",
+          "id": "RFb2i",
+          "name": "Cuerpo",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 6,
+          "children": [
+            {
+              "type": "text",
+              "id": "FccmZ",
+              "name": "Indice",
+              "fill": "$ink-soft",
+              "content": "MÓDULO 01",
+              "fontFamily": "$font-label",
+              "fontSize": 13,
+              "fontWeight": "600",
+              "letterSpacing": 1.8
+            },
+            {
+              "type": "text",
+              "id": "v66S8Y",
+              "name": "Titulo",
+              "fill": "$ink",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Asepsia y antisepsia",
+              "lineHeight": 1.2,
+              "fontFamily": "$font-body",
+              "fontSize": 19,
+              "fontWeight": "500"
+            },
+            {
+              "type": "frame",
+              "id": "lTdXM",
+              "name": "Estado",
+              "width": "fill_container",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "SNR4r",
+                  "name": "Intento 1",
+                  "width": 18,
+                  "height": 3,
+                  "fill": "$signal"
+                },
+                {
+                  "type": "frame",
+                  "id": "WoRSf",
+                  "name": "Intento 2",
+                  "width": 18,
+                  "height": 3,
+                  "fill": "$rule"
+                },
+                {
+                  "type": "text",
+                  "id": "QVTbs",
+                  "name": "EstadoTexto",
+                  "fill": "$ink-soft",
+                  "content": "1 de 2 intentos",
+                  "fontFamily": "$font-data",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "icon",
+          "id": "QZwPc",
+          "name": "Flecha",
+          "width": 18,
+          "height": 18,
+          "icon": "arrow-right",
+          "library": "lucide",
+          "fill": "$ink-soft"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "iwkFj",
+      "x": 0,
+      "y": 212,
+      "name": "01 Indice",
+      "clip": true,
+      "width": 412,
+      "height": 980,
+      "fill": "$surface",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "e7V4v",
+          "name": "Cabecera",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 26,
+          "padding": [
+            52,
+            20,
+            0,
+            20
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "Q06uK",
+              "name": "Marca",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Nn1Qi",
+                  "name": "Wordmark",
+                  "fill": "$ink",
+                  "content": "PRACTICAPRO",
+                  "fontFamily": "$font-label",
+                  "fontSize": 17,
+                  "fontWeight": "700",
+                  "letterSpacing": 3.4
+                },
+                {
+                  "type": "frame",
+                  "id": "ZfCJC",
+                  "name": "Sesion",
+                  "gap": 7,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "hxqrX",
+                      "name": "Punto",
+                      "width": 6,
+                      "height": 6,
+                      "fill": "$lime",
+                      "cornerRadius": 3
+                    },
+                    {
+                      "type": "text",
+                      "id": "m3h55P",
+                      "name": "Modo",
+                      "fill": "$ink-soft",
+                      "content": "OFFLINE",
+                      "fontFamily": "$font-label",
+                      "fontSize": 13,
+                      "fontWeight": "600",
+                      "letterSpacing": 1.6
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "oXfap",
+              "name": "Continuar",
+              "width": "fill_container",
+              "fill": "$lime",
+              "layout": "vertical",
+              "gap": 16,
+              "padding": 20,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "L8pybU",
+                  "name": "Eyebrow",
+                  "fill": "#0F1210",
+                  "content": "CONTINÚA DONDE LO DEJASTE",
+                  "fontFamily": "$font-label",
+                  "fontSize": 12,
+                  "fontWeight": "600",
+                  "letterSpacing": 1.8
+                },
+                {
+                  "type": "text",
+                  "id": "AD7Ow",
+                  "name": "Titulo",
+                  "fill": "#0F1210",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Lavado quirúrgico de manos",
+                  "lineHeight": 1.15,
+                  "fontFamily": "$font-body",
+                  "fontSize": 24,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "StOEK",
+                  "name": "Pie",
+                  "width": "fill_container",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "jalbu",
+                      "name": "Paso",
+                      "fill": "#2F3D14",
+                      "content": "PASO 4 / 11",
+                      "fontFamily": "$font-data",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "icon",
+                      "id": "Nufe8",
+                      "name": "Ir",
+                      "width": 20,
+                      "height": 20,
+                      "icon": "arrow-right",
+                      "library": "lucide",
+                      "fill": "#0F1210"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "SHCOS",
+              "name": "Resumen",
+              "width": "fill_container",
+              "fill": "$raised",
+              "padding": 18,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "cO9aL",
+                  "name": "MÓDULOS",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "WuDxR",
+                      "name": "K",
+                      "fill": "$ink-soft",
+                      "content": "MÓDULOS",
+                      "fontFamily": "$font-label",
+                      "fontSize": 12,
+                      "fontWeight": "600",
+                      "letterSpacing": 1.5
+                    },
+                    {
+                      "type": "text",
+                      "id": "lNySP",
+                      "name": "V",
+                      "fill": "$ink",
+                      "content": "4",
+                      "lineHeight": 1,
+                      "fontFamily": "$font-data",
+                      "fontSize": 26,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.5
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "OywY9",
+                  "name": "INTENTOS",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "PBiw8",
+                      "name": "K",
+                      "fill": "$ink-soft",
+                      "content": "INTENTOS",
+                      "fontFamily": "$font-label",
+                      "fontSize": 12,
+                      "fontWeight": "600",
+                      "letterSpacing": 1.5
+                    },
+                    {
+                      "type": "text",
+                      "id": "N7Vna3",
+                      "name": "V",
+                      "fill": "$lime",
+                      "content": "3/8",
+                      "lineHeight": 1,
+                      "fontFamily": "$font-data",
+                      "fontSize": 26,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.5
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "yINoA",
+                  "name": "PROMEDIO",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "h7uEF",
+                      "name": "K",
+                      "fill": "$ink-soft",
+                      "content": "PROMEDIO",
+                      "fontFamily": "$font-label",
+                      "fontSize": 12,
+                      "fontWeight": "600",
+                      "letterSpacing": 1.5
+                    },
+                    {
+                      "type": "text",
+                      "id": "xQe4M",
+                      "name": "V",
+                      "fill": "$morado-bright",
+                      "content": "82",
+                      "lineHeight": 1,
+                      "fontFamily": "$font-data",
+                      "fontSize": 26,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.5
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "H5JSL",
+          "name": "Calculadoras",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 12,
+          "padding": [
+            26,
+            20,
+            0,
+            20
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "S4aMW",
+              "name": "Seccion",
+              "fill": "$ink-soft",
+              "content": "CALCULADORAS CLÍNICAS",
+              "fontFamily": "$font-label",
+              "fontSize": 13,
+              "fontWeight": "600",
+              "letterSpacing": 1.8
+            },
+            {
+              "type": "frame",
+              "id": "gGRUS",
+              "name": "Fila",
+              "width": "fill_container",
+              "gap": 10,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "RLoAU",
+                  "name": "Tool IMC",
+                  "width": "fill_container",
+                  "fill": "$raised",
+                  "stroke": "$rule",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 14,
+                  "padding": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "OeABk",
+                      "name": "Top",
+                      "width": "fill_container",
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "UNJyz",
+                          "name": "Icono",
+                          "width": 20,
+                          "height": 20,
+                          "icon": "scale",
+                          "library": "lucide",
+                          "fill": "$lime"
+                        },
+                        {
+                          "type": "icon",
+                          "id": "M2aSi",
+                          "name": "Ir",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "arrow-up-right",
+                          "library": "lucide",
+                          "fill": "$ink-soft"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "YVYHD",
+                      "name": "Nombre",
+                      "fill": "$ink",
+                      "content": "IMC",
+                      "fontFamily": "$font-label",
+                      "fontSize": 22,
+                      "fontWeight": "700",
+                      "letterSpacing": 2.2
+                    },
+                    {
+                      "type": "text",
+                      "id": "fF9p1",
+                      "name": "Desc",
+                      "fill": "$ink-soft",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Índice de masa corporal",
+                      "lineHeight": 1.35,
+                      "fontFamily": "$font-body",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "JDoML",
+                  "name": "Tool PAM",
+                  "width": "fill_container",
+                  "fill": "$raised",
+                  "stroke": "$rule",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 14,
+                  "padding": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "HsAYC",
+                      "name": "Top",
+                      "width": "fill_container",
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "TxSCF",
+                          "name": "Icono",
+                          "width": 20,
+                          "height": 20,
+                          "icon": "activity",
+                          "library": "lucide",
+                          "fill": "$morado-bright"
+                        },
+                        {
+                          "type": "icon",
+                          "id": "wfeC9",
+                          "name": "Ir",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "arrow-up-right",
+                          "library": "lucide",
+                          "fill": "$ink-soft"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "hY9hA",
+                      "name": "Nombre",
+                      "fill": "$ink",
+                      "content": "PAM",
+                      "fontFamily": "$font-label",
+                      "fontSize": 22,
+                      "fontWeight": "700",
+                      "letterSpacing": 2.2
+                    },
+                    {
+                      "type": "text",
+                      "id": "XPgwc",
+                      "name": "Desc",
+                      "fill": "$ink-soft",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Presión arterial media",
+                      "lineHeight": 1.35,
+                      "fontFamily": "$font-body",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "g94et",
+          "name": "Modulos",
+          "width": "fill_container",
+          "layout": "vertical",
+          "padding": [
+            26,
+            20,
+            0,
+            20
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "Nuajr",
+              "name": "Seccion",
+              "fill": "$ink-soft",
+              "content": "MÓDULOS DE ESTUDIO",
+              "fontFamily": "$font-label",
+              "fontSize": 13,
+              "fontWeight": "600",
+              "letterSpacing": 1.8
+            },
+            {
+              "type": "frame",
+              "id": "Ih6bt",
+              "name": "Sep",
+              "width": "fill_container",
+              "height": 14
+            },
+            {
+              "type": "frame",
+              "id": "bRQDI",
+              "name": "Regla",
+              "width": "fill_container",
+              "height": 1,
+              "fill": "$rule"
+            },
+            {
+              "type": "frame",
+              "id": "Hlq1e",
+              "name": "Asepsia y antisepsia",
+              "width": "fill_container",
+              "gap": 14,
+              "padding": [
+                16,
+                0
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "yZBpl",
+                  "name": "Idx",
+                  "fill": "$lime",
+                  "content": "01",
+                  "fontFamily": "$font-data",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "HaPkv",
+                  "name": "Foto",
+                  "clip": true,
+                  "width": 56,
+                  "height": 56,
+                  "fill": [
+                    "#674FA3",
+                    {
+                      "type": "image",
+                      "enabled": true,
+                      "url": "./assets/ic_asepsia.jpeg",
+                      "mode": "fill",
+                      "blendMode": "luminosity"
+                    },
+                    {
+                      "type": "color",
+                      "color": "#7DBB0038",
+                      "enabled": true,
+                      "blendMode": "overlay"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "VTHx8",
+                  "name": "Cuerpo",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "HppV3",
+                      "name": "Titulo",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Asepsia y antisepsia",
+                      "lineHeight": 1.2,
+                      "fontFamily": "$font-body",
+                      "fontSize": 18,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "LU3LG",
+                      "name": "Estado",
+                      "width": "fill_container",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "WBP0N",
+                          "name": "I0",
+                          "width": 16,
+                          "height": 3,
+                          "fill": "$lime"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "GNyhk",
+                          "name": "I1",
+                          "width": 16,
+                          "height": 3,
+                          "fill": "$rule"
+                        },
+                        {
+                          "type": "text",
+                          "id": "oSS44",
+                          "name": "Txt",
+                          "fill": "$ink-soft",
+                          "content": "1 de 2 intentos",
+                          "fontFamily": "$font-data",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "icon",
+                  "id": "xf5B5",
+                  "name": "Flecha",
+                  "width": 18,
+                  "height": 18,
+                  "icon": "arrow-right",
+                  "library": "lucide",
+                  "fill": "$ink-soft"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "AmR7S",
+              "name": "Regla",
+              "width": "fill_container",
+              "height": 1,
+              "fill": "$rule"
+            },
+            {
+              "type": "frame",
+              "id": "PQ6Xs",
+              "name": "Procedimientos",
+              "width": "fill_container",
+              "gap": 14,
+              "padding": [
+                16,
+                0
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "hjTHK",
+                  "name": "Idx",
+                  "fill": "$lime",
+                  "content": "02",
+                  "fontFamily": "$font-data",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "P0pEln",
+                  "name": "Foto",
+                  "clip": true,
+                  "width": 56,
+                  "height": 56,
+                  "fill": [
+                    "#674FA3",
+                    {
+                      "type": "image",
+                      "enabled": true,
+                      "url": "./assets/ic_procedures.jpeg",
+                      "mode": "fill",
+                      "blendMode": "luminosity"
+                    },
+                    {
+                      "type": "color",
+                      "color": "#7DBB0038",
+                      "enabled": true,
+                      "blendMode": "overlay"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "T7h4A",
+                  "name": "Cuerpo",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "aMDbM",
+                      "name": "Titulo",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Procedimientos",
+                      "lineHeight": 1.2,
+                      "fontFamily": "$font-body",
+                      "fontSize": 18,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "TUy0n",
+                      "name": "Estado",
+                      "width": "fill_container",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "p09zR",
+                          "name": "I0",
+                          "width": 16,
+                          "height": 3,
+                          "fill": "$lime"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "nLNus",
+                          "name": "I1",
+                          "width": 16,
+                          "height": 3,
+                          "fill": "$lime"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Pwj91",
+                          "name": "Txt",
+                          "fill": "$ink-soft",
+                          "content": "Sin intentos",
+                          "fontFamily": "$font-data",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "icon",
+                  "id": "F0yUkj",
+                  "name": "Flecha",
+                  "width": 18,
+                  "height": 18,
+                  "icon": "arrow-right",
+                  "library": "lucide",
+                  "fill": "$ink-soft"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "IJZJU",
+              "name": "Regla",
+              "width": "fill_container",
+              "height": 1,
+              "fill": "$rule"
+            },
+            {
+              "type": "frame",
+              "id": "U788V",
+              "name": "Medicamentos",
+              "width": "fill_container",
+              "gap": 14,
+              "padding": [
+                16,
+                0
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "j8O127",
+                  "name": "Idx",
+                  "fill": "$ink-soft",
+                  "content": "03",
+                  "fontFamily": "$font-data",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "cKIW5",
+                  "name": "Foto",
+                  "clip": true,
+                  "width": 56,
+                  "height": 56,
+                  "fill": [
+                    "#674FA3",
+                    {
+                      "type": "image",
+                      "enabled": true,
+                      "url": "./assets/ic_medicines.jpeg",
+                      "mode": "fill",
+                      "blendMode": "luminosity"
+                    },
+                    {
+                      "type": "color",
+                      "color": "#7DBB0038",
+                      "enabled": true,
+                      "blendMode": "overlay"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "p9ok80",
+                  "name": "Cuerpo",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "pkcNG",
+                      "name": "Titulo",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Medicamentos",
+                      "lineHeight": 1.2,
+                      "fontFamily": "$font-body",
+                      "fontSize": 18,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "IBwzF",
+                      "name": "Estado",
+                      "width": "fill_container",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "los3K",
+                          "name": "I0",
+                          "width": 16,
+                          "height": 3,
+                          "fill": "$rule"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "hs01K",
+                          "name": "I1",
+                          "width": 16,
+                          "height": 3,
+                          "fill": "$rule"
+                        },
+                        {
+                          "type": "text",
+                          "id": "OqWPR",
+                          "name": "Txt",
+                          "fill": "$ink-soft",
+                          "content": "Sin iniciar",
+                          "fontFamily": "$font-data",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "icon",
+                  "id": "idHjq",
+                  "name": "Flecha",
+                  "width": 18,
+                  "height": 18,
+                  "icon": "arrow-right",
+                  "library": "lucide",
+                  "fill": "$ink-soft"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "G4EDM",
+              "name": "Regla",
+              "width": "fill_container",
+              "height": 1,
+              "fill": "$rule"
+            },
+            {
+              "type": "frame",
+              "id": "SwgUu",
+              "name": "Urgencias",
+              "width": "fill_container",
+              "gap": 14,
+              "padding": [
+                16,
+                0
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "a8oMJ",
+                  "name": "Idx",
+                  "fill": "$ink-soft",
+                  "content": "04",
+                  "fontFamily": "$font-data",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "YLEdi",
+                  "name": "Foto",
+                  "clip": true,
+                  "width": 56,
+                  "height": 56,
+                  "fill": [
+                    "#674FA3",
+                    {
+                      "type": "image",
+                      "enabled": true,
+                      "url": "./assets/ic_emergency.jpeg",
+                      "mode": "fill",
+                      "blendMode": "luminosity"
+                    },
+                    {
+                      "type": "color",
+                      "color": "#7DBB0038",
+                      "enabled": true,
+                      "blendMode": "overlay"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "oiq4Y",
+                  "name": "Cuerpo",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "AGqdb",
+                      "name": "Titulo",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Urgencias",
+                      "lineHeight": 1.2,
+                      "fontFamily": "$font-body",
+                      "fontSize": 18,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "EdLiI",
+                      "name": "Estado",
+                      "width": "fill_container",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Q2nwM",
+                          "name": "I0",
+                          "width": 16,
+                          "height": 3,
+                          "fill": "$rule"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "KhCm7",
+                          "name": "I1",
+                          "width": 16,
+                          "height": 3,
+                          "fill": "$rule"
+                        },
+                        {
+                          "type": "text",
+                          "id": "W2qeR3",
+                          "name": "Txt",
+                          "fill": "$ink-soft",
+                          "content": "Sin iniciar",
+                          "fontFamily": "$font-data",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "icon",
+                  "id": "hW3Bz",
+                  "name": "Flecha",
+                  "width": 18,
+                  "height": 18,
+                  "icon": "arrow-right",
+                  "library": "lucide",
+                  "fill": "$ink-soft"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "LRQw3",
+              "name": "Regla Final",
+              "width": "fill_container",
+              "height": 1,
+              "fill": "$rule"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "d4xgX",
+      "x": 472,
+      "y": 212,
+      "name": "02 Modulo detalle",
+      "clip": true,
+      "width": 412,
+      "height": 1060,
+      "fill": "$surface",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "QKdhQ",
+          "name": "Hero",
+          "clip": true,
+          "width": "fill_container",
+          "height": 280,
+          "fill": [
+            "#674FA3",
+            {
+              "type": "image",
+              "enabled": true,
+              "url": "./assets/ic_asepcia1.jpg",
+              "mode": "fill",
+              "blendMode": "luminosity"
+            },
+            {
+              "type": "color",
+              "color": "#7DBB0030",
+              "enabled": true,
+              "blendMode": "overlay"
+            },
+            {
+              "type": "gradient",
+              "gradientType": "linear",
+              "enabled": true,
+              "rotation": 270,
+              "size": {
+                "height": 1
+              },
+              "colors": [
+                {
+                  "color": "#12101900",
+                  "position": 0
+                },
+                {
+                  "color": "#121019",
+                  "position": 0.92
+                }
+              ]
+            }
+          ],
+          "layout": "vertical",
+          "gap": 10,
+          "padding": 20,
+          "justifyContent": "end",
+          "children": [
+            {
+              "type": "icon",
+              "id": "mNqUg",
+              "layoutPosition": "absolute",
+              "x": 20,
+              "y": 52,
+              "name": "Atras",
+              "width": 22,
+              "height": 22,
+              "icon": "arrow-left",
+              "library": "lucide",
+              "fill": "$ink"
+            },
+            {
+              "type": "text",
+              "id": "ju0t0",
+              "name": "Indice",
+              "fill": "$verde-bright",
+              "content": "MÓDULO 01 · TÉCNICAS",
+              "fontFamily": "$font-label",
+              "fontSize": 13,
+              "fontWeight": "600",
+              "letterSpacing": 1.8
+            },
+            {
+              "type": "text",
+              "id": "L2HEY",
+              "name": "Titulo",
+              "fill": "$ink",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Asepsia y antisepsia",
+              "lineHeight": 1.1,
+              "fontFamily": "$font-body",
+              "fontSize": 30,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "PPvxz",
+          "name": "Cuerpo",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 22,
+          "padding": [
+            20,
+            20,
+            0,
+            20
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "J9ebRK",
+              "name": "Intro",
+              "fill": "$ink-soft",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Barreras, lavado de manos y campo estéril. Tres técnicas que sostienen todo lo demás.",
+              "lineHeight": 1.55,
+              "fontFamily": "$font-body",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "uf8qY",
+              "name": "Video",
+              "clip": true,
+              "width": "fill_container",
+              "height": 168,
+              "fill": [
+                "#674FA3",
+                {
+                  "type": "image",
+                  "enabled": true,
+                  "url": "./assets/ic_asepsia3.jpg",
+                  "mode": "fill",
+                  "blendMode": "luminosity"
+                },
+                "#121019A6"
+              ],
+              "layout": "vertical",
+              "padding": 14,
+              "justifyContent": "end",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "BGtyc",
+                  "layoutPosition": "absolute",
+                  "x": 179,
+                  "y": 44,
+                  "name": "Play",
+                  "width": 54,
+                  "height": 54,
+                  "fill": "$verde",
+                  "cornerRadius": 27,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "kI0m9",
+                      "name": "Icono",
+                      "width": 22,
+                      "height": 22,
+                      "icon": "play",
+                      "library": "lucide",
+                      "fill": "#121019"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "nbvMs",
+                  "name": "Pie",
+                  "width": "fill_container",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "gwwHS",
+                      "name": "T",
+                      "fill": "$ink",
+                      "content": "Demostración · lavado quirúrgico",
+                      "fontFamily": "$font-body",
+                      "fontSize": 13,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "text",
+                      "id": "sR3M8",
+                      "name": "D",
+                      "fill": "$ink",
+                      "content": "4:12",
+                      "fontFamily": "$font-data",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "K8gZX1",
+              "name": "SecTitulo",
+              "fill": "$ink-soft",
+              "content": "CONTENIDO",
+              "fontFamily": "$font-label",
+              "fontSize": 13,
+              "fontWeight": "600",
+              "letterSpacing": 1.8
+            },
+            {
+              "type": "frame",
+              "id": "UJeTW",
+              "name": "Pasos",
+              "width": "fill_container",
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "ERfMP",
+                  "name": "R",
+                  "width": "fill_container",
+                  "height": 1,
+                  "fill": "$rule"
+                },
+                {
+                  "type": "frame",
+                  "id": "qDJym",
+                  "name": "Paso 01",
+                  "width": "fill_container",
+                  "gap": 14,
+                  "padding": [
+                    15,
+                    0
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "cvLA2",
+                      "name": "N",
+                      "fill": "$verde",
+                      "content": "01",
+                      "fontFamily": "$font-data",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "oLPpq",
+                      "name": "T",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Barreras de protección",
+                      "fontFamily": "$font-body",
+                      "fontSize": 16,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "mFQXE",
+                      "name": "E",
+                      "fill": "$verde",
+                      "content": "LISTO",
+                      "fontFamily": "$font-label",
+                      "fontSize": 12,
+                      "fontWeight": "600",
+                      "letterSpacing": 1.4
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ysUaI",
+                  "name": "R",
+                  "width": "fill_container",
+                  "height": 1,
+                  "fill": "$rule"
+                },
+                {
+                  "type": "frame",
+                  "id": "A6x3j",
+                  "name": "Paso 02",
+                  "width": "fill_container",
+                  "gap": 14,
+                  "padding": [
+                    15,
+                    0
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "nEU9Q",
+                      "name": "N",
+                      "fill": "$verde",
+                      "content": "02",
+                      "fontFamily": "$font-data",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "CfVMl",
+                      "name": "T",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Lavado clínico de manos",
+                      "fontFamily": "$font-body",
+                      "fontSize": 16,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "s1oTL8",
+                      "name": "E",
+                      "fill": "$verde",
+                      "content": "LISTO",
+                      "fontFamily": "$font-label",
+                      "fontSize": 12,
+                      "fontWeight": "600",
+                      "letterSpacing": 1.4
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "whzkU",
+                  "name": "R",
+                  "width": "fill_container",
+                  "height": 1,
+                  "fill": "$rule"
+                },
+                {
+                  "type": "frame",
+                  "id": "EKoUa",
+                  "name": "Paso 03",
+                  "width": "fill_container",
+                  "gap": 14,
+                  "padding": [
+                    15,
+                    0
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ZGRT1",
+                      "name": "N",
+                      "fill": "$verde",
+                      "content": "03",
+                      "fontFamily": "$font-data",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "m8P4L",
+                      "name": "T",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Lavado quirúrgico",
+                      "fontFamily": "$font-body",
+                      "fontSize": 16,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "iS3zq",
+                      "name": "E",
+                      "fill": "$morado-bright",
+                      "content": "EN CURSO",
+                      "fontFamily": "$font-label",
+                      "fontSize": 12,
+                      "fontWeight": "600",
+                      "letterSpacing": 1.4
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "OF5Qi",
+                  "name": "R",
+                  "width": "fill_container",
+                  "height": 1,
+                  "fill": "$rule"
+                },
+                {
+                  "type": "frame",
+                  "id": "GDK5D",
+                  "name": "Paso 04",
+                  "width": "fill_container",
+                  "gap": 14,
+                  "padding": [
+                    15,
+                    0
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ocCXx",
+                      "name": "N",
+                      "fill": "$ink-soft",
+                      "content": "04",
+                      "fontFamily": "$font-data",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Sqg3q",
+                      "name": "T",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Colocación de guantes",
+                      "fontFamily": "$font-body",
+                      "fontSize": 16,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "F9MjB",
+                  "name": "R",
+                  "width": "fill_container",
+                  "height": 1,
+                  "fill": "$rule"
+                },
+                {
+                  "type": "frame",
+                  "id": "Dz7IW",
+                  "name": "Paso 05",
+                  "width": "fill_container",
+                  "gap": 14,
+                  "padding": [
+                    15,
+                    0
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "o2atR",
+                      "name": "N",
+                      "fill": "$ink-soft",
+                      "content": "05",
+                      "fontFamily": "$font-data",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "H2kgj",
+                      "name": "T",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Campo estéril",
+                      "fontFamily": "$font-body",
+                      "fontSize": 16,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "sjFuT",
+                  "name": "R",
+                  "width": "fill_container",
+                  "height": 1,
+                  "fill": "$rule"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "AXB11",
+          "name": "CTA",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 12,
+          "padding": 20,
+          "children": [
+            {
+              "type": "frame",
+              "id": "y9Eeh",
+              "name": "Boton",
+              "width": "fill_container",
+              "height": 58,
+              "fill": "$verde",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "K96oAz",
+                  "name": "L",
+                  "fill": "#121019",
+                  "content": "EMPEZAR QUIZ",
+                  "fontFamily": "$font-label",
+                  "fontSize": 16,
+                  "fontWeight": "700",
+                  "letterSpacing": 2.2
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "luDMt",
+              "name": "Intentos",
+              "width": "fill_container",
+              "gap": 8,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "yF6CB",
+                  "name": "I0",
+                  "width": 20,
+                  "height": 3,
+                  "fill": "$verde"
+                },
+                {
+                  "type": "frame",
+                  "id": "x0lNa",
+                  "name": "I1",
+                  "width": 20,
+                  "height": 3,
+                  "fill": "$rule"
+                },
+                {
+                  "type": "text",
+                  "id": "MG6dV",
+                  "name": "T",
+                  "fill": "$ink-soft",
+                  "content": "1 de 2 intentos usados",
+                  "fontFamily": "$font-data",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "mMo6z",
+      "x": 944,
+      "y": 212,
+      "name": "03 Quiz",
+      "clip": true,
+      "width": 412,
+      "height": 980,
+      "fill": "$surface",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "ZARGL",
+          "name": "Top",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 18,
+          "padding": [
+            52,
+            20,
+            0,
+            20
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "q4HDv3",
+              "name": "Fila",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "GsqpQ",
+                  "name": "Cerrar",
+                  "width": 22,
+                  "height": 22,
+                  "icon": "x",
+                  "library": "lucide",
+                  "fill": "$ink-soft"
+                },
+                {
+                  "type": "text",
+                  "id": "q6BlBW",
+                  "name": "Cuenta",
+                  "fill": "$ink-soft",
+                  "content": "PREGUNTA 4 / 10",
+                  "fontFamily": "$font-label",
+                  "fontSize": 13,
+                  "fontWeight": "600",
+                  "letterSpacing": 1.8
+                },
+                {
+                  "type": "frame",
+                  "id": "rqhx2",
+                  "name": "Crono",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "JgR7z",
+                      "name": "Reloj",
+                      "width": 15,
+                      "height": 15,
+                      "icon": "timer",
+                      "library": "lucide",
+                      "fill": "$morado-bright"
+                    },
+                    {
+                      "type": "text",
+                      "id": "o4pX0",
+                      "name": "S",
+                      "fill": "$morado-bright",
+                      "content": "0:18",
+                      "fontFamily": "$font-data",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "VdQxu",
+              "name": "Progreso",
+              "width": "fill_container",
+              "height": 4,
+              "gap": 3,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "YheOf",
+                  "name": "S0",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$verde"
+                },
+                {
+                  "type": "frame",
+                  "id": "T9mMrd",
+                  "name": "S1",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$verde"
+                },
+                {
+                  "type": "frame",
+                  "id": "psDz5",
+                  "name": "S2",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$verde"
+                },
+                {
+                  "type": "frame",
+                  "id": "W77hi",
+                  "name": "S3",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$morado-bright"
+                },
+                {
+                  "type": "frame",
+                  "id": "ncA54",
+                  "name": "S4",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$rule"
+                },
+                {
+                  "type": "frame",
+                  "id": "S3Xbc",
+                  "name": "S5",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$rule"
+                },
+                {
+                  "type": "frame",
+                  "id": "mYTDA",
+                  "name": "S6",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$rule"
+                },
+                {
+                  "type": "frame",
+                  "id": "tdO7B",
+                  "name": "S7",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$rule"
+                },
+                {
+                  "type": "frame",
+                  "id": "WgfOa",
+                  "name": "S8",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$rule"
+                },
+                {
+                  "type": "frame",
+                  "id": "F4DxUZ",
+                  "name": "S9",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$rule"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "z4Kk4",
+          "name": "Cuerpo",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 28,
+          "padding": [
+            36,
+            20,
+            0,
+            20
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "iKR0w",
+              "name": "Pregunta",
+              "fill": "$ink",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "¿Cuánto debe durar el frotado en el lavado quirúrgico de manos?",
+              "lineHeight": 1.25,
+              "fontFamily": "$font-body",
+              "fontSize": 26,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "knMtL",
+              "name": "Opciones",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 10,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "eaJwp",
+                  "name": "Op A",
+                  "width": "fill_container",
+                  "fill": "$raised",
+                  "stroke": "$rule",
+                  "strokeWidth": 1,
+                  "gap": 14,
+                  "padding": [
+                    17,
+                    16
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Zeur6",
+                      "name": "L",
+                      "fill": "$ink-soft",
+                      "content": "A",
+                      "fontFamily": "$font-data",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "iwsN2",
+                      "name": "T",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "20 segundos",
+                      "fontFamily": "$font-body",
+                      "fontSize": 17
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "OFuD2",
+                  "name": "Op B",
+                  "width": "fill_container",
+                  "fill": "$raised",
+                  "stroke": "$rule",
+                  "strokeWidth": 1,
+                  "gap": 14,
+                  "padding": [
+                    17,
+                    16
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "YfOBC",
+                      "name": "L",
+                      "fill": "$ink-soft",
+                      "content": "B",
+                      "fontFamily": "$font-data",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "gGOWC",
+                      "name": "T",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "1 minuto",
+                      "fontFamily": "$font-body",
+                      "fontSize": 17
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Dhn0r",
+                  "name": "Op C",
+                  "width": "fill_container",
+                  "fill": "$verde-dim",
+                  "stroke": "$verde",
+                  "strokeWidth": 2,
+                  "gap": 14,
+                  "padding": [
+                    17,
+                    16
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "fjTUL",
+                      "name": "L",
+                      "fill": "$verde-bright",
+                      "content": "C",
+                      "fontFamily": "$font-data",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "BLQOA",
+                      "name": "T",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "De 2 a 5 minutos",
+                      "fontFamily": "$font-body",
+                      "fontSize": 17,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "icon",
+                      "id": "l751B",
+                      "name": "Ck",
+                      "width": 19,
+                      "height": 19,
+                      "icon": "check",
+                      "library": "lucide",
+                      "fill": "$verde-bright"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "s34bE",
+                  "name": "Op D",
+                  "width": "fill_container",
+                  "fill": "$raised",
+                  "stroke": "$rule",
+                  "strokeWidth": 1,
+                  "gap": 14,
+                  "padding": [
+                    17,
+                    16
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "w9UWlH",
+                      "name": "L",
+                      "fill": "$ink-soft",
+                      "content": "D",
+                      "fontFamily": "$font-data",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "hPCTw",
+                      "name": "T",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "10 minutos",
+                      "fontFamily": "$font-body",
+                      "fontSize": 17
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "uQRdk",
+              "name": "Feedback",
+              "width": "fill_container",
+              "fill": "$verde-dim",
+              "layout": "vertical",
+              "gap": 8,
+              "padding": 16,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "YnYLr",
+                  "name": "H",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "w4GpG",
+                      "name": "I",
+                      "width": 17,
+                      "height": 17,
+                      "icon": "circle-check",
+                      "library": "lucide",
+                      "fill": "$verde-bright"
+                    },
+                    {
+                      "type": "text",
+                      "id": "t74zhB",
+                      "name": "T",
+                      "fill": "$verde-bright",
+                      "content": "CORRECTO",
+                      "fontFamily": "$font-label",
+                      "fontSize": 13,
+                      "fontWeight": "700",
+                      "letterSpacing": 1.8
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "YJThc",
+                  "name": "Exp",
+                  "fill": "$ink-soft",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "El frotado quirúrgico requiere de 2 a 5 minutos según el protocolo y el antiséptico usado.",
+                  "lineHeight": 1.5,
+                  "fontFamily": "$font-body",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ZD0vN",
+          "name": "CTA",
+          "width": "fill_container",
+          "layout": "vertical",
+          "padding": 20,
+          "children": [
+            {
+              "type": "frame",
+              "id": "l6boYQ",
+              "name": "Boton",
+              "width": "fill_container",
+              "height": 58,
+              "fill": "$verde",
+              "gap": 10,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "lyGLU",
+                  "name": "L",
+                  "fill": "#121019",
+                  "content": "SIGUIENTE",
+                  "fontFamily": "$font-label",
+                  "fontSize": 16,
+                  "fontWeight": "700",
+                  "letterSpacing": 2.2
+                },
+                {
+                  "type": "icon",
+                  "id": "VaWkm",
+                  "name": "F",
+                  "width": 18,
+                  "height": 18,
+                  "icon": "arrow-right",
+                  "library": "lucide",
+                  "fill": "#121019"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "L9GWCE",
+      "x": 1416,
+      "y": 212,
+      "name": "04 Calculadora IMC",
+      "clip": true,
+      "width": 412,
+      "height": 980,
+      "fill": "$surface",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "ZvokN",
+          "name": "Top",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 26,
+          "padding": [
+            52,
+            20,
+            0,
+            20
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "X8wylM",
+              "name": "Nav",
+              "width": "fill_container",
+              "gap": 14,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "jpnWZ",
+                  "name": "Atras",
+                  "width": 22,
+                  "height": 22,
+                  "icon": "arrow-left",
+                  "library": "lucide",
+                  "fill": "$ink"
+                },
+                {
+                  "type": "text",
+                  "id": "Gbf61",
+                  "name": "T",
+                  "fill": "$ink",
+                  "content": "ÍNDICE DE MASA CORPORAL",
+                  "fontFamily": "$font-label",
+                  "fontSize": 14,
+                  "fontWeight": "600",
+                  "letterSpacing": 1.8
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "GxeMA",
+              "name": "Entradas",
+              "width": "fill_container",
+              "gap": 10,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "vEuuS",
+                  "name": "PESO",
+                  "width": "fill_container",
+                  "fill": "$raised",
+                  "stroke": "$rule",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 10,
+                  "padding": 16,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "uxHR3",
+                      "name": "K",
+                      "fill": "$ink-soft",
+                      "content": "PESO",
+                      "fontFamily": "$font-label",
+                      "fontSize": 12,
+                      "fontWeight": "600",
+                      "letterSpacing": 1.5
+                    },
+                    {
+                      "type": "frame",
+                      "id": "vqock",
+                      "name": "V",
+                      "width": "fill_container",
+                      "gap": 6,
+                      "alignItems": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "eLTKz",
+                          "name": "N",
+                          "fill": "$ink",
+                          "content": "68.0",
+                          "lineHeight": 1,
+                          "fontFamily": "$font-data",
+                          "fontSize": 30,
+                          "fontWeight": "500",
+                          "letterSpacing": -1
+                        },
+                        {
+                          "type": "text",
+                          "id": "V8A8lJ",
+                          "name": "U",
+                          "fill": "$ink-soft",
+                          "content": "kg",
+                          "fontFamily": "$font-data",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "B06NV",
+                  "name": "TALLA",
+                  "width": "fill_container",
+                  "fill": "$raised",
+                  "stroke": "$rule",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 10,
+                  "padding": 16,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "idIdr",
+                      "name": "K",
+                      "fill": "$ink-soft",
+                      "content": "TALLA",
+                      "fontFamily": "$font-label",
+                      "fontSize": 12,
+                      "fontWeight": "600",
+                      "letterSpacing": 1.5
+                    },
+                    {
+                      "type": "frame",
+                      "id": "siSqf",
+                      "name": "V",
+                      "width": "fill_container",
+                      "gap": 6,
+                      "alignItems": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "O4Jc6R",
+                          "name": "N",
+                          "fill": "$ink",
+                          "content": "1.70",
+                          "lineHeight": 1,
+                          "fontFamily": "$font-data",
+                          "fontSize": 30,
+                          "fontWeight": "500",
+                          "letterSpacing": -1
+                        },
+                        {
+                          "type": "text",
+                          "id": "K13iqC",
+                          "name": "U",
+                          "fill": "$ink-soft",
+                          "content": "m",
+                          "fontFamily": "$font-data",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "vjqvl",
+          "name": "Resultado",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 14,
+          "padding": [
+            34,
+            20,
+            0,
+            20
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "HrniV",
+              "name": "Sec",
+              "fill": "$ink-soft",
+              "content": "RESULTADO",
+              "fontFamily": "$font-label",
+              "fontSize": 13,
+              "fontWeight": "600",
+              "letterSpacing": 1.8
+            },
+            {
+              "type": "frame",
+              "id": "a6R2wT",
+              "name": "Lectura",
+              "width": "fill_container",
+              "gap": 8,
+              "alignItems": "end",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "aiS18",
+                  "name": "Valor",
+                  "fill": "$ink",
+                  "content": "23.5",
+                  "lineHeight": 1,
+                  "fontFamily": "$font-data",
+                  "fontSize": 64,
+                  "fontWeight": "500",
+                  "letterSpacing": -2.5
+                },
+                {
+                  "type": "text",
+                  "id": "FSqCG",
+                  "name": "U",
+                  "fill": "$ink-soft",
+                  "content": "kg/m²",
+                  "fontFamily": "$font-data",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "gpyFj",
+                  "name": "Sp",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "type": "text",
+                  "id": "aut84",
+                  "name": "Cat",
+                  "fill": "$verde-bright",
+                  "content": "NORMAL",
+                  "fontFamily": "$font-label",
+                  "fontSize": 17,
+                  "fontWeight": "700",
+                  "letterSpacing": 1.8
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "TUH3h",
+              "name": "Pista",
+              "width": "fill_container",
+              "height": 12,
+              "gap": 2,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "E7k9rK",
+                  "name": "Bajo",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$morado"
+                },
+                {
+                  "type": "frame",
+                  "id": "HDYMa",
+                  "name": "Normal",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$verde"
+                },
+                {
+                  "type": "frame",
+                  "id": "yYaZe",
+                  "name": "Sobrepeso",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$morado-bright"
+                },
+                {
+                  "type": "frame",
+                  "id": "j1BrZ",
+                  "name": "Obesidad",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$coral"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "mtfJI",
+              "name": "Aguja",
+              "width": "fill_container",
+              "height": 16,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "p244V",
+                  "name": "Off",
+                  "width": 148,
+                  "height": 1
+                },
+                {
+                  "type": "frame",
+                  "id": "uSZrI",
+                  "name": "Marca",
+                  "width": 2,
+                  "height": "fill_container",
+                  "fill": "$ink"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "LkUWI",
+              "name": "Ejes",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Dajxx",
+                  "name": "18.5",
+                  "fill": "$ink-soft",
+                  "content": "18.5",
+                  "fontFamily": "$font-data",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "Qd6NQ",
+                  "name": "25.0",
+                  "fill": "$ink-soft",
+                  "content": "25.0",
+                  "fontFamily": "$font-data",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "gNNGV",
+                  "name": "30.0",
+                  "fill": "$ink-soft",
+                  "content": "30.0",
+                  "fontFamily": "$font-data",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "GirYb",
+          "name": "Nota",
+          "width": "fill_container",
+          "layout": "vertical",
+          "padding": [
+            26,
+            20,
+            0,
+            20
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "hYaB7",
+              "name": "R",
+              "width": "fill_container",
+              "height": 1,
+              "fill": "$rule"
+            },
+            {
+              "type": "frame",
+              "id": "wdaLs",
+              "name": "Rango normal",
+              "width": "fill_container",
+              "padding": [
+                15,
+                0
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "N3DSS",
+                  "name": "K",
+                  "fill": "$ink-soft",
+                  "content": "RANGO NORMAL",
+                  "fontFamily": "$font-label",
+                  "fontSize": 13,
+                  "fontWeight": "600",
+                  "letterSpacing": 1.6
+                },
+                {
+                  "type": "frame",
+                  "id": "nRrkD",
+                  "name": "S",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "type": "text",
+                  "id": "s9KaO0",
+                  "name": "V",
+                  "fill": "$ink",
+                  "content": "18.5 – 24.9",
+                  "fontFamily": "$font-data",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "OlQeU",
+              "name": "R",
+              "width": "fill_container",
+              "height": 1,
+              "fill": "$rule"
+            },
+            {
+              "type": "frame",
+              "id": "OjXGi",
+              "name": "Peso ideal estimado",
+              "width": "fill_container",
+              "padding": [
+                15,
+                0
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "PMYmk",
+                  "name": "K",
+                  "fill": "$ink-soft",
+                  "content": "PESO IDEAL ESTIMADO",
+                  "fontFamily": "$font-label",
+                  "fontSize": 13,
+                  "fontWeight": "600",
+                  "letterSpacing": 1.6
+                },
+                {
+                  "type": "frame",
+                  "id": "gJ6jZ",
+                  "name": "S",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "type": "text",
+                  "id": "B9Wlj",
+                  "name": "V",
+                  "fill": "$ink",
+                  "content": "53.5 – 72.0 kg",
+                  "fontFamily": "$font-data",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ds6AZ",
+              "name": "R",
+              "width": "fill_container",
+              "height": 1,
+              "fill": "$rule"
+            },
+            {
+              "type": "frame",
+              "id": "Kd0TH",
+              "name": "Diferencia",
+              "width": "fill_container",
+              "padding": [
+                15,
+                0
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "l0ipZJ",
+                  "name": "K",
+                  "fill": "$ink-soft",
+                  "content": "DIFERENCIA",
+                  "fontFamily": "$font-label",
+                  "fontSize": 13,
+                  "fontWeight": "600",
+                  "letterSpacing": 1.6
+                },
+                {
+                  "type": "frame",
+                  "id": "HwbdS",
+                  "name": "S",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "type": "text",
+                  "id": "wNGjj",
+                  "name": "V",
+                  "fill": "$ink-soft",
+                  "content": "—",
+                  "fontFamily": "$font-data",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "F3cwz9",
+              "name": "R",
+              "width": "fill_container",
+              "height": 1,
+              "fill": "$rule"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "themes": {
+    "mode": [
+      "light",
+      "dark"
+    ]
+  },
+  "variables": {
+    "ink": {
+      "type": "color",
+      "value": "#EFEDF4"
+    },
+    "ink-soft": {
+      "type": "color",
+      "value": "#9A93AD"
+    },
+    "surface": {
+      "type": "color",
+      "value": "#121019"
+    },
+    "field": {
+      "type": "color",
+      "value": "#1C1827"
+    },
+    "rule": {
+      "type": "color",
+      "value": "#2E2840"
+    },
+    "signal": {
+      "type": "color",
+      "value": "#7DBB00"
+    },
+    "caution": {
+      "type": "color",
+      "value": "#9B7EE0"
+    },
+    "critical": {
+      "type": "color",
+      "value": "#E5624A"
+    },
+    "font-label": {
+      "type": "string",
+      "value": "Barlow Condensed"
+    },
+    "font-body": {
+      "type": "string",
+      "value": "IBM Plex Sans"
+    },
+    "font-data": {
+      "type": "string",
+      "value": "IBM Plex Mono"
+    },
+    "gutter": {
+      "type": "number",
+      "value": 20
+    },
+    "raised": {
+      "type": "color",
+      "value": "#1C1827"
+    },
+    "lime": {
+      "type": "color",
+      "value": "#7DBB00"
+    },
+    "lime-bright": {
+      "type": "color",
+      "value": "#A8E01E"
+    },
+    "lime-dim": {
+      "type": "color",
+      "value": "#2F3D14"
+    },
+    "gold": {
+      "type": "color",
+      "value": "#9B7EE0"
+    },
+    "coral": {
+      "type": "color",
+      "value": "#E5624A"
+    },
+    "verde": {
+      "type": "color",
+      "value": "#7DBB00"
+    },
+    "verde-bright": {
+      "type": "color",
+      "value": "#96DC12"
+    },
+    "verde-dim": {
+      "type": "color",
+      "value": "#26330A"
+    },
+    "morado": {
+      "type": "color",
+      "value": "#674FA3"
+    },
+    "morado-bright": {
+      "type": "color",
+      "value": "#9B7EE0"
+    },
+    "morado-dim": {
+      "type": "color",
+      "value": "#241D3A"
+    }
+  },
+  "fileToken": "137aff96-7f0c-4723-9b79-3fd40f466ed6"
+}

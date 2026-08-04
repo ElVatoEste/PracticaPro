@@ -61,6 +61,13 @@
                     "proguard-rules.pro"
                 )
                 signingConfig = signingConfigs.findByName("release")
+
+                // Empaqueta los símbolos de la única librería nativa que hay,
+                // libandroidx.graphics.path.so, para que Play desofusque sus
+                // trazas en lugar de mostrar direcciones.
+                ndk {
+                    debugSymbolLevel = "SYMBOL_TABLE"
+                }
             }
         }
 
